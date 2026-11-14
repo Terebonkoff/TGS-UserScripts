@@ -1,0 +1,10 @@
+[2026-11-14 22:37:10] === Starting auto reinstall helper for 1 item(s) ===
+[2026-11-14 22:37:10] Processing script: COMIX ZIP Downloader
+[2026-11-14 22:37:10] Opening URL: https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/6c3418347aa7273a83d04e7bbbc34cde34a4fc5e/COMIX_ZIP_Downloader_by_TGS.user.js
+[2026-11-14 22:37:11] Detected confirm tab: 'Установка скрипта - Violentmonkey, профиль Виктор В. — Яндекс Браузер' (after 0.4s)
+[2026-11-14 22:37:11] Sending Ctrl+Enter to trigger Reinstall/Install...
+[2026-11-14 22:37:13] Title after Ctrl+Enter: 'COMIX ZIP Downloader & Live Stats by TGS - Установка скрипта - Violentmonkey, профиль Виктор В. — Яндекс Браузер'
+[2026-11-14 22:37:13] Tab still open, sending Ctrl+W to close it...
+[2026-11-14 22:37:13] Successfully finished install cycle for: COMIX ZIP Downloader
+[2026-11-14 22:37:14] Removed pending_urls.txt
+[2026-11-14 22:37:14] === All scripts processed successfully! ===
