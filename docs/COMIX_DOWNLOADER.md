@@ -4,6 +4,7 @@
 [![Violentmonkey](https://img.shields.io/badge/Violentmonkey-compatible-green.svg)](https://violentmonkey.github.io/)
 [![Tampermonkey](https://img.shields.io/badge/Tampermonkey-compatible-green.svg)](https://www.tampermonkey.net/)
 [![Patreon](https://img.shields.io/badge/Support-Patreon-FF424D.svg)](https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_comix&utm_medium=tgs_suite)
+[![Boosty](https://img.shields.io/badge/Support-Boosty-F15F2C.svg)](https://boosty.to/terebonkoff?utm_source=userscript_comix&utm_medium=tgs_suite)
 [![18+ Content](https://img.shields.io/badge/Content-18%2B%20Adult%20Only-red.svg)](https://github.com/Terebonkoff/TGS-UserScripts)
 
 > **Next-generation all-in-one suite for browsing, tracking, and downloading adult comics, manga, and manhwa.**  
@@ -16,7 +17,8 @@
 | Action | Direct Link |
 |---|---|
 | **🚀 Install in Violentmonkey / Tampermonkey** | [**👉 Click Here to Install (v3.403)**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/COMIX_ZIP_Downloader_by_TGS.user.js) |
-| **💖 Support the Creator on Patreon** | [**Patreon Creator Page**](https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_comix&utm_medium=tgs_suite) |
+| **☕ Support via Boosty (Card / PayPal)** | [**Boosty Creator Page**](https://boosty.to/terebonkoff?utm_source=userscript_comix&utm_medium=tgs_suite) |
+| **💖 Support via Patreon (Game Studio)** | [**Patreon Creator Page**](https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_comix&utm_medium=tgs_suite) |
 | **⭐ Official GitHub Repository** | [**Terebonkoff/TGS-UserScripts**](https://github.com/Terebonkoff/TGS-UserScripts) |
 
 ---

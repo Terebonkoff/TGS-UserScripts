@@ -1010,6 +1010,20 @@
                 white-space: nowrap !important;
             }
 
+            
+            .tgs-btn-boosty {
+                background: rgba(241, 95, 44, 0.22) !important;
+                border: 1px solid rgba(241, 95, 44, 0.65) !important;
+                color: #ff8a65 !important;
+            }
+            .tgs-btn-boosty:hover {
+                background: #f15f2c !important;
+                border-color: #f15f2c !important;
+                color: #ffffff !important;
+                transform: translateY(-1px) !important;
+                box-shadow: 0 0 10px rgba(241, 95, 44, 0.7) !important;
+            }
+
             .tgs-btn-patreon {
                 background: linear-gradient(135deg, rgba(239, 68, 68, 0.28), rgba(225, 29, 72, 0.28)) !important;
                 border: 1px solid rgba(239, 68, 68, 0.75) !important;
@@ -2415,10 +2429,13 @@
                 <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-brand-scripts-link" title="Перейти в репозиторий TGS Scripts на GitHub">TGS Scripts</a>
             </span>
             <div class="tgs-actions">
-                <a href="https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_rutracker&utm_medium=tgs_suite" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-patreon" title="Поддержать автора на Patreon">
-                    <span class="tgs-heart">💖</span> <span>Support Me</span>
+                <a href="https://boosty.to/terebonkoff?utm_source=userscript_rutracker&utm_medium=tgs_suite" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-boosty" title="Support via Boosty (Cards & PayPal)">
+                    <span>☕</span> <span>Boosty</span>
                 </a>
-                <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-github" title="Официальный GitHub TGS: все скрипты и обновления">
+                <a href="https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_rutracker&utm_medium=tgs_suite" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-patreon" title="Support on Patreon">
+                    <span class="tgs-heart">💖</span> <span>Patreon</span>
+                </a>
+                <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-github" title="Official GitHub TGS Repository">
                     <span>⭐</span> <span>GitHub</span>
                 </a>
             </div>

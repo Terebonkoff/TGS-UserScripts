@@ -4,6 +4,7 @@
 [![Violentmonkey](https://img.shields.io/badge/Violentmonkey-compatible-green.svg)](https://violentmonkey.github.io/)
 [![Tampermonkey](https://img.shields.io/badge/Tampermonkey-compatible-green.svg)](https://www.tampermonkey.net/)
 [![Patreon](https://img.shields.io/badge/Support-Patreon-FF424D.svg)](https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_hub&utm_medium=tgs_suite)
+[![Boosty](https://img.shields.io/badge/Support-Boosty-F15F2C.svg)](https://boosty.to/terebonkoff?utm_source=userscript_hub&utm_medium=tgs_suite)
 [![18+ Content](https://img.shields.io/badge/Content-18%2B%20Adult%20Only-red.svg)](https://github.com/Terebonkoff/TGS-UserScripts)
 
 > ⚠️ **WARNING: ADULT 18+ CONTENT ONLY**  
@@ -36,8 +37,12 @@ Each script is a complete standalone tool featuring deep layout optimization, ba
 
 ---
 
-## 💖 Support the Studio
+## 💖 Support the Studio & Ongoing Updates
 
-All tools and scripts are authored and actively maintained for free by **Terebonkoff Game Studio**.  
-If you enjoy our work and want to support ongoing development and adult gaming projects, please consider backing us on Patreon:  
-👉 [**Patreon: Terebonkoff Game Studio**](https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_hub&utm_medium=tgs_suite)
+All userscripts and downloaders are developed and actively maintained for free by **Terebonkoff Game Studio**.  
+If you appreciate our tools and want to support ongoing development and adult gaming projects, you can back us directly via:
+
+- ☕ [**Boosty: Terebonkoff Studio (Cards & PayPal)**](https://boosty.to/terebonkoff?utm_source=userscript_hub&utm_medium=tgs_suite) — Ideal for quick 1-click tips, bank cards, and PayPal without mandatory monthly subscriptions.
+- 💖 [**Patreon: Terebonkoff Game Studio**](https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_hub&utm_medium=tgs_suite) — Perfect for monthly backers who wish to follow game development updates, beta builds, and art previews.
+
+*(Additional payment methods, including direct cryptocurrency donations, will be added in upcoming updates!)*
