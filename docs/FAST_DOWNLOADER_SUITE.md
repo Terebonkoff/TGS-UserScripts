@@ -3,11 +3,11 @@
 [![Version](https://img.shields.io/badge/version-4.0.1-blue.svg)](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/Vik1ngFile_MediaFire_Downloader_by_TGS.user.js)
 [![Violentmonkey](https://img.shields.io/badge/Violentmonkey-compatible-green.svg)](https://violentmonkey.github.io/)
 
-> **Автоматизатор и ускоритель загрузок с файлообменников.**  
-> Автоматический старт загрузки на MediaFire, обход ограничений скорости на Pixeldrain, поддержка Gofile, 1Fichier, Datanodes, VIK1NGFILE и автоматическое раскрытие ссылок-редиректов F95Zone.
+> **Fast download automator and speed enhancer for multi-host storage.**  
+> Automatically starts downloads on MediaFire, bypasses Pixeldrain download speed throttling, and supports Gofile, 1Fichier, Datanodes, VIK1NGFILE, and direct unmasking of F95Zone redirect links.
 
 ---
 
-## ⚡ Быстрая установка
+## ⚡ Fast 1-Click Install
 
-- [**👉 Установить Downloader Suite (v4.0.1)**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/Vik1ngFile_MediaFire_Downloader_by_TGS.user.js)
+- [**👉 Install Downloader Suite (v4.0.1)**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/Vik1ngFile_MediaFire_Downloader_by_TGS.user.js)

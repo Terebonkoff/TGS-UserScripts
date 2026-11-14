@@ -6,38 +6,38 @@
 [![Patreon](https://img.shields.io/badge/Support-Patreon-FF424D.svg)](https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_hub&utm_medium=tgs_suite)
 [![18+ Content](https://img.shields.io/badge/Content-18%2B%20Adult%20Only-red.svg)](https://github.com/Terebonkoff/TGS-UserScripts)
 
-> ⚠️ **ПРЕДУПРЕЖДЕНИЕ: КОНТЕНТ 18+ (ADULT ONLY)**  
-> Данный репозиторий содержит скрипты, разработанные специально для сайтов взрослой тематики, трекеров и архивов комиксов/хентая. Если вам меньше 18 лет, пожалуйста, покиньте данную страницу.
+> ⚠️ **WARNING: ADULT 18+ CONTENT ONLY**  
+> This repository contains browser userscripts developed specifically for adult websites, adult gaming portals, trackers, and comic/hentai archives. If you are under 18 years of age, please leave this repository immediately.
 
-Добро пожаловать в официальную коллекцию скриптов и интерфейсных улучшений от **Terebonkoff Game Studio (TGS)**!  
-Каждый скрипт — это полноценный инструмент с глубокой оптимизацией интерфейса, пакетной загрузкой и живой аналитикой.
+Welcome to the official collection of browser userscripts and UI enhancements crafted by **Terebonkoff Game Studio (TGS)**!  
+Each script is a complete standalone tool featuring deep layout optimization, batch downloading, real-time analytics, and clean ad-free reading.
 
 ---
 
-## 🧭 Каталог скриптов TGS
+## 🧭 TGS UserScripts Catalog
 
-| Скрипт | Назначение | Быстрая установка | Подробный обзор со скриншотами |
+| Script Name | Purpose & Highlights | 1-Click Install | Full Guide & Screenshots |
 |---|---|:---:|:---:|
-| 📚 **COMIX ZIP Downloader & Live Stats** | Пакетное скачивание глав в ZIP, живая статистика карточек (страницы, рейтинг, загрузки), статус VIEWED | [**🚀 Установить v3.403**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/COMIX_ZIP_Downloader_by_TGS.user.js) | [**📸 Смотреть скриншоты и обзор**](docs/COMIX_DOWNLOADER.md) |
-| 🚀 **F95Zone: Enhanced Suite** | Адаптивный макет под боковое меню, устранение обрезаний, прямое HD-превью и Lightbox | [**🚀 Установить v24.4**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/F95Zone_Enhanced_Suite.user.js) | [**📖 Описание возможностей**](docs/F95ZONE_ENHANCED_SUITE.md) |
-| 🔞 **Pornolab: Enhanced Suite** | Превью в списке, боковой док предпросмотра, вырезание донатов и плашек, HD Lightbox | [**🚀 Установить v5.4.2**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/Pornolab_Complete_Suite.user.js) | [**📖 Описание возможностей**](docs/PORNOLAB_ENHANCED_SUITE.md) |
-| 🧲 **RuTracker: Enhanced Suite** | Превью в списке, кнопка скачивания `.torrent`, компактный Автор, ресайзер колонок | [**🚀 Установить v5.4.2**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/RuTracker_Complete_Suite.user.js) | [**📖 Описание возможностей**](docs/RUTRACKER_ENHANCED_SUITE.md) |
-| ⚡ **Vik1ngFile & Multi-Host Downloader** | Обход ограничений Pixeldrain, автостарт MediaFire, Gofile, 1Fichier, раскрытие редиректов F95 | [**🚀 Установить v4.0.1**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/Vik1ngFile_MediaFire_Downloader_by_TGS.user.js) | [**📖 Описание возможностей**](docs/FAST_DOWNLOADER_SUITE.md) |
+| 📚 **COMIX ZIP Downloader & Live Stats** | Batch download all chapters into ZIP, live card stats (pages, downloads, favorites, rating), auto-tracked VIEWED history, gold-framed Favorites | [**🚀 Install v3.403**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/COMIX_ZIP_Downloader_by_TGS.user.js) | [**📸 View Screenshots & Docs**](docs/COMIX_DOWNLOADER.md) |
+| 🚀 **F95Zone: Enhanced Suite** | Responsive sidebar layout, zero content cutoff, direct uncompressed HD screenshots, full-size Lightbox, size sliders & clean Windows mirrors | [**🚀 Install v24.4**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/F95Zone_Enhanced_Suite.user.js) | [**📖 View Features & Docs**](docs/F95ZONE_ENHANCED_SUITE.md) |
+| 🔞 **Pornolab: Enhanced Suite** | Inline list previews, hover Right-Dock preview panel, instant `.torrent` button, donation & banner purge, full-size FastPic/IMX Lightbox | [**🚀 Install v5.4.2**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/Pornolab_Complete_Suite.user.js) | [**📖 View Features & Docs**](docs/PORNOLAB_ENHANCED_SUITE.md) |
+| 🧲 **RuTracker: Enhanced Suite** | Inline list previews, 1-click `.torrent` download, compact author column, forum resizer & uncompressed FastPic/IBB Lightbox viewer | [**🚀 Install v5.4.2**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/RuTracker_Complete_Suite.user.js) | [**📖 View Features & Docs**](docs/RUTRACKER_ENHANCED_SUITE.md) |
+| ⚡ **Vik1ngFile & Multi-Host Downloader** | Bypass Pixeldrain speed limits, auto-start MediaFire downloads, Gofile, 1Fichier, Datanodes, VIK1NGFILE & unmask F95Zone redirects | [**🚀 Install v4.0.1**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/Vik1ngFile_MediaFire_Downloader_by_TGS.user.js) | [**📖 View Features & Docs**](docs/FAST_DOWNLOADER_SUITE.md) |
 
 ---
 
-## 🛠 Как установить и настроить
+## 🛠 Installation & Automatic Updates
 
-1. Установите менеджер юзерскриптов для вашего браузера:
-   - [**Violentmonkey**](https://violentmonkey.github.io/) (рекомендуется) или [**Tampermonkey**](https://www.tampermonkey.net/).
-2. В таблице выше нажмите **«🚀 Установить»** напротив нужного скрипта.
-3. В открывшейся вкладке подтвердите установку в Violentmonkey.
-4. Все скрипты содержат теги автообновления (`@updateURL`), поэтому они будут обновляться автоматически при выходе новых версий!
+1. Install a userscript manager in your browser:
+   - [**Violentmonkey**](https://violentmonkey.github.io/) (strongly recommended) or [**Tampermonkey**](https://www.tampermonkey.net/).
+2. In the catalog table above, click the **«🚀 Install»** button for your desired script.
+3. In the tab that opens, click **Confirm installation**.
+4. Every script has built-in auto-update tags (`@downloadURL` and `@updateURL`), ensuring you automatically receive the latest bugfixes and features directly from this repository!
 
 ---
 
-## 💖 Поддержка автора
+## 💖 Support the Studio
 
-Все скрипты разрабатываются и поддерживаются бесплатно автором **Terebonkoff Game Studio**.  
-Если вам нравятся эти инструменты, поддержите автора на Patreon:  
+All tools and scripts are authored and actively maintained for free by **Terebonkoff Game Studio**.  
+If you enjoy our work and want to support ongoing development and adult gaming projects, please consider backing us on Patreon:  
 👉 [**Patreon: Terebonkoff Game Studio**](https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_hub&utm_medium=tgs_suite)

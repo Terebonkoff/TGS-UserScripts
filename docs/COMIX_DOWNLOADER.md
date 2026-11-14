@@ -6,134 +6,135 @@
 [![Patreon](https://img.shields.io/badge/Support-Patreon-FF424D.svg)](https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_comix&utm_medium=tgs_suite)
 [![18+ Content](https://img.shields.io/badge/Content-18%2B%20Adult%20Only-red.svg)](https://github.com/Terebonkoff/TGS-UserScripts)
 
-> **Автономный комплекс нового поколения для чтения и скачивания взрослой манги, комиксов и хентая.**  
-> Позволяет скачивать целые многотомники или отдельные главы в упорядоченных ZIP-архивах на максимальной скорости, отображает живую статистику прямо в каталогах, автоматически отмечает просмотренные тайтлы и позволяет вести собственное Избранное с эффектной золотой рамкой!
+> **Next-generation all-in-one suite for browsing, tracking, and downloading adult comics, manga, and hentai.**  
+> Batch download entire multi-chapter series or single chapters directly into clean ZIP archives at lightning speed, view real-time card stats directly in catalogs, auto-track viewed titles, and curate your personal Favorites with a stunning golden border!
 
 ---
 
-## ⚡ Быстрая установка
+## ⚡ 1-Click Fast Install
 
-| Действие | Ссылка |
+| Action | Direct Link |
 |---|---|
-| **🚀 Установить в Violentmonkey / Tampermonkey** | [**👉 Кликните здесь для установки (v3.403)**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/COMIX_ZIP_Downloader_by_TGS.user.js) |
-| **💖 Поддержать Terebonkoff Game Studio** | [**Patreon Studio**](https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_comix&utm_medium=tgs_suite) |
-| **⭐ Исходный код репозитория** | [**Terebonkoff/TGS-UserScripts**](https://github.com/Terebonkoff/TGS-UserScripts) |
+| **🚀 Install in Violentmonkey / Tampermonkey** | [**👉 Click Here to Install (v3.403)**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/COMIX_ZIP_Downloader_by_TGS.user.js) |
+| **💖 Support Terebonkoff Game Studio on Patreon** | [**Patreon Creator Page**](https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_comix&utm_medium=tgs_suite) |
+| **⭐ Official GitHub Repository** | [**Terebonkoff/TGS-UserScripts**](https://github.com/Terebonkoff/TGS-UserScripts) |
 
 ---
 
-## 🔥 Что умеет скрипт (Ключевые возможности)
+## 🔥 Key Features
 
-1. **📊 Живая статистика карточек (Live Card Stats):**
-   - Прямо в общей ленте, жанрах и поиске (до перехода на страницу комикса) выводит аккуратную плашку с реальными данными:
-     - 📄 **Количество страниц** в манге или выпуске;
-     - 📥 **Количество скачиваний** другими пользователями;
-     - ❤️ **Количество добавлений в избранное** (лайки / сердечки читателей);
-     - ★ **Средний пользовательский рейтинг**;
-     - 👁 **Общее количество просмотров**.
-2. **✅ Умная отметка просмотренного (`VIEWED` + зелёная подсветка):**
-   - Скрипт запоминает всё, что вы когда-либо открывали. Просмотренные тайтлы выделяются яркой неоново-зелёной рамкой и аккуратной плашкой `✔ VIEWED`. Больше не нужно гадать, читали вы этот комикс или нет!
-3. **⭐ Личное Избранное (`FAVORITE` + золотая рамка):**
-   - В правом верхнем углу каждой обложки расположена аккуратная белая звёздочка.
-   - Один клик по звёздочке — и карточка мгновенно переходит в **Избранное TGS**: рамка окрашивается в роскошный золотистый цвет, зажигается золотой бейдж `★ FAVORITE`, а звёздочка наполняется золотым свечением. Клик по звёздочке не открывает комикс, позволяя быстро сортировать ленту.
-4. **📦 Пакетное скачивание всех глав разом (Download All Chapters):**
-   - На страницах многотомных веб-комиксов и манхвы появляется кнопка **DOWNLOAD ALL (X CHAPTERS)**, которая в один клик выкачивает все главы целиком и бережно раскладывает их по упорядоченным папкам внутри одного ZIP-архива.
-5. **⚡ Молниеносное скачивание одной главы в ZIP:**
-   - Высокоскоростной асинхронный сбор оригиналов изображений в максимальном разрешении в обход ограничений хостингов с живым прогресс-баром в реальном времени.
-6. **🌐 Встроенный навигатор по 38+ сайтам:**
-   - Быстрое всплывающее меню переходов между лучшими онлайн-библиотеками комиксов интернета.
-
----
-
-## 📸 Галерея и демонстрация работы
-
-### 1. Живая статистика карточек (страницы, рейтинг, просмотры)
-Прямо в ленте каталога выводятся точные данные о количестве страниц, пользовательских оценках и популярности:
-![Живая статистика на iLikeComix](../assets/screenshots/comix/01_ilikecomix_stats.jpg)
+1. **📊 Live Card Stats in Catalogs (Zero Clicking Needed):**
+   - Directly on listing pages, genre filters, and search results (before opening any gallery), an elegant overlay displays live statistics:
+     - 📄 **Page Count** — exact number of pages in the manga/chapter;
+     - 📥 **Download Count** — popularity among other users;
+     - ❤️ **Favorites / Likes** — total user bookmarks and upvotes;
+     - ★ **Rating** — community score out of 5;
+     - 👁 **Views** — total visitor impressions.
+2. **✅ Smart Viewed History (`VIEWED` + Neon-Green Outline):**
+   - Automatically tracks every comic you open or view. Previously explored titles are highlighted with a prominent neon-green outline and a `✔ VIEWED` badge. Never lose track of what you've already read!
+3. **⭐ Personal Favorites System (`FAVORITE` + Glowing Gold Frame):**
+   - Every card features a sleek white star button in the top-right corner.
+   - Clicking the star instantly toggles **TGS Favorite** status: the card gets an eye-catching glowing gold frame, the badge switches to `★ FAVORITE`, and the star fills with radiant gold!
+   - Clicking the star does not navigate away, allowing you to curate your reading list seamlessly.
+4. **📦 Batch Download All Chapters in 1 Click (Multi-Volume Series):**
+   - On webtoon, manhwa, and serialized comic pages, a prominent **DOWNLOAD ALL (X CHAPTERS)** button packages all chapters into a neatly organized ZIP archive with proper chronological folder naming.
+5. **⚡ Blazing Fast Single-Chapter ZIP Downloader:**
+   - Multi-threaded asynchronous image fetching with automatic CDN limit bypass, retry handlers, and a live percentage progress bar.
+6. **🌐 Interactive 38+ Site Navigator:**
+   - Built-in popup dropdown providing instant 1-click access to the top 38 comic archives on the web.
 
 ---
 
-### 2. Отметка просмотренного (статус VIEWED и зелёная рамка)
-Тайтлы, которые вы уже изучали, выделяются зелёной рамкой с бейджем `✔ VIEWED` и подробной статистикой (страницы, загрузки, избранное):
-![Статистика и VIEWED на imHentai](../assets/screenshots/comix/02_imhentai_stats_viewed.png)
+## 📸 Screenshots & Showcase
+
+### 1. Live Card Statistics (Pages, Rating, Views)
+Instant preview of comic length, community ratings, and view counts before clicking into any title:
+![Live Card Statistics](../assets/screenshots/comix/01_ilikecomix_stats.jpg)
 
 ---
 
-### 3. Индикация популярности и просмотренного в каталогах
-Поддержка крупнейших хентай-агрегаторов с живым обновлением счётчиков фаворитов и страниц:
-![Статистика и VIEWED на nHentai](../assets/screenshots/comix/03_nhentai_stats_viewed.jpg)
+### 2. Auto-Tracked Reading History (`✔ VIEWED` Badge)
+Titles you have already opened are highlighted with a neon-green border, a `✔ VIEWED` badge, and full card metrics:
+![Viewed History Badge](../assets/screenshots/comix/02_imhentai_stats_viewed.png)
 
 ---
 
-### 4. Комплексная аналитика для манхвы и веб-комиксов
-Отображение страниц, закладок и рейтингов на современных манхва-порталах:
-![Статистика на AllPornComic](../assets/screenshots/comix/04_allporncomic_stats.png)
+### 3. Manga Archive Integration & Engagement Counters
+Accurate page counts, favorite tallies, and visited tags across the largest manga platforms:
+![Manga Statistics](../assets/screenshots/comix/03_nhentai_stats_viewed.jpg)
 
 ---
 
-### 5. Пакетная загрузка всех глав целиком
-Одной кнопкой **DOWNLOAD ALL** весь многотомник скачивается в единый упорядоченный ZIP-архив:
-![Скачивание всех глав](../assets/screenshots/comix/05_batch_download_all_chapters.png)
+### 4. Manhwa & Webtoon Card Analytics
+Full page counts, reader bookmarks, and 5-star ratings displayed seamlessly on modern manhwa layouts:
+![Manhwa Statistics](../assets/screenshots/comix/04_allporncomic_stats.png)
 
 ---
 
-### 6. Скоростная загрузка главы с живым индикатором
-Наглядный прогресс скачивания с отображением текущей страницы, общего объёма и процента готовности:
-![Прогресс скачивания](../assets/screenshots/comix/06_single_chapter_download_progress.png)
+### 5. 1-Click Full Series Batch Downloader
+Download all chapters of any serialized comic with a single click into a single organized ZIP:
+![Batch Download All Chapters](../assets/screenshots/comix/05_batch_download_all_chapters.png)
 
 ---
 
-### 7. Быстрое меню переходов по сайтам
-Удобный выпадающий список для мгновенного перехода в любую поддерживаемую библиотеку:
-![Поддерживаемые сайты](../assets/screenshots/comix/07_supported_sites_dropdown.png)
+### 6. Real-Time Download Progress Bar
+Lightning-fast parallel image packaging with live percentage, page numbers, and remaining file counter:
+![Download Progress Bar](../assets/screenshots/comix/06_single_chapter_download_progress.png)
 
 ---
 
-## 🌐 Полный список поддерживаемых сайтов (38 ресурсов)
-
-Скрипт оптимизирован, оснащён специальными парсерами и непрерывно тестируется на огромном числе ресурсов:
-
-### 🌟 Крупнейшие мировые архивы манги и хентая:
-- `nhentai.net` — живые карточки, статус VIEWED, Избранное, скачивание в ZIP;
-- `imhentai.xxx` — карточки со страницами, скачиваниями и избранным;
-- `hentaiera.com` — точные счётчики избранного и загрузок (с сохранением нативного счётчика страниц);
-- `e-hentai.org` / `exhentai.org` — оригиналы в максимальном разрешении;
-- `18comic.vip` / `18comic.org` / `18kami.com` — обход шифрования и выкачивание глав;
-- `allporncomic.com` / `allporncomics.co` — поддержка манхва-ридеров, рейтинги, лайки, пакетное скачивание глав;
-- `8muses.com` / `8muses.io` — пакетная загрузка альбомов;
-- `multporn.net` — пакетное сохранение галерей.
-
-### 📚 Популярные порталы комиксов и CG-артов:
-- `ilikecomix.com` — интеграция PhotoSwipe-галерей и статистики;
-- `xlecx.one` / `xlecx.com` — обход рекламы и скачивание комиксов;
-- `bestporncomix.com` — карточки и скачивание выпусков;
-- `porncomix.info` — полная поддержка архивов;
-- `freeadultcomix.com` — быстрое сохранение глав;
-- `xcartx.com` — пакетная выгрузка картинок;
-- `xyzcomics.com` — сохранение в ZIP;
-- `kingcomix.com` — поддержка многостраничных выпусков;
-- `onlycomix.net` — выкачивание комиксов.
-
-### ⚡ Авторские студии, 3D и тематические порталы:
-- `toon34.com` — поддержка 3D и мультипликационных комиксов;
-- `palcomix.com` — архивы классических пародий;
-- `savitahd.net` — загрузка высококачественных глав;
-- `comixhere.xyz` — скачивание выпусков;
-- `sexkomix22.com` / `sexkomix6.com` — поддержка серий комиксов;
-- `svscomics.com` — сохранение выпусков;
-- `gedecomix.com` — полная интеграция галерей;
-- `oglaf.com` — сохранение веб-стрипов;
-- `thehentai.net` — карточки и загрузка архивов;
-- `erofus.com` / `erovers-comics.com` — тематические комикс-библиотеки;
-- `hentaixcomic.com` / `hentaixdickgirl.com` / `hentaixyuri.com` — специализированные архивы;
-- `nxt-comics.com` — поддержка свежих веб-релизов.
+### 7. Instant Multi-Site Navigation Menu
+Switch between the best 38 adult comic archives instantly with the integrated dropdown navigator:
+![Supported Sites Menu](../assets/screenshots/comix/07_supported_sites_dropdown.png)
 
 ---
 
-## ⚙️ Установка и автообновление
+## 🌐 Full List of Supported Sites (38 Archives)
 
-Скрипт содержит официальные мета-теги `@downloadURL` и `@updateURL`.  
-После установки браузерное расширение (**Violentmonkey** или **Tampermonkey**) автоматически проверяет наличие свежих версий прямо из этого репозитория.
+The suite is optimized, powered by custom parsers, and continuously tested across 38 major platforms:
 
-1. Установите [Violentmonkey](https://violentmonkey.github.io/) (рекомендуется) или Tampermonkey.
-2. Откройте [**прямую ссылку на скрипт (v3.403)**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/COMIX_ZIP_Downloader_by_TGS.user.js).
-3. В открывшейся вкладке подтвердите установку.
+### 🌟 Premier Manga & Hentai Archives:
+- `nhentai.net` — Live card stats, VIEWED badge, Favorites, high-speed ZIP export;
+- `imhentai.xxx` — Page counts, downloads, favorite tallies, single-click ZIPs;
+- `hentaiera.com` — Live favorite and download stats with native page counter integration;
+- `e-hentai.org` / `exhentai.org` — Full-resolution master image extraction;
+- `18comic.vip` / `18comic.org` / `18kami.com` — Anti-scramble image reconstruction & chapter downloads;
+- `allporncomic.com` / `allporncomics.co` — Manhwa reader support, ratings, bookmarks, full batch downloader;
+- `8muses.com` / `8muses.io` — Multi-album extraction;
+- `multporn.net` — Batch gallery archiver.
+
+### 📚 Popular Comic Portals & CG Art Repositories:
+- `ilikecomix.com` — PhotoSwipe gallery integration & live card statistics;
+- `xlecx.one` / `xlecx.com` — Ad-bypass and clean ZIP downloads;
+- `bestporncomix.com` — Card analytics and high-speed downloads;
+- `porncomix.info` — Full archive downloader;
+- `freeadultcomix.com` — Clean chapter downloader;
+- `xcartx.com` — High-speed parallel image packaging;
+- `xyzcomics.com` — Instant ZIP packaging;
+- `kingcomix.com` — Multi-page comic series;
+- `onlycomix.net` — Clean extraction.
+
+### ⚡ Author Studios, 3D Artists & Themed Libraries:
+- `toon34.com` — 3D and animated comic series;
+- `palcomix.com` — Classic parody comic archives;
+- `savitahd.net` — High-definition serialized chapter archiver;
+- `comixhere.xyz` — Full issue download support;
+- `sexkomix22.com` / `sexkomix6.com` — Multi-part series downloader;
+- `svscomics.com` — Clean issue packaging;
+- `gedecomix.com` — Full gallery integration;
+- `oglaf.com` — Webcomic archiver;
+- `thehentai.net` — Card metrics and ZIP exports;
+- `erofus.com` / `erovers-comics.com` — Themed comic portals;
+- `hentaixcomic.com` / `hentaixdickgirl.com` / `hentaixyuri.com` — Niche comic archives;
+- `nxt-comics.com` — Latest webcomic releases.
+
+---
+
+## ⚙️ Installation & Automatic Updates
+
+All scripts include official `@downloadURL` and `@updateURL` metadata tags.  
+Once installed, your userscript manager (**Violentmonkey** or **Tampermonkey**) will automatically check for and install updates directly from this repository.
+
+1. Install [Violentmonkey](https://violentmonkey.github.io/) (recommended) or [Tampermonkey](https://www.tampermonkey.net/).
+2. Open the [**Direct Script Installation Link (v3.403)**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/COMIX_ZIP_Downloader_by_TGS.user.js).
+3. Click **Confirm installation** in the browser tab.

@@ -4,24 +4,24 @@
 [![Violentmonkey](https://img.shields.io/badge/Violentmonkey-compatible-green.svg)](https://violentmonkey.github.io/)
 [![18+ Content](https://img.shields.io/badge/Content-18%2B%20Adult%20Only-red.svg)](https://github.com/Terebonkoff/TGS-UserScripts)
 
-> **Тотальный комплекс модернизации Pornolab.**  
-> Встроенные превью в списках раздач, умная боковая панель быстрого просмотра (Dock Preview), единая панель инструментов, чистка донатов и навязчивых плашек, полноразмерные скриншоты и полноэкранный Lightbox.
+> **Complete overhaul and modern interface suite for Pornolab.**  
+> Inline list previews, right-dock hover screenshot preview panel, unified topic toolbar, full donation banner purge, uncompressed FastPic/IMX screenshots, and a keyboard-navigable Lightbox viewer.
 
 ---
 
-## ⚡ Быстрая установка
+## ⚡ Fast 1-Click Install
 
-- [**👉 Установить Pornolab Suite (v5.4.2)**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/Pornolab_Complete_Suite.user.js)
+- [**👉 Install Pornolab Suite (v5.4.2)**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/Pornolab_Complete_Suite.user.js)
 
 ---
 
-## 🔥 Ключевые возможности
+## 🔥 Key Features
 
-1. **📑 Встроенные превью и прямая кнопка скачивания:**
-   - Превью раздачи прямо в строке таблицы + мгновенная загрузка `.torrent` файла без захода в тему.
-2. **🧹 Полная очистка интерфейса:**
-   - Вырезаны навязчивые плашки («Если не нашли Pornolab...»), донат-баннеры и пустые рекламные блоки.
-3. **👁 Боковое окно быстрого предпросмотра (Right Dock Preview):**
-   - Плавное появление скриншотов в боковом доке при наведении курсора на название темы.
-4. **🖼 Полноразмерный Lightbox:**
-   - Раскрытие картинок хостингов FastPic, IMX, ImageTwist в оригинальном разрешении без рекламы хостингов.
+1. **📑 Inline Torrent Previews & Instant Download Button:**
+   - Previews release screenshots directly in table rows alongside an instant `.torrent` download button without having to enter the topic.
+2. **🧹 Complete Banner & Announcement Purge:**
+   - Safely removes obtrusive warnings, donation prompts, and dead advertisement containers while preserving essential forum navigation.
+3. **👁 Right-Dock Hover Preview Window:**
+   - Smoothly displays release screenshots in a sticky right-side preview drawer when hovering over release titles.
+4. **🖼 Full-Resolution Lightbox:**
+   - Direct loading of FastPic, IMX, and ImageTwist images in original resolution without external ads or popups.
