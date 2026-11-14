@@ -1,6 +1,7 @@
 # 📚 COMIX ZIP Downloader & Live Stats by TGS
 
-[![Version](https://img.shields.io/badge/version-3.403-blue.svg)](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/COMIX_ZIP_Downloader_by_TGS.user.js)
+[![Version](https://img.shields.io/badge/version-3.407-blue.svg)](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/COMIX_ZIP_Downloader_by_TGS.user.js)
+[![Greasy Fork](https://img.shields.io/badge/Greasy%20Fork-Install-red.svg)](https://greasyfork.org/ru/scripts/605547-comix-zip-downloader-live-stats-by-tgs)
 [![Violentmonkey](https://img.shields.io/badge/Violentmonkey-compatible-green.svg)](https://violentmonkey.github.io/)
 [![Tampermonkey](https://img.shields.io/badge/Tampermonkey-compatible-green.svg)](https://www.tampermonkey.net/)
 [![Patreon](https://img.shields.io/badge/Support-Patreon-FF424D.svg)](https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_comix&utm_medium=tgs_suite)
@@ -8,7 +9,7 @@
 [![18+ Content](https://img.shields.io/badge/Content-18%2B%20Adult%20Only-red.svg)](https://github.com/Terebonkoff/TGS-UserScripts)
 
 > **Next-generation all-in-one suite for browsing, tracking, and downloading adult comics, manga, and manhwa.**  
-> Automatically fetches live metrics on card covers across 38+ websites, highlights your reading history, allows 1-click personal Favoriting with custom golden glow frames, and packages entire multi-volume series into clean ZIP archives at maximum bandwidth.
+> Automatically fetches live metrics on card covers across 28+ websites, highlights your reading history, allows 1-click personal Favoriting with custom golden glow frames, and packages entire multi-volume series into clean ZIP archives at maximum bandwidth.
 
 ---
 
@@ -16,7 +17,8 @@
 
 | Action | Direct Link |
 |---|---|
-| **🚀 Install in Violentmonkey / Tampermonkey** | [**👉 Click Here to Install (v3.403)**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/COMIX_ZIP_Downloader_by_TGS.user.js) |
+| **🚀 Install via GitHub (v3.407)** | [**👉 Click to Install from GitHub**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/COMIX_ZIP_Downloader_by_TGS.user.js) |
+| **🦊 Install via Greasy Fork** | [**👉 Click to Install from Greasy Fork**](https://greasyfork.org/ru/scripts/605547-comix-zip-downloader-live-stats-by-tgs) |
 | **☕ Support via Boosty (Card / PayPal)** | [**Boosty Creator Page**](https://boosty.to/terebonkoff?utm_source=userscript_comix&utm_medium=tgs_suite) |
 | **💖 Support via Patreon (Game Studio)** | [**Patreon Creator Page**](https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_comix&utm_medium=tgs_suite) |
 | **⭐ Official GitHub Repository** | [**Terebonkoff/TGS-UserScripts**](https://github.com/Terebonkoff/TGS-UserScripts) |
@@ -55,7 +57,9 @@ Instead of forcing you to click into every title to check its details, the scrip
 
 ### 3. 📦 Instant High-Speed ZIP Downloader (Single & Multi-Volume)
 - **1-Click Batch Downloader:** Serialized manga and webtoons feature a dedicated **DOWNLOAD ALL (X CHAPTERS)** button to download and package all volumes into a single structured ZIP archive.
-- **Fast Single-Chapter Archiver:** Multi-threaded image fetching bypasses server-side speed throttles and displays an active progress percentage with live page counts.
+- **Pristine Quality & Zero Recompression:** Downloads all comic pages in original pristine resolution without lossy recompression or watermarks.
+- **Zero-Padded Clean File Organization:** Images are saved with proper zero-padded sequential numbering (`001.jpg`, `002.jpg`, ...) ensuring perfect alphabetical sorting across Windows Explorer, Honeyview, CDisplayEx, and mobile comic readers.
+- **⚡ Bulletproof Download Engine:** Multi-threaded concurrent chunk downloads, queue dispatching, anti-hang timeouts, and `GM_xmlhttpRequest` compatibility to bypass tricky CDN throttles and hotlink protections.
 
 | **Batch Multi-Chapter Downloader** | **Active Real-Time Progress Bar** |
 |:---:|:---:|
@@ -63,8 +67,10 @@ Instead of forcing you to click into every title to check its details, the scrip
 
 ---
 
-### 4. 🌐 Quick-Jump Navigator (38+ Supported Sites)
-A sleek expandable popup allows instant jumping between the internet's largest and highest-quality comic archives with zero bookmarks clutter:
+### 4. 🌐 Quick-Jump Navigator & Instant Language Switch
+- **28+ Curated Archives Navigator:** A sleek collapsible dropdown sorted by popularity allows instant jumping between the web's largest manga, manhwa, and adult comic portals with zero bookmarks clutter.
+- **🌍 Instant Language Switch (EN / RU):** Seamlessly toggle between English and Russian on the fly right from the control panel without refreshing the page.
+- **Clean UI Guarantee:** Clean metadata presentation — absent stats never clutter cards with empty dashes or missing badges.
 
 <p align="center">
   <img src="../assets/screenshots/comix/07_supported_sites_dropdown.png" alt="Supported Sites Menu" width="320" />
