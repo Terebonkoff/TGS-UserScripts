@@ -6,8 +6,8 @@
 [![Patreon](https://img.shields.io/badge/Support-Patreon-FF424D.svg)](https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_comix&utm_medium=tgs_suite)
 [![18+ Content](https://img.shields.io/badge/Content-18%2B%20Adult%20Only-red.svg)](https://github.com/Terebonkoff/TGS-UserScripts)
 
-> **Next-generation all-in-one suite for browsing, tracking, and downloading adult comics, manga, and hentai.**  
-> Batch download entire multi-chapter series or single chapters directly into clean ZIP archives at lightning speed, view real-time card stats directly in catalogs, auto-track viewed titles, and curate your personal Favorites with a stunning golden border!
+> **Next-generation all-in-one suite for browsing, tracking, and downloading adult comics, manga, and manhwa.**  
+> Automatically fetches live metrics on card covers across 38+ websites, highlights your reading history, allows 1-click personal Favoriting with custom golden glow frames, and packages entire multi-volume series into clean ZIP archives at maximum bandwidth.
 
 ---
 
@@ -16,86 +16,65 @@
 | Action | Direct Link |
 |---|---|
 | **🚀 Install in Violentmonkey / Tampermonkey** | [**👉 Click Here to Install (v3.403)**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/COMIX_ZIP_Downloader_by_TGS.user.js) |
-| **💖 Support Terebonkoff Game Studio on Patreon** | [**Patreon Creator Page**](https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_comix&utm_medium=tgs_suite) |
+| **💖 Support the Creator on Patreon** | [**Patreon Creator Page**](https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_comix&utm_medium=tgs_suite) |
 | **⭐ Official GitHub Repository** | [**Terebonkoff/TGS-UserScripts**](https://github.com/Terebonkoff/TGS-UserScripts) |
 
 ---
 
-## 🔥 Key Features
+## 📸 Visual Showcase & Core Capabilities
 
-1. **📊 Live Card Stats in Catalogs (Zero Clicking Needed):**
-   - Directly on listing pages, genre filters, and search results (before opening any gallery), an elegant overlay displays live statistics:
-     - 📄 **Page Count** — exact number of pages in the manga/chapter;
-     - 📥 **Download Count** — popularity among other users;
-     - ❤️ **Favorites / Likes** — total user bookmarks and upvotes;
-     - ★ **Rating** — community score out of 5;
-     - 👁 **Views** — total visitor impressions.
-2. **✅ Smart Viewed History (`VIEWED` + Neon-Green Outline):**
-   - Automatically tracks every comic you open or view. Previously explored titles are highlighted with a prominent neon-green outline and a `✔ VIEWED` badge. Never lose track of what you've already read!
-3. **⭐ Personal Favorites System (`FAVORITE` + Glowing Gold Frame):**
-   - Every card features a sleek white star button in the top-right corner.
-   - Clicking the star instantly toggles **TGS Favorite** status: the card gets an eye-catching glowing gold frame, the badge switches to `★ FAVORITE`, and the star fills with radiant gold!
-   - Clicking the star does not navigate away, allowing you to curate your reading list seamlessly.
-4. **📦 Batch Download All Chapters in 1 Click (Multi-Volume Series):**
-   - On webtoon, manhwa, and serialized comic pages, a prominent **DOWNLOAD ALL (X CHAPTERS)** button packages all chapters into a neatly organized ZIP archive with proper chronological folder naming.
-5. **⚡ Blazing Fast Single-Chapter ZIP Downloader:**
-   - Multi-threaded asynchronous image fetching with automatic CDN limit bypass, retry handlers, and a live percentage progress bar.
-6. **🌐 Interactive 38+ Site Navigator:**
-   - Built-in popup dropdown providing instant 1-click access to the top 38 comic archives on the web.
+### 1. 📊 Live Dynamic Card Metrics (Adapts to Each Archive)
+Instead of forcing you to click into every title to check its details, the script automatically parses whatever data is available on that specific site and cleanly displays it in a subtle overlay at the bottom of the card:
+- 📄 **Page Count** — exact number of pages inside;
+- 📥 **Downloads** — total community downloads;
+- ❤️ **Favorites / Bookmarks** — reader upvotes and likes;
+- ★ **Rating** — community score out of 5;
+- 👁 **Views** — total visitor impressions.
+
+*Each website has its own feature set — if a platform supports ratings or downloads, the script surfaces them dynamically right over the cover:*
+
+| **iLikeComix** (Pages • Rating • Views) | **imHentai** (Pages • Downloads • Likes) |
+|:---:|:---:|
+| ![iLikeComix Metrics](../assets/screenshots/comix/01_ilikecomix_stats.jpg) | ![imHentai Metrics & Viewed](../assets/screenshots/comix/02_imhentai_stats_viewed.png) |
+| **nHentai** (Pages • Favorites) | **AllPornComic** (Pages • Bookmarks • Rating) |
+| ![nHentai Metrics](../assets/screenshots/comix/03_nhentai_stats_viewed.jpg) | ![AllPornComic Metrics](../assets/screenshots/comix/04_allporncomic_stats.png) |
 
 ---
 
-## 📸 Screenshots & Showcase
-
-### 1. Live Card Statistics (Pages, Rating, Views)
-Instant preview of comic length, community ratings, and view counts before clicking into any title:
-![Live Card Statistics](../assets/screenshots/comix/01_ilikecomix_stats.jpg)
-
----
-
-### 2. Auto-Tracked Reading History (`✔ VIEWED` Badge)
-Titles you have already opened are highlighted with a neon-green border, a `✔ VIEWED` badge, and full card metrics:
-![Viewed History Badge](../assets/screenshots/comix/02_imhentai_stats_viewed.png)
+### 2. 🏷️ Smart Reading History (`VIEWED`) & Personal Favorites (`FAVORITE`)
+- **Auto-Tracked History:** Any comic you open or view is automatically remembered. Its card receives a crisp neon-green border and a top-left **`✔ VIEWED`** tag, so you never accidentally read the same story twice.
+- **1-Click Personal Favorites:** Every card features a white star button in the top-right corner. Clicking the star toggles **TGS Favorite** status:
+  - The border instantly shifts to a **glowing royal gold frame** (`#eab308`);
+  - The badge transforms into a radiant **`★ FAVORITE`** gold label;
+  - The star fills with vibrant gold.
+  - *Clicking the star does not open the link, making catalog curation effortless!*
 
 ---
 
-### 3. Manga Archive Integration & Engagement Counters
-Accurate page counts, favorite tallies, and visited tags across the largest manga platforms:
-![Manga Statistics](../assets/screenshots/comix/03_nhentai_stats_viewed.jpg)
+### 3. 📦 Instant High-Speed ZIP Downloader (Single & Multi-Volume)
+- **1-Click Batch Downloader:** Serialized manga and webtoons feature a dedicated **DOWNLOAD ALL (X CHAPTERS)** button to download and package all volumes into a single structured ZIP archive.
+- **Fast Single-Chapter Archiver:** Multi-threaded image fetching bypasses server-side speed throttles and displays an active progress percentage with live page counts.
+
+| **Batch Multi-Chapter Downloader** | **Active Real-Time Progress Bar** |
+|:---:|:---:|
+| ![Batch Downloader UI](../assets/screenshots/comix/05_batch_download_all_chapters.png) | ![Download Progress Bar](../assets/screenshots/comix/06_single_chapter_download_progress.png) |
 
 ---
 
-### 4. Manhwa & Webtoon Card Analytics
-Full page counts, reader bookmarks, and 5-star ratings displayed seamlessly on modern manhwa layouts:
-![Manhwa Statistics](../assets/screenshots/comix/04_allporncomic_stats.png)
+### 4. 🌐 Quick-Jump Navigator (38+ Supported Sites)
+A sleek expandable popup allows instant jumping between the internet's largest and highest-quality comic archives with zero bookmarks clutter:
+
+<p align="center">
+  <img src="../assets/screenshots/comix/07_supported_sites_dropdown.png" alt="Supported Sites Menu" width="320" />
+</p>
 
 ---
 
-### 5. 1-Click Full Series Batch Downloader
-Download all chapters of any serialized comic with a single click into a single organized ZIP:
-![Batch Download All Chapters](../assets/screenshots/comix/05_batch_download_all_chapters.png)
-
----
-
-### 6. Real-Time Download Progress Bar
-Lightning-fast parallel image packaging with live percentage, page numbers, and remaining file counter:
-![Download Progress Bar](../assets/screenshots/comix/06_single_chapter_download_progress.png)
-
----
-
-### 7. Instant Multi-Site Navigation Menu
-Switch between the best 38 adult comic archives instantly with the integrated dropdown navigator:
-![Supported Sites Menu](../assets/screenshots/comix/07_supported_sites_dropdown.png)
-
----
-
-## 🌐 Full List of Supported Sites (38 Archives)
-
-The suite is optimized, powered by custom parsers, and continuously tested across 38 major platforms:
+## 🌐 Complete Directory of Supported Sites (38 Archives)
 
 ### 🌟 Premier Manga & Hentai Archives:
-- `nhentai.net` — Live card stats, VIEWED badge, Favorites, high-speed ZIP export;
-- `imhentai.xxx` — Page counts, downloads, favorite tallies, single-click ZIPs;
+- `nhentai.net` — Live card stats, VIEWED badge, Favorites, clean ZIP export;
+- `imhentai.xxx` — Page counts, downloads, favorite tallies, instant ZIPs;
 - `hentaiera.com` — Live favorite and download stats with native page counter integration;
 - `e-hentai.org` / `exhentai.org` — Full-resolution master image extraction;
 - `18comic.vip` / `18comic.org` / `18kami.com` — Anti-scramble image reconstruction & chapter downloads;
@@ -135,6 +114,6 @@ The suite is optimized, powered by custom parsers, and continuously tested acros
 All scripts include official `@downloadURL` and `@updateURL` metadata tags.  
 Once installed, your userscript manager (**Violentmonkey** or **Tampermonkey**) will automatically check for and install updates directly from this repository.
 
-1. Install [Violentmonkey](https://violentmonkey.github.io/) (recommended) or [Tampermonkey](https://www.tampermonkey.net/).
+1. Install [Violentmonkey](https://violentmonkey.github.io/) (strongly recommended) or [Tampermonkey](https://www.tampermonkey.net/).
 2. Open the [**Direct Script Installation Link (v3.403)**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/COMIX_ZIP_Downloader_by_TGS.user.js).
 3. Click **Confirm installation** in the browser tab.
