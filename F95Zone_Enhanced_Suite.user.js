@@ -3,7 +3,7 @@
 // @name:ru      F95Zone: Enhanced Suite by TGS
 // @name:en      F95Zone: Enhanced Suite by TGS
 // @namespace    https://www.patreon.com/Terebonkoff
-// @version      24.5
+// @version      24.6
 // @description  Адаптивный макет под боковое меню, прямое отображение HD-скриншотов, Lightbox, слайдеры размеров и удобные ссылки скачивания.
 // @description:en Adaptive layout for sidebar menu, direct HD screenshots, Lightbox viewer, size sliders, and clean Windows download links.
 // @author       Terebonkoff (TGS)
@@ -375,136 +375,145 @@
                 border-color: #ef4444 !important;
                 transform: scale(1.1) !important;
             }
-            /* =========================================================================
-             * 10. ЕДИНАЯ КОМПАКТНАЯ ПЛАШКА TGS (в одну строчку, строго на длину текста)
-             * ========================================================================= */
+                        /* =================================================================
+             * TGS BRANDING BAR (Terebonkoff Game Studio / Scripts)
+             * ================================================================= */
             .tgs-branding-bar {
                 display: inline-flex !important;
-                flex-direction: row !important;
                 align-items: center !important;
-                justify-content: flex-start !important;
+                gap: 8px !important;
+                background: rgba(22, 27, 34, 0.9) !important;
+                border: 1px solid #363d4a !important;
+                border-radius: 6px !important;
+                padding: 3px 10px !important;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45) !important;
                 white-space: nowrap !important;
                 width: fit-content !important;
                 max-width: fit-content !important;
-                gap: 8px !important;
-                background: linear-gradient(135deg, rgba(20, 24, 33, 0.96), rgba(30, 20, 28, 0.96)) !important;
-                border: 1px solid rgba(244, 63, 94, 0.55) !important;
-                border-radius: 6px !important;
-                padding: 3px 10px !important;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 10px rgba(244, 63, 94, 0.15) !important;
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
-                font-size: 11px !important;
-                line-height: 1.2 !important;
-                user-select: none !important;
+                flex: 0 0 auto !important;
                 vertical-align: middle !important;
+                user-select: none !important;
                 box-sizing: border-box !important;
+                margin: 0 8px !important;
                 z-index: 1000 !important;
             }
 
-            .tgs-branding-bar .tgs-title-label {
+            .tgs-brand-studio-link {
+                color: #f8fafc !important;
+                text-decoration: none !important;
+                cursor: pointer !important;
+                font-weight: 700 !important;
+                transition: color 0.2s ease !important;
+            }
+            .tgs-brand-studio-link:hover {
+                color: #f43f5e !important;
+                text-decoration: underline !important;
+            }
+            .tgs-slash-sep {
+                color: rgba(255, 255, 255, 0.4) !important;
+                margin: 0 1px !important;
+            }
+            .tgs-brand-scripts-link {
+                color: #38bdf8 !important;
+                text-decoration: none !important;
+                cursor: pointer !important;
+                font-weight: 600 !important;
+                transition: color 0.2s ease !important;
+            }
+            .tgs-brand-scripts-link:hover {
+                color: #7dd3fc !important;
+                text-decoration: underline !important;
+            }
+            /* Скрываем старые одиночные кнопки если они остались */
+            #tgs-brand-group, #tgs-support-btn, .tgs-brand-group, a.tgs-support-btn:not(.tgs-btn), #f95-tgs-support-btn, .f95-tgs-support-btn {
+                display: none !important;
+            }
+
+            .tgs-title-label {
                 display: inline-flex !important;
                 align-items: center !important;
                 gap: 5px !important;
+                font-size: 11px !important;
+                color: #f0f6fc !important;
                 font-weight: 700 !important;
-                white-space: nowrap !important;
+                letter-spacing: 0.2px !important;
             }
 
-            .tgs-branding-bar .tgs-logo-icon {
-                font-size: 13px !important;
+            .tgs-title-label .tgs-logo-icon {
+                font-size: 12px !important;
                 line-height: 1 !important;
             }
 
-            .tgs-branding-bar .tgs-brand-studio-link {
-                color: #f43f5e !important;
-                text-decoration: none !important;
-                font-weight: 700 !important;
-                transition: all 0.15s ease !important;
-            }
-            .tgs-branding-bar .tgs-brand-studio-link:hover {
-                color: #fb7185 !important;
-                text-shadow: 0 0 6px rgba(251, 113, 133, 0.6) !important;
+            .tgs-actions {
+                display: inline-flex !important;
+                align-items: center !important;
+                gap: 6px !important;
             }
 
-            .tgs-branding-bar .tgs-slash-sep {
-                color: #64748b !important;
-                font-weight: 400 !important;
-                margin: 0 1px !important;
-            }
-
-            .tgs-branding-bar .tgs-brand-scripts-link {
-                color: #38bdf8 !important;
-                text-decoration: none !important;
-                font-weight: 600 !important;
-                transition: all 0.15s ease !important;
-            }
-            .tgs-branding-bar .tgs-brand-scripts-link:hover {
-                color: #7dd3fc !important;
-                text-shadow: 0 0 6px rgba(125, 211, 252, 0.6) !important;
-            }
-
-            .tgs-branding-bar .tgs-pipe-sep {
-                color: #475569 !important;
-                font-size: 10px !important;
-                margin: 0 2px !important;
-            }
-
-            .tgs-branding-bar .tgs-actions {
+            .tgs-btn {
                 display: inline-flex !important;
                 align-items: center !important;
                 gap: 5px !important;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-
-            .tgs-branding-bar .tgs-btn {
-                display: inline-flex !important;
-                align-items: center !important;
-                gap: 4px !important;
-                padding: 2px 7px !important;
+                padding: 2px 8px !important;
                 border-radius: 4px !important;
                 font-size: 11px !important;
-                font-weight: 600 !important;
+                font-weight: 700 !important;
                 text-decoration: none !important;
                 line-height: 1.2 !important;
-                transition: all 0.15s ease !important;
+                transition: all 0.2s ease !important;
+                cursor: pointer !important;
+                box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3) !important;
                 white-space: nowrap !important;
-                border: 1px solid transparent !important;
             }
 
-            .tgs-branding-bar .tgs-btn-boosty {
-                background: rgba(249, 115, 22, 0.16) !important;
-                color: #fb923c !important;
-                border-color: rgba(249, 115, 22, 0.45) !important;
+            .tgs-btn-boosty {
+                background: rgba(241, 95, 44, 0.22) !important;
+                border: 1px solid rgba(241, 95, 44, 0.65) !important;
+                color: #ff8a65 !important;
             }
-            .tgs-branding-bar .tgs-btn-boosty:hover {
-                background: #f97316 !important;
+            .tgs-btn-boosty:hover {
+                background: #f15f2c !important;
+                border-color: #f15f2c !important;
                 color: #ffffff !important;
-                border-color: #f97316 !important;
-                box-shadow: 0 0 8px rgba(249, 115, 22, 0.7) !important;
+                transform: translateY(-1px) !important;
+                box-shadow: 0 0 10px rgba(241, 95, 44, 0.7) !important;
             }
 
-            .tgs-branding-bar .tgs-btn-patreon {
-                background: rgba(244, 63, 94, 0.16) !important;
-                color: #fda4af !important;
-                border-color: rgba(244, 63, 94, 0.45) !important;
-            }
-            .tgs-branding-bar .tgs-btn-patreon:hover {
-                background: #f43f5e !important;
+            .tgs-btn-patreon {
+                background: linear-gradient(135deg, rgba(239, 68, 68, 0.28), rgba(225, 29, 72, 0.28)) !important;
+                border: 1px solid rgba(239, 68, 68, 0.75) !important;
                 color: #ffffff !important;
-                border-color: #f43f5e !important;
-                box-shadow: 0 0 8px rgba(244, 63, 94, 0.7) !important;
+            }
+            .tgs-btn-patreon:hover {
+                background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+                border-color: #ef4444 !important;
+                color: #ffffff !important;
+                box-shadow: 0 0 12px rgba(239, 68, 68, 0.75) !important;
+                transform: translateY(-1px) !important;
             }
 
-            .tgs-branding-bar .tgs-btn-github {
-                background: rgba(56, 189, 248, 0.16) !important;
-                color: #7dd3fc !important;
-                border-color: rgba(56, 189, 248, 0.45) !important;
+            .tgs-btn-github {
+                background: rgba(33, 38, 45, 0.85) !important;
+                border: 1px solid #444c56 !important;
+                color: #e6edf3 !important;
             }
-            .tgs-branding-bar .tgs-btn-github:hover {
-                background: #0284c7 !important;
+            .tgs-btn-github:hover {
+                background: #238636 !important;
+                border-color: #2ea043 !important;
                 color: #ffffff !important;
-                border-color: #0284c7 !important;
-                box-shadow: 0 0 8px rgba(56, 189, 248, 0.7) !important;
+                box-shadow: 0 0 12px rgba(35, 134, 54, 0.7) !important;
+                transform: translateY(-1px) !important;
+            }
+
+            .tgs-heart {
+                font-size: 11px !important;
+                line-height: 1 !important;
+                display: inline-block !important;
+                animation: tgs-pulse 2s infinite ease-in-out !important;
+            }
+            @keyframes tgs-pulse {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.22); }
             }
 
             /* 11. Избранные игры (Розовая рамка) и сердечко на карточках */
@@ -569,7 +578,7 @@
         
     
     
-    function createTgsBrandBar(extraClass = '') {
+        function createTgsBrandBar(extraClass = '') {
         const bar = document.createElement('div');
         bar.className = 'tgs-branding-bar ' + extraClass;
         bar.id = 'tgs-branding-bar';
@@ -580,15 +589,14 @@
                 <span class="tgs-slash-sep">/</span>
                 <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-brand-scripts-link" title="TGS Scripts Repository">Scripts</a>
             </span>
-            <span class="tgs-pipe-sep">|</span>
             <div class="tgs-actions">
-                <a href="https://boosty.to/terebonkoff" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-boosty" title="Поддержать на Boosty">
+                <a href="https://boosty.to/terebonkoff" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-boosty" title="Support via Boosty (Cards & PayPal)">
                     <span>☕</span> <span>Boosty</span>
                 </a>
-                <a href="https://www.patreon.com/c/terebonkoff/about" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-patreon" title="Поддержать на Patreon">
-                    <span>💖</span> <span>Patreon</span>
+                <a href="https://www.patreon.com/c/terebonkoff/about" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-patreon" title="Support on Patreon">
+                    <span class="tgs-heart">💖</span> <span>Patreon</span>
                 </a>
-                <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-github" title="Официальный GitHub репозиторий">
+                <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-github" title="Official GitHub TGS Repository">
                     <span>⭐</span> <span>GitHub</span>
                 </a>
             </div>

@@ -3,7 +3,7 @@
 // @name:ru      RuTracker: Enhanced Suite by TGS
 // @name:en      RuTracker: Enhanced Suite by TGS
 // @namespace    https://rutracker.org/
-// @version      5.5
+// @version      5.6
 // @description  Единый мощный комплекс для RuTracker: встроенные превью и кнопка скачивания в списке раздач, идеальные колонки (Форум с ресайзером, компактный Автор ~3 см), боковое окно предпросмотра при наведении, единый тулбар в раздачах, полноразмерные скриншоты FastPic/IBB без мыла и полноэкранный Lightbox.
 // @description:en All-in-one suite for RuTracker: inline previews & download button in torrent lists, perfect column layout, right-dock hover screenshot preview, single toolbar in topics, full-size FastPic/IBB screenshots & Lightbox.
 // @author       Terebonkoff (TGS)
@@ -916,7 +916,7 @@
 `;
         style.textContent += `
             /* =================================================================
-             * TGS BRANDING BAR (Terebonkoff Game Studio / TGS Scripts)
+             * TGS BRANDING BAR (Terebonkoff Game Studio / Scripts)
              * ================================================================= */
             .tgs-branding-bar {
                 display: inline-flex !important;
@@ -935,13 +935,14 @@
                 user-select: none !important;
                 box-sizing: border-box !important;
                 margin: 0 8px !important;
+                z-index: 1000 !important;
             }
 
-            
             .tgs-brand-studio-link {
                 color: #f8fafc !important;
                 text-decoration: none !important;
                 cursor: pointer !important;
+                font-weight: 700 !important;
                 transition: color 0.2s ease !important;
             }
             .tgs-brand-studio-link:hover {
@@ -956,6 +957,7 @@
                 color: #38bdf8 !important;
                 text-decoration: none !important;
                 cursor: pointer !important;
+                font-weight: 600 !important;
                 transition: color 0.2s ease !important;
             }
             .tgs-brand-scripts-link:hover {
@@ -963,7 +965,7 @@
                 text-decoration: underline !important;
             }
             /* Скрываем старые одиночные кнопки если они остались */
-            #tgs-brand-group, #tgs-support-btn, .tgs-brand-group, a.tgs-support-btn:not(.tgs-btn) {
+            #tgs-brand-group, #tgs-support-btn, .tgs-brand-group, a.tgs-support-btn:not(.tgs-btn), #f95-tgs-support-btn, .f95-tgs-support-btn {
                 display: none !important;
             }
 
@@ -980,12 +982,6 @@
             .tgs-title-label .tgs-logo-icon {
                 font-size: 12px !important;
                 line-height: 1 !important;
-            }
-
-            .tgs-title-label .tgs-sub-tag {
-                color: #58a6ff !important;
-                font-weight: 600 !important;
-                font-size: 11px !important;
             }
 
             .tgs-actions {
@@ -1010,7 +1006,6 @@
                 white-space: nowrap !important;
             }
 
-            
             .tgs-btn-boosty {
                 background: rgba(241, 95, 44, 0.22) !important;
                 border: 1px solid rgba(241, 95, 44, 0.65) !important;
@@ -2417,22 +2412,22 @@
      * ========================================================================= */
 
     
-    function createTgsBrandBar(extraClass = '') {
+        function createTgsBrandBar(extraClass = '') {
         const bar = document.createElement('div');
         bar.className = 'tgs-branding-bar ' + extraClass;
         bar.id = 'tgs-branding-bar';
         bar.innerHTML = `
             <span class="tgs-title-label">
                 <span class="tgs-logo-icon">🚀</span>
-                <a href="https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_rutracker&utm_medium=tgs_suite" target="_blank" rel="noopener noreferrer" class="tgs-brand-studio-link" title="Перейти на страницу Terebonkoff Game Studio на Patreon">Terebonkoff Game Studio</a>
+                <a href="https://www.patreon.com/c/terebonkoff/about" target="_blank" rel="noopener noreferrer" class="tgs-brand-studio-link" title="Terebonkoff Game Studio">Terebonkoff Game Studio</a>
                 <span class="tgs-slash-sep">/</span>
-                <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-brand-scripts-link" title="Перейти в репозиторий TGS Scripts на GitHub">Scripts</a>
+                <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-brand-scripts-link" title="TGS Scripts Repository">Scripts</a>
             </span>
             <div class="tgs-actions">
-                <a href="https://boosty.to/terebonkoff?utm_source=userscript_rutracker&utm_medium=tgs_suite" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-boosty" title="Support via Boosty (Cards & PayPal)">
+                <a href="https://boosty.to/terebonkoff" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-boosty" title="Support via Boosty (Cards & PayPal)">
                     <span>☕</span> <span>Boosty</span>
                 </a>
-                <a href="https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_rutracker&utm_medium=tgs_suite" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-patreon" title="Support on Patreon">
+                <a href="https://www.patreon.com/c/terebonkoff/about" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-patreon" title="Support on Patreon">
                     <span class="tgs-heart">💖</span> <span>Patreon</span>
                 </a>
                 <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-github" title="Official GitHub TGS Repository">
