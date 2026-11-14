@@ -2255,7 +2255,7 @@
         group.id = 'tgs-brand-group';
         group.className = 'tgs-brand-group';
         group.innerHTML = `
-            <a href="https://www.patreon.com/c/terebonkoff/about" target="_blank" rel="noopener noreferrer" class="tgs-support-btn" title="Поддержать Terebonkoff Game Studio на Patreon">
+            <a href="https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_rutracker&utm_medium=tgs_suite" target="_blank" rel="noopener noreferrer" class="tgs-support-btn" title="Поддержать Terebonkoff Game Studio на Patreon">
                 <span class="tgs-heart">💖</span> <span>Support Me</span>
             </a>
             <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-github-btn" title="Официальный GitHub TGS: все скрипты и обновления">
@@ -2290,7 +2290,7 @@
 
         const btn = document.createElement('a');
         btn.id = 'tgs-support-btn';
-        btn.href = 'https://www.patreon.com/c/terebonkoff/about';
+        btn.href = 'https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_rutracker&utm_medium=tgs_suite';
         btn.target = '_blank';
         btn.rel = 'noopener noreferrer';
         btn.className = 'tgs-support-btn';

@@ -670,7 +670,7 @@
             <!-- Блок автора и поддержки -->
             <div style="margin-top: 14px; text-align: center; border-top: 1px solid #2f3136; padding-top: 10px;">
                 <div id="tgs-support-label" style="font-size: 10px; font-weight: 800; color: #faa61a; letter-spacing: 0.8px; margin-bottom: 3px;">💖 SUPPORT ME:</div>
-                <a id="tgs-author-link" href="https://www.patreon.com/c/terebonkoff/about" target="_blank" style="font-size: 11px; color: #7289da; text-decoration: none; font-weight: bold; transition: color 0.3s;">Terebonkoff Game Studio</a>
+                <a id="tgs-author-link" href="https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_comix&utm_medium=tgs_suite" target="_blank" style="font-size: 11px; color: #7289da; text-decoration: none; font-weight: bold; transition: color 0.3s;">Terebonkoff Game Studio</a>
                 
                 <!-- Раскрывающийся список поддерживаемых сайтов со стрелочкой вниз -->
                 <div id="tgs-supported-toggle" style="margin-top: 8px; cursor: pointer; font-size: 10px; color: #8e9297; display: flex; align-items: center; justify-content: center; gap: 4px; user-select: none; transition: color 0.2s;">
@@ -1731,7 +1731,7 @@
         group.id = 'tgs-brand-group';
         group.className = 'tgs-brand-group';
         group.innerHTML = `
-            <a href="https://www.patreon.com/c/terebonkoff/about" target="_blank" rel="noopener noreferrer" class="tgs-support-btn" title="Поддержать Terebonkoff Game Studio на Patreon">
+            <a href="https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_comix&utm_medium=tgs_suite" target="_blank" rel="noopener noreferrer" class="tgs-support-btn" title="Поддержать Terebonkoff Game Studio на Patreon">
                 <span class="tgs-heart">💖</span> <span>Support Me</span>
             </a>
             <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-github-btn" title="Официальный GitHub TGS: все скрипты и обновления">
