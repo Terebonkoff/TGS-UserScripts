@@ -3,7 +3,7 @@
 // @name:ru      F95Zone: Enhanced Suite by TGS
 // @name:en      F95Zone: Enhanced Suite by TGS
 // @namespace    https://www.patreon.com/Terebonkoff
-// @version      24.6
+// @version      24.7
 // @description  Адаптивный макет под боковое меню, прямое отображение HD-скриншотов, Lightbox, слайдеры размеров и удобные ссылки скачивания.
 // @description:en Adaptive layout for sidebar menu, direct HD screenshots, Lightbox viewer, size sliders, and clean Windows download links.
 // @author       Terebonkoff (TGS)

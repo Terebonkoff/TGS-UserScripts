@@ -46,3 +46,41 @@
 [2026-11-14 23:07:16] Successfully finished install cycle for: Vik1ngFile/MediaFire Downloader
 [2026-11-14 23:07:17] Removed pending_urls.txt
 [2026-11-14 23:07:17] === All scripts processed successfully! ===
+[2026-11-14 23:15:55] === Starting auto reinstall helper for 5 item(s) ===
+[2026-11-14 23:15:55] Processing script: F95Zone: Enhanced Suite
+[2026-11-14 23:15:55] Opening URL: https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/cdbb15f5a170d9a96769c92519990c6fdb1e12da/F95Zone_Enhanced_Suite.user.js
+[2026-11-14 23:15:56] Detected confirm tab: 'Установка скрипта - Violentmonkey, профиль Виктор В. — Яндекс Браузер' (after 0.4s)
+[2026-11-14 23:15:56] Sending Ctrl+Enter to trigger Reinstall/Install...
+[2026-11-14 23:15:58] Title after Ctrl+Enter: 'F95Zone: Enhanced Suite by TGS - Установка скрипта - Violentmonkey, профиль Виктор В. — Яндекс Браузер'
+[2026-11-14 23:15:58] Tab still open, sending Ctrl+W to close it...
+[2026-11-14 23:15:58] Successfully finished install cycle for: F95Zone: Enhanced Suite
+[2026-11-14 23:15:59] Processing script: Pornolab: Enhanced Suite
+[2026-11-14 23:15:59] Opening URL: https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/cdbb15f5a170d9a96769c92519990c6fdb1e12da/Pornolab_Complete_Suite.user.js
+[2026-11-14 23:15:59] Detected confirm tab: 'Установка скрипта - Violentmonkey, профиль Виктор В. — Яндекс Браузер' (after 0.4s)
+[2026-11-14 23:16:00] Sending Ctrl+Enter to trigger Reinstall/Install...
+[2026-11-14 23:16:01] Title after Ctrl+Enter: 'Pornolab: Enhanced Suite by TGS - Установка скрипта - Violentmonkey, профиль Виктор В. — Яндекс Браузер'
+[2026-11-14 23:16:01] Tab still open, sending Ctrl+W to close it...
+[2026-11-14 23:16:02] Successfully finished install cycle for: Pornolab: Enhanced Suite
+[2026-11-14 23:16:03] Processing script: RuTracker: Enhanced Suite
+[2026-11-14 23:16:03] Opening URL: https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/cdbb15f5a170d9a96769c92519990c6fdb1e12da/RuTracker_Complete_Suite.user.js
+[2026-11-14 23:16:03] Detected confirm tab: 'Установка скрипта - Violentmonkey, профиль Виктор В. — Яндекс Браузер' (after 0.4s)
+[2026-11-14 23:16:04] Sending Ctrl+Enter to trigger Reinstall/Install...
+[2026-11-14 23:16:05] Title after Ctrl+Enter: 'RuTracker: Enhanced Suite by TGS - Установка скрипта - Violentmonkey, профиль Виктор В. — Яндекс Браузер'
+[2026-11-14 23:16:05] Tab still open, sending Ctrl+W to close it...
+[2026-11-14 23:16:05] Successfully finished install cycle for: RuTracker: Enhanced Suite
+[2026-11-14 23:16:06] Processing script: COMIX ZIP Downloader
+[2026-11-14 23:16:06] Opening URL: https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/cdbb15f5a170d9a96769c92519990c6fdb1e12da/COMIX_ZIP_Downloader_by_TGS.user.js
+[2026-11-14 23:16:07] Detected confirm tab: 'Установка скрипта - Violentmonkey, профиль Виктор В. — Яндекс Браузер' (after 0.4s)
+[2026-11-14 23:16:07] Sending Ctrl+Enter to trigger Reinstall/Install...
+[2026-11-14 23:16:08] Title after Ctrl+Enter: 'COMIX ZIP Downloader & Live Stats by TGS - Установка скрипта - Violentmonkey, профиль Виктор В. — Яндекс Браузер'
+[2026-11-14 23:16:08] Tab still open, sending Ctrl+W to close it...
+[2026-11-14 23:16:09] Successfully finished install cycle for: COMIX ZIP Downloader
+[2026-11-14 23:16:10] Processing script: Vik1ngFile/MediaFire Downloader
+[2026-11-14 23:16:10] Opening URL: https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/cdbb15f5a170d9a96769c92519990c6fdb1e12da/Vik1ngFile_MediaFire_Downloader_by_TGS.user.js
+[2026-11-14 23:16:10] Detected confirm tab: 'Установка скрипта - Violentmonkey, профиль Виктор В. — Яндекс Браузер' (after 0.4s)
+[2026-11-14 23:16:11] Sending Ctrl+Enter to trigger Reinstall/Install...
+[2026-11-14 23:16:12] Title after Ctrl+Enter: 'Vik1ngFile, MediaFire, Gofile & 1Fichier Downloader by TGS - Установка скрипта - Violentmonkey, профиль Виктор В. — Яндекс Браузер'
+[2026-11-14 23:16:12] Tab still open, sending Ctrl+W to close it...
+[2026-11-14 23:16:13] Successfully finished install cycle for: Vik1ngFile/MediaFire Downloader
+[2026-11-14 23:16:13] Removed pending_urls.txt
+[2026-11-14 23:16:13] === All scripts processed successfully! ===
