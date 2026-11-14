@@ -1,25 +1,17 @@
 """
 deploy_and_install.py
-Автоматический деплой и отправка скриптов в Violentmonkey браузера.
-Использование:
-    python deploy_and_install.py                  # Все скрипты
-    python deploy_and_install.py f95              # Только F95Zone
-    python deploy_and_install.py pornolab         # Только Pornolab
-    python deploy_and_install.py rutracker        # Только RuTracker
-    python deploy_and_install.py comix            # Только COMIX Downloader
-    python deploy_and_install.py downloader       # Только Fast Downloader
+Автоматический деплой и интерактивное открытие скриптов в Яндекс Браузере через Task Scheduler.
 """
 
 import sys
 import os
-import re
 import subprocess
 import time
 
 REPO_DIR = r"C:\Users\vlasi\Documents\TGS-UserScripts"
 DOCS_DIR = r"C:\Users\vlasi\Documents"
 BASE_DIR = r"E:\! ANTIGRAVITY BASE !\userscripts"
-BROWSER_EXE = r"C:\Program Files\Yandex\YandexBrowser\Application\browser.exe"
+PENDING_FILE = os.path.join(REPO_DIR, "pending_urls.txt")
 
 SCRIPTS = {
     "f95": {
@@ -61,25 +53,13 @@ def deploy(target="all", commit_msg=None):
             print(f"Unknown target: {target}")
             return
 
-    # 1. Sync and verify headers
+    # 1. Sync files to Documents and Base
     for s in targets:
         fpath = os.path.join(REPO_DIR, s["file"])
         if not os.path.exists(fpath):
             continue
         with open(fpath, "r", encoding="utf-8") as f:
             text = f.read()
-
-        fn = s["file"]
-        if "@downloadURL" not in text:
-            urls_block = (
-                f"// @downloadURL  https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/{fn}\n"
-                f"// @updateURL    https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/{fn}\n"
-                f"// @homepageURL  https://github.com/Terebonkoff/TGS-UserScripts\n"
-                f"// @supportURL   https://github.com/Terebonkoff/TGS-UserScripts/issues\n"
-            )
-            text = text.replace("// ==/UserScript==", urls_block + "// ==/UserScript==", 1)
-            with open(fpath, "w", encoding="utf-8") as f:
-                f.write(text)
 
         # Sync to Documents
         with open(os.path.join(DOCS_DIR, s["file"]), "w", encoding="utf-8") as f:
@@ -94,18 +74,25 @@ def deploy(target="all", commit_msg=None):
     # 2. Git commit & push
     subprocess.run(["git", "add", "-A"], cwd=REPO_DIR, check=True)
     msg = commit_msg or f"Update and deploy {'all' if target == 'all' else target} userscripts"
-    res = subprocess.run(["git", "commit", "-m", msg], cwd=REPO_DIR, capture_output=True, text=True)
+    subprocess.run(["git", "commit", "-m", msg], cwd=REPO_DIR, capture_output=True, text=True)
     subprocess.run(["git", "push", "origin", "main"], cwd=REPO_DIR, capture_output=True, text=True)
 
     commit_hash = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=REPO_DIR, text=True).strip()
     print(f"Pushed commit: {commit_hash}")
 
-    # 3. Open install tabs in Yandex Browser
+    # 3. Write URLs for interactive execution via Task Scheduler
+    urls = []
     for s in targets:
         url = f"https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/{commit_hash}/{s['file']}"
-        subprocess.Popen([BROWSER_EXE, url])
-        print(f"Triggered Violentmonkey install tab for: {s['name']}")
-        time.sleep(0.4)
+        urls.append(url)
+        print(f"Queued install tab for: {s['name']}")
+
+    with open(PENDING_FILE, "w", encoding="utf-8") as f:
+        f.write("\n".join(urls) + "\n")
+
+    # 4. Trigger Task Scheduler task in user's interactive Session 1
+    res = subprocess.run(["schtasks", "/run", "/tn", "TGS_OpenInstallTabs"], capture_output=True, text=True)
+    print("Task Scheduler trigger:", res.stdout.strip() or res.stderr.strip())
 
 if __name__ == "__main__":
     t = sys.argv[1] if len(sys.argv) > 1 else "all"
