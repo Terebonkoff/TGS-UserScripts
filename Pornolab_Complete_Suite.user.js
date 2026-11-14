@@ -3,7 +3,7 @@
 // @name:ru      Pornolab: Enhanced Suite by TGS
 // @name:en      Pornolab: Enhanced Suite by TGS
 // @namespace    https://pornolab.net/
-// @version      5.13
+// @version      5.14
 // @description  Единый мощный комплекс для Pornolab: встроенные превью и кнопка скачивания в списке раздач, идеальные колонки (Форум с ресайзером, компактный Автор ~3 см), боковое окно предпросмотра при наведении, единый тулбар в раздачах, полноразмерные скриншоты FastPic/IMX/ImageTwist без мыла и полноэкранный Lightbox.
 // @description:en All-in-one suite for Pornolab: inline previews & download button in torrent lists, perfect column layout, right-dock hover screenshot preview, single toolbar in topics, full-size FastPic/IMX screenshots & Lightbox.
 // @author       Terebonkoff (TGS)
@@ -348,26 +348,30 @@
             }
             .pl-inline-imgs-container {
                 display: flex !important;
-                flex-wrap: nowrap !important;
+                flex-direction: row !important;
                 align-items: center !important;
                 gap: 8px !important;
+                flex-wrap: nowrap !important;
                 overflow: hidden !important;
-                max-width: 100% !important;
-                padding: 4px 0 !important;
+                padding: 6px 0 !important;
                 white-space: nowrap !important;
             }
             .pl-inline-thumb {
-                max-height: var(--pl-inline-img-h, 180px) !important;
-                max-width: calc(25% - 8px) !important;
-                height: auto !important;
-                width: auto !important;
+                width: 350px !important;
+                max-width: calc(20% - 7px) !important;
+                height: 196px !important;
+                max-height: 196px !important;
+                aspect-ratio: 16 / 9 !important;
                 object-fit: cover !important;
+                object-position: center top !important;
                 display: block !important;
                 cursor: zoom-in !important;
-                border-radius: 5px !important;
+                border-radius: 6px !important;
                 border: 1px solid #30363d !important;
                 background: #111419 !important;
-                flex: 0 0 auto !important;
+                flex: 0 1 calc(20% - 7px) !important;
+                min-width: 0 !important;
+                box-sizing: border-box !important;
                 transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease !important;
             }
             .pl-inline-thumb:hover {
@@ -1779,7 +1783,7 @@
                 const imgContainer = document.createElement('div');
                 imgContainer.className = 'pl-inline-imgs-container';
 
-                const limit = Math.min(validScreenshots.length, 4);
+                const limit = Math.min(validScreenshots.length, 5);
                 for (let i = 0; i < limit; i++) {
                     const item = validScreenshots[i];
                     const img = document.createElement('img');
