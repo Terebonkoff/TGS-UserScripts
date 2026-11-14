@@ -896,6 +896,117 @@
                 50% { transform: scale(1.22); }
             }
 `;
+        style.textContent += `
+            /* =================================================================
+             * TGS BRANDING BAR (Terebonkoff Game Studio / TGS Scripts)
+             * ================================================================= */
+            .tgs-branding-bar {
+                display: inline-flex !important;
+                align-items: center !important;
+                gap: 8px !important;
+                background: rgba(22, 27, 34, 0.9) !important;
+                border: 1px solid #363d4a !important;
+                border-radius: 6px !important;
+                padding: 3px 10px !important;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45) !important;
+                white-space: nowrap !important;
+                width: fit-content !important;
+                max-width: fit-content !important;
+                flex: 0 0 auto !important;
+                vertical-align: middle !important;
+                user-select: none !important;
+                box-sizing: border-box !important;
+                margin: 0 8px !important;
+            }
+
+            .tgs-title-label {
+                display: inline-flex !important;
+                align-items: center !important;
+                gap: 5px !important;
+                font-size: 11px !important;
+                color: #f0f6fc !important;
+                font-weight: 700 !important;
+                letter-spacing: 0.2px !important;
+            }
+
+            .tgs-title-label .tgs-logo-icon {
+                font-size: 12px !important;
+                line-height: 1 !important;
+            }
+
+            .tgs-title-label .tgs-sub-tag {
+                color: #58a6ff !important;
+                font-weight: 600 !important;
+                font-size: 11px !important;
+            }
+
+            .tgs-actions {
+                display: inline-flex !important;
+                align-items: center !important;
+                gap: 6px !important;
+            }
+
+            .tgs-btn {
+                display: inline-flex !important;
+                align-items: center !important;
+                gap: 5px !important;
+                padding: 2px 8px !important;
+                border-radius: 4px !important;
+                font-size: 11px !important;
+                font-weight: 700 !important;
+                text-decoration: none !important;
+                line-height: 1.2 !important;
+                transition: all 0.2s ease !important;
+                cursor: pointer !important;
+                box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3) !important;
+                white-space: nowrap !important;
+            }
+
+            .tgs-btn-patreon {
+                background: linear-gradient(135deg, rgba(239, 68, 68, 0.28), rgba(225, 29, 72, 0.28)) !important;
+                border: 1px solid rgba(239, 68, 68, 0.75) !important;
+                color: #ffffff !important;
+            }
+            .tgs-btn-patreon:hover {
+                background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+                border-color: #ef4444 !important;
+                color: #ffffff !important;
+                box-shadow: 0 0 12px rgba(239, 68, 68, 0.75) !important;
+                transform: translateY(-1px) !important;
+            }
+
+            .tgs-btn-github {
+                background: rgba(33, 38, 45, 0.85) !important;
+                border: 1px solid #444c56 !important;
+                color: #e6edf3 !important;
+            }
+            .tgs-btn-github:hover {
+                background: #238636 !important;
+                border-color: #2ea043 !important;
+                color: #ffffff !important;
+                box-shadow: 0 0 12px rgba(35, 134, 54, 0.7) !important;
+                transform: translateY(-1px) !important;
+            }
+
+            .tgs-heart {
+                font-size: 11px !important;
+                line-height: 1 !important;
+                display: inline-block !important;
+                animation: tgs-pulse 2s infinite ease-in-out !important;
+            }
+            @keyframes tgs-pulse {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.22); }
+            }
+
+            /* Удаление назойливых плашек объявлений и донатов */
+            .donate, #donate, [class*="donate"], [id*="donate"],
+            a[href*="donate"], a[href*="help_us"], .announcement,
+            #announcement, .top_warning, .site_alert, .brand-banner,
+            #sidebar1, div.warning, div.alert-error, div.alert-warning {
+                display: none !important;
+            }
+`;
         document.head.appendChild(style);
     }
 
@@ -1903,6 +2014,7 @@
                 </label>
             </div>
             <div class="rt-toolbar-right">
+                <div id="rt-tb-tgs-container"></div>
                 <button class="rt-btn rt-tb-gallery-btn" title="Открыть просмотрщик во весь экран">${t.viewGallery}</button>
             </div>
         `;
@@ -1945,6 +2057,12 @@
                 g.classList.toggle('rt-overview-active', e.target.checked);
             });
         });
+
+        
+        const tgsCont = toolbar.querySelector('#rt-tb-tgs-container');
+        if (tgsCont) {
+            tgsCont.appendChild(createTgsBrandBar());
+        }
 
         toolbar.querySelector('.rt-tb-gallery-btn').addEventListener('click', () => {
             if (galleryImages.length) openLightbox(0);
@@ -2306,7 +2424,67 @@
         }
     }
 
+
+    function createTgsBrandBar(extraClass = '') {
+        const bar = document.createElement('div');
+        bar.className = 'tgs-branding-bar ' + extraClass;
+        bar.id = 'tgs-branding-bar';
+        bar.innerHTML = `
+            <span class="tgs-title-label">
+                <span class="tgs-logo-icon">🚀</span>
+                <b>Terebonkoff Game Studio</b> <span class="tgs-sub-tag">/ TGS Scripts</span>
+            </span>
+            <div class="tgs-actions">
+                <a href="https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_pornolab&utm_medium=tgs_suite" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-patreon" title="Поддержать Terebonkoff Game Studio на Patreon">
+                    <span class="tgs-heart">💖</span> <span>Support Me</span>
+                </a>
+                <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-github" title="Официальный GitHub TGS: все скрипты и обновления">
+                    <span>⭐</span> <span>GitHub</span>
+                </a>
+            </div>
+        `;
+        return bar;
+    }
+
+
+    function purgePornolabAnnouncements() {
+        const badPhrases = [
+            'если не нашли',
+            'зайдите на rutracker',
+            'помочь ресурсу',
+            'donate for us',
+            'donate',
+            'пожертвован',
+            'сбор средств',
+            'на оплату серверов'
+        ];
+
+        document.querySelectorAll('div, tr, td, p, table, span').forEach(el => {
+            const txt = (el.textContent || '').trim().toLowerCase();
+            if (txt.length < 350 && badPhrases.some(p => txt.includes(p))) {
+                const box = el.closest('tr, table, div.warning, div.alert, div.info, div') || el;
+                if (box && !box.closest('.tgs-branding-bar') && !box.closest('.rt-toolbar')) {
+                    box.style.setProperty('display', 'none', 'important');
+                }
+            }
+        });
+
+        document.querySelectorAll('.donate, #donate, [class*="donate"], [id*="donate"], a[href*="donate"]').forEach(el => {
+            if (!el.closest('.tgs-branding-bar') && !el.closest('.rt-toolbar')) {
+                el.style.setProperty('display', 'none', 'important');
+            }
+        });
+    }
+
     function init() {
+        purgePornolabAnnouncements();
+        
+        const topNav = document.querySelector('#main-nav, #page_header');
+        if (topNav && !document.querySelector('.tgs-branding-bar')) {
+            topNav.appendChild(createTgsBrandBar());
+        }
+
+        setTimeout(purgePornolabAnnouncements, 400);
         insertTgsBrandGroup();
         injectMasterStyles();
 

@@ -414,40 +414,52 @@
     injectStyles();
 
         
-    function insertTgsBrandGroup() {
-        if (document.getElementById('tgs-brand-group')) return;
-
-        const group = document.createElement('span');
-        group.id = 'tgs-brand-group';
-        group.className = 'tgs-brand-group';
-        group.innerHTML = `
-            <a href="https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_f95zone&utm_medium=tgs_suite" target="_blank" rel="noopener noreferrer" class="tgs-support-btn" title="Поддержать Terebonkoff Game Studio на Patreon">
-                <span class="tgs-heart">💖</span> <span>Support Me</span>
-            </a>
-            <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-github-btn" title="Официальный GitHub TGS: все скрипты и обновления">
-                <span>⭐</span> <span>GitHub</span>
-            </a>
+    
+    
+    function createTgsBrandBar(extraClass = '') {
+        const bar = document.createElement('div');
+        bar.className = 'tgs-branding-bar ' + extraClass;
+        bar.id = 'tgs-branding-bar';
+        bar.innerHTML = `
+            <span class="tgs-title-label">
+                <span class="tgs-logo-icon">🚀</span>
+                <b>Terebonkoff Game Studio</b> <span class="tgs-sub-tag">/ TGS Scripts</span>
+            </span>
+            <div class="tgs-actions">
+                <a href="https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_f95zone&utm_medium=tgs_suite" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-patreon" title="Поддержать Terebonkoff Game Studio на Patreon">
+                    <span class="tgs-heart">💖</span> <span>Support Me</span>
+                </a>
+                <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-github" title="Официальный GitHub TGS: все скрипты и обновления">
+                    <span>⭐</span> <span>GitHub</span>
+                </a>
+            </div>
         `;
+        return bar;
+    }
 
-        // 1. F95Zone: в шапку перед иконками пользователя
-        const navOpposite = document.querySelector('.p-nav-opposite, .uix_headerRight');
-        if (navOpposite && navOpposite.parentNode) {
-            navOpposite.parentNode.insertBefore(group, navOpposite);
-            return;
+    function mountF95TgsBar() {
+        // 1. В центральную серую зону шапки (на всех страницах, включая комиксы и игры)
+        if (!document.getElementById('f95-header-tgs-bar')) {
+            const navOpposite = document.querySelector('.p-nav-opposite, .uix_headerRight');
+            const navInner = document.querySelector('.p-nav-inner, .p-header-inner, .uix_headerContainer');
+            if (navOpposite && navOpposite.parentNode) {
+                const headerBar = createTgsBrandBar();
+                headerBar.id = 'f95-header-tgs-bar';
+                navOpposite.parentNode.insertBefore(headerBar, navOpposite);
+            } else if (navInner) {
+                const headerBar = createTgsBrandBar();
+                headerBar.id = 'f95-header-tgs-bar';
+                navInner.appendChild(headerBar);
+            }
         }
 
-        // 2. RuTracker / Pornolab: в единую строчку тулбара
-        const tb = document.querySelector('.rt-toolbar');
-        if (tb) {
-            tb.appendChild(group);
-            return;
-        }
-
-        // 3. Главное меню сайтов
-        const nav = document.querySelector('#main-nav, #page_header, #top-nav, .topmenu, #nav-panel, .p-nav-inner');
-        if (nav) {
-            nav.appendChild(group);
-            return;
+        // 2. Внутри самой игры: строго посередине над первым постом рядом с ползунком баннера
+        const topControls = document.querySelector('.f95-top-nav-controls');
+        if (topControls && !document.getElementById('f95-thread-tgs-bar')) {
+            const threadBar = createTgsBrandBar();
+            threadBar.id = 'f95-thread-tgs-bar';
+            threadBar.style.cssText = 'margin-left: 12px !important; margin-right: 12px !important; vertical-align: middle !important;';
+            topControls.parentNode.insertBefore(threadBar, topControls.nextSibling);
         }
     }
 
@@ -1561,7 +1573,7 @@
     // --- 13. Запуск и наблюдение ---
     function run() {
         purgeAllNotices();
-        insertTgsBrandGroup();
+        mountF95TgsBar();
         if (window.location.href.includes('/latest_alpha')) {
             const data = findGridAndCards();
             if (data) {
