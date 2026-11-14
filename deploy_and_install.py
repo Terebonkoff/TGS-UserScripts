@@ -84,7 +84,7 @@ def deploy(target="all", commit_msg=None):
     urls = []
     for s in targets:
         url = f"https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/{commit_hash}/{s['file']}"
-        urls.append(url)
+        urls.append(f"{url}|{s['name']}")
         print(f"Queued install tab for: {s['name']}")
 
     with open(PENDING_FILE, "w", encoding="utf-8") as f:
