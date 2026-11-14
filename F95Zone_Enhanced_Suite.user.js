@@ -3,7 +3,7 @@
 // @name:ru      F95Zone: Enhanced Suite by TGS
 // @name:en      F95Zone: Enhanced Suite by TGS
 // @namespace    https://www.patreon.com/Terebonkoff
-// @version      24.3
+// @version      24.4
 // @description  Адаптивный макет под боковое меню, прямое отображение HD-скриншотов, Lightbox, слайдеры размеров и удобные ссылки скачивания.
 // @description:en Adaptive layout for sidebar menu, direct HD screenshots, Lightbox viewer, size sliders, and clean Windows download links.
 // @author       Terebonkoff (TGS)
@@ -143,8 +143,10 @@
                 display: none !important;
             }
 
-            /* 5. Сетка карточек */
-            [class*="grid-cols-"], [class*="grid"], [class*="tiles"], [class*="cards"] {
+            /* 5. Сетка карточек ТОЛЬКО на странице Latest Updates (/sam/latest_alpha/) */
+            .f95-alpha-grid,
+            [class*="latest_alpha"] [class*="grid-cols-"],
+            [class*="latest-alpha"] [class*="grid-cols-"] {
                 grid-template-columns: repeat(auto-fill, minmax(var(--f95-card-w, 230px), 1fr)) !important;
             }
 
@@ -427,10 +429,12 @@
         bar.innerHTML = `
             <span class="tgs-title-label">
                 <span class="tgs-logo-icon">🚀</span>
-                <b>Terebonkoff Game Studio</b> <span class="tgs-sub-tag">/ TGS Scripts</span>
+                <a href="https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_f95zone&utm_medium=tgs_suite" target="_blank" rel="noopener noreferrer" class="tgs-brand-studio-link" title="Перейти на страницу Terebonkoff Game Studio на Patreon">Terebonkoff Game Studio</a>
+                <span class="tgs-slash-sep">/</span>
+                <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-brand-scripts-link" title="Перейти в репозиторий TGS Scripts на GitHub">TGS Scripts</a>
             </span>
             <div class="tgs-actions">
-                <a href="https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_f95zone&utm_medium=tgs_suite" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-patreon" title="Поддержать Terebonkoff Game Studio на Patreon">
+                <a href="https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_f95zone&utm_medium=tgs_suite" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-patreon" title="Поддержать автора на Patreon">
                     <span class="tgs-heart">💖</span> <span>Support Me</span>
                 </a>
                 <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-github" title="Официальный GitHub TGS: все скрипты и обновления">
@@ -469,39 +473,24 @@
 
 // --- 2. Очистка инфо-баннеров, подписей в чате и плашки Steam ---
     function purgeAllNotices() {
-        // Обычные системные плашки
-        document.querySelectorAll('.notice, .notices, .notice--block, .blockMessage, [class*="notice"], [data-notice-id]').forEach(el => {
+        // Убираем старые отдельные кнопки если остались
+        document.querySelectorAll('#tgs-brand-group, #tgs-support-btn, .f95-tgs-support-btn').forEach(el => {
+            if (!el.closest('.tgs-branding-bar')) el.remove();
+        });
+
+        // Скрываем только системные плашки уведомлений XenForo
+        document.querySelectorAll('.notice, .notices, .notice--block, .blockMessage--warning, [class*="notice--"], [data-notice-id]').forEach(el => {
             el.style.display = 'none';
         });
 
         // Подписи комментаторов в чате
-        document.querySelectorAll('.message-signature, .message-signatureWrapper, [class*="message-signature"]').forEach(el => {
+        document.querySelectorAll('.message-signature, .message-signatureWrapper').forEach(el => {
             el.style.display = 'none';
         });
 
         // Плашка Steam
-        document.querySelectorAll('iframe[data-s9e-mediaembed*="steam"], iframe[src*="steampowered.com"], iframe[data-s9e-mediaembed-src*="steampowered.com"]').forEach(el => {
+        document.querySelectorAll('iframe[data-s9e-mediaembed*="steam"], iframe[src*="steampowered.com"]').forEach(el => {
             el.style.display = 'none';
-            const p = el.parentElement;
-            if (p && (p.classList.contains('bbMediaWrapper') || p.classList.contains('s9e-mediaembed-wrapper'))) {
-                p.style.display = 'none';
-            }
-        });
-
-        const phrases = [
-            'disable the old latest updates page',
-            'Uploader applications are open',
-            'visuals in this game were created with AI',
-            'Thank you for your patience'
-        ];
-
-        document.querySelectorAll('div, p, span').forEach(el => {
-            const txt = el.textContent || '';
-            if (txt.length < 350 && phrases.some(p => txt.includes(p))) {
-                const box = el.closest('.notice, .blockMessage, div[class*="notice"], div') || el;
-                box.style.display = 'none';
-                box.classList.add('f95-banner-hidden');
-            }
         });
     }
 
@@ -1590,17 +1579,28 @@
         }
     }
 
-    const observer = new MutationObserver(() => {
-        run();
+    let f95DebounceTimer = null;
+    function scheduleF95Run() {
+        if (f95DebounceTimer) return;
+        f95DebounceTimer = setTimeout(() => {
+            f95DebounceTimer = null;
+            run();
+        }, 300);
+    }
+
+    const observer = new MutationObserver((mutations) => {
+        for (const m of mutations) {
+            if (m.target && m.target.id === 'f95-suite-styles-v21') return;
+            if (m.target && m.target.classList && m.target.classList.contains('tgs-branding-bar')) return;
+        }
+        scheduleF95Run();
     });
-    observer.observe(document.documentElement, { childList: true, subtree: true });
 
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
         run();
     } else {
         document.addEventListener('DOMContentLoaded', run);
     }
-
-    setInterval(run, 600);
+    observer.observe(document.body || document.documentElement, { childList: true, subtree: true });
 
 })();

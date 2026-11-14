@@ -1,6 +1,6 @@
 # 🔞 Pornolab: Enhanced Suite by TGS
 
-[![Version](https://img.shields.io/badge/version-5.4.1-blue.svg)](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/Pornolab_Complete_Suite.user.js)
+[![Version](https://img.shields.io/badge/version-5.4.2-blue.svg)](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/Pornolab_Complete_Suite.user.js)
 [![Violentmonkey](https://img.shields.io/badge/Violentmonkey-compatible-green.svg)](https://violentmonkey.github.io/)
 [![18+ Content](https://img.shields.io/badge/Content-18%2B%20Adult%20Only-red.svg)](https://github.com/Terebonkoff/TGS-UserScripts)
 
@@ -11,7 +11,7 @@
 
 ## ⚡ Быстрая установка
 
-- [**👉 Установить Pornolab Suite (v5.4.1)**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/Pornolab_Complete_Suite.user.js)
+- [**👉 Установить Pornolab Suite (v5.4.2)**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/Pornolab_Complete_Suite.user.js)
 
 ---
 

@@ -1,6 +1,6 @@
 # 🧲 RuTracker: Enhanced Suite by TGS
 
-[![Version](https://img.shields.io/badge/version-5.4.1-blue.svg)](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/RuTracker_Complete_Suite.user.js)
+[![Version](https://img.shields.io/badge/version-5.4.2-blue.svg)](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/RuTracker_Complete_Suite.user.js)
 [![Violentmonkey](https://img.shields.io/badge/Violentmonkey-compatible-green.svg)](https://violentmonkey.github.io/)
 
 > **Мощный интерфейсный комплекс для RuTracker.**  
@@ -10,4 +10,4 @@
 
 ## ⚡ Быстрая установка
 
-- [**👉 Установить RuTracker Suite (v5.4.1)**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/RuTracker_Complete_Suite.user.js)
+- [**👉 Установить RuTracker Suite (v5.4.2)**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/RuTracker_Complete_Suite.user.js)

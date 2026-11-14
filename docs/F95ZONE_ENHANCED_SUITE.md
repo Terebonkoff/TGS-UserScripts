@@ -1,6 +1,6 @@
 # 🚀 F95Zone: Enhanced Suite by TGS
 
-[![Version](https://img.shields.io/badge/version-24.3-blue.svg)](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/F95Zone_Enhanced_Suite.user.js)
+[![Version](https://img.shields.io/badge/version-24.4-blue.svg)](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/F95Zone_Enhanced_Suite.user.js)
 [![Violentmonkey](https://img.shields.io/badge/Violentmonkey-compatible-green.svg)](https://violentmonkey.github.io/)
 [![18+ Content](https://img.shields.io/badge/Content-18%2B%20Adult%20Only-red.svg)](https://github.com/Terebonkoff/TGS-UserScripts)
 
@@ -11,7 +11,7 @@
 
 ## ⚡ Быстрая установка
 
-- [**👉 Установить F95Zone Suite (v24.3)**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/F95Zone_Enhanced_Suite.user.js)
+- [**👉 Установить F95Zone Suite (v24.4)**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/F95Zone_Enhanced_Suite.user.js)
 
 ---
 

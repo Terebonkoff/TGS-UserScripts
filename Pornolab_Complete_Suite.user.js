@@ -3,7 +3,7 @@
 // @name:ru      Pornolab: Enhanced Suite by TGS
 // @name:en      Pornolab: Enhanced Suite by TGS
 // @namespace    https://pornolab.net/
-// @version      5.4.1
+// @version      5.4.2
 // @description  Единый мощный комплекс для Pornolab: встроенные превью и кнопка скачивания в списке раздач, идеальные колонки (Форум с ресайзером, компактный Автор ~3 см), боковое окно предпросмотра при наведении, единый тулбар в раздачах, полноразмерные скриншоты FastPic/IMX/ImageTwist без мыла и полноэкранный Lightbox.
 // @description:en All-in-one suite for Pornolab: inline previews & download button in torrent lists, perfect column layout, right-dock hover screenshot preview, single toolbar in topics, full-size FastPic/IMX screenshots & Lightbox.
 // @author       Terebonkoff (TGS)
@@ -82,7 +82,7 @@
             pressKey: 'Нажмите комбинацию клавиш...',
             close: 'Закрыть',
             saveAndReload: 'Сохранить и обновить',
-            downloadTorrent: '🍑 Скачать .torrent',
+            downloadTorrent: 'Скачать .torrent',
             loadingScreenshots: '⏳ Загрузка скриншотов...',
             noScreenshotsFound: 'Скриншотов в раздаче не найдено',
             screenshotsBadge: 'Скриншоты',
@@ -111,7 +111,7 @@
             pressKey: 'Press keys...',
             close: 'Close',
             saveAndReload: 'Save & Reload',
-            downloadTorrent: '🍑 Download Torrent',
+            downloadTorrent: 'Скачать .torrent',
             loadingScreenshots: '⏳ Loading screenshots...',
             noScreenshotsFound: 'No screenshots found in topic',
             screenshotsBadge: 'Screenshots',
@@ -140,7 +140,7 @@
             pressKey: '请按键...',
             close: '关闭',
             saveAndReload: '保存并刷新',
-            downloadTorrent: '🍑 下载种子',
+            downloadTorrent: 'Скачать .torrent',
             loadingScreenshots: '⏳ 正在加载截图...',
             noScreenshotsFound: '未找到截图',
             screenshotsBadge: '截图',
@@ -155,7 +155,7 @@
         }
     }[lang] || {
         settings: '⚙️ Настройки Pornolab Suite',
-        downloadTorrent: '🍑 Скачать .torrent'
+        downloadTorrent: 'Скачать .torrent'
     };
 
     /* =========================================================================
@@ -319,26 +319,29 @@
             .pl-inline-dl-btn {
                 display: inline-flex !important;
                 align-items: center !important;
-                gap: 6px !important;
+                gap: 5px !important;
                 padding: 3px 10px !important;
-                border-radius: 6px !important;
-                background: linear-gradient(135deg, #ff69b4 0%, #e04b98 100%) !important;
+                border-radius: 4px !important;
+                background: #0284c7 !important;
                 color: #ffffff !important;
-                font-size: 12px !important;
-                font-weight: 600 !important;
+                font-size: 11px !important;
+                font-weight: 700 !important;
+                line-height: 1.3 !important;
                 text-decoration: none !important;
+                white-space: nowrap !important;
                 cursor: pointer !important;
-                transition: transform 0.12s ease, background 0.15s ease, box-shadow 0.15s ease !important;
-                box-shadow: 0 2px 6px rgba(224, 75, 152, 0.35) !important;
-                border: 1px solid rgba(255, 255, 255, 0.2) !important;
+                box-shadow: 0 2px 6px rgba(2, 132, 199, 0.45) !important;
+                transition: all 0.2s ease !important;
+                border: none !important;
                 width: fit-content !important;
+                max-width: fit-content !important;
             }
             .pl-inline-dl-btn:hover {
-                background: linear-gradient(135deg, #ff7dc0 0%, #ed56a4 100%) !important;
-                transform: translateY(-1px) !important;
+                background: #0369a1 !important;
                 color: #ffffff !important;
+                transform: translateY(-1px) !important;
                 text-decoration: none !important;
-                box-shadow: 0 4px 10px rgba(224, 75, 152, 0.5) !important;
+                box-shadow: 0 4px 10px rgba(2, 132, 199, 0.65) !important;
             }
             .pl-inline-imgs-container {
                 display: flex !important;
@@ -921,6 +924,36 @@
                 user-select: none !important;
                 box-sizing: border-box !important;
                 margin: 0 8px !important;
+            }
+
+            
+            .tgs-brand-studio-link {
+                color: #f8fafc !important;
+                text-decoration: none !important;
+                cursor: pointer !important;
+                transition: color 0.2s ease !important;
+            }
+            .tgs-brand-studio-link:hover {
+                color: #f43f5e !important;
+                text-decoration: underline !important;
+            }
+            .tgs-slash-sep {
+                color: rgba(255, 255, 255, 0.4) !important;
+                margin: 0 1px !important;
+            }
+            .tgs-brand-scripts-link {
+                color: #38bdf8 !important;
+                text-decoration: none !important;
+                cursor: pointer !important;
+                transition: color 0.2s ease !important;
+            }
+            .tgs-brand-scripts-link:hover {
+                color: #7dd3fc !important;
+                text-decoration: underline !important;
+            }
+            /* Скрываем старые одиночные кнопки если они остались */
+            #tgs-brand-group, #tgs-support-btn, .tgs-brand-group, a.tgs-support-btn:not(.tgs-btn) {
+                display: none !important;
             }
 
             .tgs-title-label {
@@ -2365,70 +2398,6 @@
      * ========================================================================= */
 
     
-    function insertTgsBrandGroup() {
-        if (document.getElementById('tgs-brand-group')) return;
-
-        const group = document.createElement('span');
-        group.id = 'tgs-brand-group';
-        group.className = 'tgs-brand-group';
-        group.innerHTML = `
-            <a href="https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_pornolab&utm_medium=tgs_suite" target="_blank" rel="noopener noreferrer" class="tgs-support-btn" title="Поддержать Terebonkoff Game Studio на Patreon">
-                <span class="tgs-heart">💖</span> <span>Support Me</span>
-            </a>
-            <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-github-btn" title="Официальный GitHub TGS: все скрипты и обновления">
-                <span>⭐</span> <span>GitHub</span>
-            </a>
-        `;
-
-        // 1. F95Zone: в шапку перед иконками пользователя
-        const navOpposite = document.querySelector('.p-nav-opposite, .uix_headerRight');
-        if (navOpposite && navOpposite.parentNode) {
-            navOpposite.parentNode.insertBefore(group, navOpposite);
-            return;
-        }
-
-        // 2. RuTracker / Pornolab: в единую строчку тулбара
-        const tb = document.querySelector('.rt-toolbar');
-        if (tb) {
-            tb.appendChild(group);
-            return;
-        }
-
-        // 3. Главное меню сайтов
-        const nav = document.querySelector('#main-nav, #page_header, #top-nav, .topmenu, #nav-panel, .p-nav-inner');
-        if (nav) {
-            nav.appendChild(group);
-            return;
-        }
-    }
-
-    function insertSupportButton() {
-        if (document.getElementById('tgs-support-btn')) return;
-
-        const btn = document.createElement('a');
-        btn.id = 'tgs-support-btn';
-        btn.href = 'https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_pornolab&utm_medium=tgs_suite';
-        btn.target = '_blank';
-        btn.rel = 'noopener noreferrer';
-        btn.className = 'tgs-support-btn';
-        btn.innerHTML = `<span class="tgs-heart">💖</span> <span>Support Me Terebonkoff Game Studio</span>`;
-
-        // 1. В тулбар раздачи
-        const tb = document.querySelector('.rt-toolbar');
-        if (tb) {
-            tb.appendChild(btn);
-            return;
-        }
-
-        // 2. В главное меню/шапку сайта
-        const nav = document.querySelector('#main-nav, #page_header, #top-nav, .topmenu, #nav-panel');
-        if (nav) {
-            nav.appendChild(btn);
-            return;
-        }
-    }
-
-
     function createTgsBrandBar(extraClass = '') {
         const bar = document.createElement('div');
         bar.className = 'tgs-branding-bar ' + extraClass;
@@ -2436,10 +2405,12 @@
         bar.innerHTML = `
             <span class="tgs-title-label">
                 <span class="tgs-logo-icon">🚀</span>
-                <b>Terebonkoff Game Studio</b> <span class="tgs-sub-tag">/ TGS Scripts</span>
+                <a href="https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_pornolab&utm_medium=tgs_suite" target="_blank" rel="noopener noreferrer" class="tgs-brand-studio-link" title="Перейти на страницу Terebonkoff Game Studio на Patreon">Terebonkoff Game Studio</a>
+                <span class="tgs-slash-sep">/</span>
+                <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-brand-scripts-link" title="Перейти в репозиторий TGS Scripts на GitHub">TGS Scripts</a>
             </span>
             <div class="tgs-actions">
-                <a href="https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_pornolab&utm_medium=tgs_suite" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-patreon" title="Поддержать Terebonkoff Game Studio на Patreon">
+                <a href="https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_pornolab&utm_medium=tgs_suite" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-patreon" title="Поддержать автора на Patreon">
                     <span class="tgs-heart">💖</span> <span>Support Me</span>
                 </a>
                 <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-github" title="Официальный GitHub TGS: все скрипты и обновления">
@@ -2452,29 +2423,24 @@
 
 
     function purgePornolabAnnouncements() {
-        const badPhrases = [
-            'если не нашли',
-            'зайдите на rutracker',
-            'помочь ресурсу',
-            'donate for us',
-            'donate',
-            'пожертвован',
-            'сбор средств',
-            'на оплату серверов'
-        ];
+        // Убираем старые дублирующие кнопки поддержки, если они остались в DOM
+        document.querySelectorAll('#tgs-brand-group, #tgs-support-btn, .tgs-brand-group, a.tgs-support-btn:not(.tgs-btn), a.tgs-github-btn:not(.tgs-btn)').forEach(el => {
+            el.remove();
+        });
 
-        document.querySelectorAll('div, tr, td, p, table, span').forEach(el => {
-            const txt = (el.textContent || '').trim().toLowerCase();
-            if (txt.length < 350 && badPhrases.some(p => txt.includes(p))) {
-                const box = el.closest('tr, table, div.warning, div.alert, div.info, div') || el;
-                if (box && !box.closest('.tgs-branding-bar') && !box.closest('.rt-toolbar')) {
-                    box.style.setProperty('display', 'none', 'important');
-                }
+        // Скрываем целевые баннеры ("Если не нашли Pornolab...", "Donate for us")
+        // ВАЖНО: Никогда не трогаем #main-nav и #page_header!
+        document.querySelectorAll('div, table').forEach(box => {
+            if (box.id === 'main-nav' || box.id === 'page_header' || box.closest('#main-nav, #page_header, .tgs-branding-bar, .rt-toolbar')) return;
+            const txt = (box.textContent || '').trim();
+            if (txt.includes('Если не нашли') || txt.includes('зайдите на RuTracker') || txt.includes('помочь ресурсу') || txt.includes('Donate for us')) {
+                box.style.setProperty('display', 'none', 'important');
             }
         });
 
-        document.querySelectorAll('.donate, #donate, [class*="donate"], [id*="donate"], a[href*="donate"]').forEach(el => {
-            if (!el.closest('.tgs-branding-bar') && !el.closest('.rt-toolbar')) {
+        // Скрываем исключительно донат-ссылки вне меню
+        document.querySelectorAll('a[href*="donate"]').forEach(el => {
+            if (!el.closest('#main-nav, #page_header, .tgs-branding-bar, .rt-toolbar')) {
                 el.style.setProperty('display', 'none', 'important');
             }
         });
@@ -2489,7 +2455,7 @@
         }
 
         setTimeout(purgePornolabAnnouncements, 400);
-        insertTgsBrandGroup();
+        
         injectMasterStyles();
 
         if (isTopicPage) {
