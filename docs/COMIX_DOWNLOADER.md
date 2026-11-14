@@ -39,9 +39,9 @@ Instead of forcing you to click into every title to check its details, the scrip
 
 | **iLikeComix** (Pages • Rating • Views) | **imHentai** (Pages • Downloads • Likes) |
 |:---:|:---:|
-| ![iLikeComix Metrics](../assets/screenshots/comix/01_ilikecomix_stats.jpg) | ![imHentai Metrics & Viewed](../assets/screenshots/comix/02_imhentai_stats_viewed.png) |
+| ![iLikeComix Metrics](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/assets/screenshots/comix/01_ilikecomix_stats.jpg) | ![imHentai Metrics & Viewed](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/assets/screenshots/comix/02_imhentai_stats_viewed.png) |
 | **nHentai** (Pages • Favorites) | **AllPornComic** (Pages • Bookmarks • Rating) |
-| ![nHentai Metrics](../assets/screenshots/comix/03_nhentai_stats_viewed.jpg) | ![AllPornComic Metrics](../assets/screenshots/comix/04_allporncomic_stats.png) |
+| ![nHentai Metrics](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/assets/screenshots/comix/03_nhentai_stats_viewed.jpg) | ![AllPornComic Metrics](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/assets/screenshots/comix/04_allporncomic_stats.png) |
 
 ---
 
@@ -63,7 +63,7 @@ Instead of forcing you to click into every title to check its details, the scrip
 
 | **Batch Multi-Chapter Downloader** | **Active Real-Time Progress Bar** |
 |:---:|:---:|
-| ![Batch Downloader UI](../assets/screenshots/comix/05_batch_download_all_chapters.png) | ![Download Progress Bar](../assets/screenshots/comix/06_single_chapter_download_progress.png) |
+| ![Batch Downloader UI](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/assets/screenshots/comix/05_batch_download_all_chapters.png) | ![Download Progress Bar](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/assets/screenshots/comix/06_single_chapter_download_progress.png) |
 
 ---
 
@@ -73,7 +73,7 @@ Instead of forcing you to click into every title to check its details, the scrip
 - **Clean UI Guarantee:** Clean metadata presentation — absent stats never clutter cards with empty dashes or missing badges.
 
 <p align="center">
-  <img src="../assets/screenshots/comix/07_supported_sites_dropdown.png" alt="Supported Sites Menu" width="320" />
+  <img src="https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/assets/screenshots/comix/07_supported_sites_dropdown.png" alt="Supported Sites Menu" width="320" />
 </p>
 
 ---
