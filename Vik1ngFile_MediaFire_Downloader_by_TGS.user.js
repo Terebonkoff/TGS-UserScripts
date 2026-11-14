@@ -344,7 +344,7 @@
 
                 const footer = document.createElement('div');
                 footer.style.cssText = 'text-align: center; border-top: 1px solid #2f3136; padding-top: 6px;';
-                footer.innerHTML = '<a id="tgs-author-link" href="https://www.patreon.com/c/terebonkoff/about" target="_blank" style="font-size: 11px; color: #7289da; text-decoration: none; font-weight: bold; transition: color 0.3s;">Terebonkoff Game Studio</a>';
+                footer.innerHTML = '<a id="tgs-author-link" href="https://www.patreon.com/c/terebonkoff/about" target="_blank" style="font-size: 11px; color: #7289da; text-decoration: none; font-weight: bold; margin-right: 8px;">💖 Support Me</a> | <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" style="font-size: 11px; color: #57ab5a; text-decoration: none; font-weight: bold; margin-left: 8px;">⭐ GitHub</a>';
                 content.appendChild(footer);
                 panel.appendChild(content);
                 document.body.appendChild(panel);

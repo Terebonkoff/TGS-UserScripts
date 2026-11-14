@@ -784,7 +784,75 @@
             }
         `;
         style.textContent += `
-            /* Кнопка поддержки Terebonkoff Game Studio */
+            
+            /* TGS Brand Group: Support Me & GitHub */
+            .tgs-brand-group {
+                display: inline-flex !important;
+                align-items: center !important;
+                gap: 6px !important;
+                width: fit-content !important;
+                max-width: fit-content !important;
+                flex: 0 0 auto !important;
+                align-self: center !important;
+                box-sizing: border-box !important;
+                vertical-align: middle !important;
+                user-select: none !important;
+                margin: 0 10px !important;
+            }
+            .tgs-support-btn, .tgs-github-btn {
+                display: inline-flex !important;
+                align-items: center !important;
+                gap: 5px !important;
+                width: fit-content !important;
+                max-width: fit-content !important;
+                flex: 0 0 auto !important;
+                padding: 3px 9px !important;
+                border-radius: 5px !important;
+                font-size: 11px !important;
+                font-weight: 700 !important;
+                text-decoration: none !important;
+                line-height: 1.2 !important;
+                transition: all 0.2s ease !important;
+                white-space: nowrap !important;
+                cursor: pointer !important;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35) !important;
+            }
+            .tgs-support-btn {
+                background: linear-gradient(135deg, rgba(239, 68, 68, 0.22), rgba(88, 101, 242, 0.22)) !important;
+                border: 1px solid rgba(239, 68, 68, 0.65) !important;
+                color: #ffffff !important;
+            }
+            .tgs-support-btn:hover {
+                background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+                border-color: #ef4444 !important;
+                color: #ffffff !important;
+                box-shadow: 0 0 12px rgba(239, 68, 68, 0.75) !important;
+                transform: translateY(-1px) !important;
+            }
+            .tgs-github-btn {
+                background: rgba(36, 41, 47, 0.8) !important;
+                border: 1px solid #444c56 !important;
+                color: #e6edf3 !important;
+            }
+            .tgs-github-btn:hover {
+                background: #2ea043 !important;
+                border-color: #2ea043 !important;
+                color: #ffffff !important;
+                box-shadow: 0 0 12px rgba(46, 160, 67, 0.65) !important;
+                transform: translateY(-1px) !important;
+            }
+            .tgs-heart {
+                font-size: 12px !important;
+                line-height: 1 !important;
+                display: inline-block !important;
+                animation: tgs-pulse 2s infinite ease-in-out !important;
+            }
+            @keyframes tgs-pulse {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.22); }
+            }
+
+            /* Старая кнопка Terebonkoff Game Studio */
             .tgs-support-btn {
                 display: inline-flex !important;
                 align-items: center !important;
@@ -2174,6 +2242,44 @@
      * 11. СТАРТ
      * ========================================================================= */
 
+    
+    function insertTgsBrandGroup() {
+        if (document.getElementById('tgs-brand-group')) return;
+
+        const group = document.createElement('span');
+        group.id = 'tgs-brand-group';
+        group.className = 'tgs-brand-group';
+        group.innerHTML = `
+            <a href="https://www.patreon.com/c/terebonkoff/about" target="_blank" rel="noopener noreferrer" class="tgs-support-btn" title="Поддержать Terebonkoff Game Studio на Patreon">
+                <span class="tgs-heart">💖</span> <span>Support Me</span>
+            </a>
+            <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-github-btn" title="Официальный GitHub TGS: все скрипты и обновления">
+                <span>⭐</span> <span>GitHub</span>
+            </a>
+        `;
+
+        // 1. F95Zone: в шапку перед иконками пользователя
+        const navOpposite = document.querySelector('.p-nav-opposite, .uix_headerRight');
+        if (navOpposite && navOpposite.parentNode) {
+            navOpposite.parentNode.insertBefore(group, navOpposite);
+            return;
+        }
+
+        // 2. RuTracker / Pornolab: в единую строчку тулбара
+        const tb = document.querySelector('.rt-toolbar');
+        if (tb) {
+            tb.appendChild(group);
+            return;
+        }
+
+        // 3. Главное меню сайтов
+        const nav = document.querySelector('#main-nav, #page_header, #top-nav, .topmenu, #nav-panel, .p-nav-inner');
+        if (nav) {
+            nav.appendChild(group);
+            return;
+        }
+    }
+
     function insertSupportButton() {
         if (document.getElementById('tgs-support-btn')) return;
 
@@ -2201,7 +2307,7 @@
     }
 
     function init() {
-        insertSupportButton();
+        insertTgsBrandGroup();
         injectMasterStyles();
 
         if (isTopicPage) {

@@ -413,50 +413,44 @@
 
     injectStyles();
 
-        // --- 2.5 Кнопка Support Me Terebonkoff Game Studio ---
-    function insertSupportButton() {
-        if (document.getElementById('f95-tgs-support-btn')) return;
+        
+    function insertTgsBrandGroup() {
+        if (document.getElementById('tgs-brand-group')) return;
 
-        const btn = document.createElement('a');
-        btn.id = 'f95-tgs-support-btn';
-        btn.href = 'https://www.patreon.com/c/terebonkoff/about';
-        btn.target = '_blank';
-        btn.rel = 'noopener noreferrer';
-        btn.className = 'f95-tgs-support-btn';
-        btn.innerHTML = `<span class="f95-tgs-heart">💖</span><span>Support Me Terebonkoff Game Studio</span>`;
+        const group = document.createElement('span');
+        group.id = 'tgs-brand-group';
+        group.className = 'tgs-brand-group';
+        group.innerHTML = `
+            <a href="https://www.patreon.com/c/terebonkoff/about" target="_blank" rel="noopener noreferrer" class="tgs-support-btn" title="Поддержать Terebonkoff Game Studio на Patreon">
+                <span class="tgs-heart">💖</span> <span>Support Me</span>
+            </a>
+            <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-github-btn" title="Официальный GitHub TGS: все скрипты и обновления">
+                <span>⭐</span> <span>GitHub</span>
+            </a>
+        `;
 
-        // 1. Поиск центральной серой зоны шапки (между поиском и иконками пользователя):
+        // 1. F95Zone: в шапку перед иконками пользователя
         const navOpposite = document.querySelector('.p-nav-opposite, .uix_headerRight');
-        const searchBox = document.querySelector('.uix_searchBar, .p-nav-search, form[action*="search"]');
-        const navInner = document.querySelector('.p-nav-inner, .p-header-inner, .uix_headerContainer');
-
         if (navOpposite && navOpposite.parentNode) {
-            // Вставляем строго перед блоком иконок пользователя в середину шапки
-            navOpposite.parentNode.insertBefore(btn, navOpposite);
+            navOpposite.parentNode.insertBefore(group, navOpposite);
             return;
         }
 
-        if (searchBox && searchBox.nextSibling) {
-            searchBox.parentNode.insertBefore(btn, searchBox.nextSibling);
+        // 2. RuTracker / Pornolab: в единую строчку тулбара
+        const tb = document.querySelector('.rt-toolbar');
+        if (tb) {
+            tb.appendChild(group);
             return;
         }
 
-        if (navInner) {
-            navInner.appendChild(btn);
+        // 3. Главное меню сайтов
+        const nav = document.querySelector('#main-nav, #page_header, #top-nav, .topmenu, #nav-panel, .p-nav-inner');
+        if (nav) {
+            nav.appendChild(group);
             return;
         }
-
-        // 2. Блок в шапке для страниц комиксов/SAM
-        const readerBar = document.querySelector('.sam-header, .reader-nav, .viewer-header, header');
-        if (readerBar) {
-            readerBar.appendChild(btn);
-            return;
-        }
-
-        // 3. Запасной вариант с аккуратным позиционированием
-        btn.style.cssText = 'position: fixed !important; top: 8px !important; right: 230px !important; z-index: 99999 !important; width: fit-content !important;';
-        document.body.appendChild(btn);
     }
+
 // --- 2. Очистка инфо-баннеров, подписей в чате и плашки Steam ---
     function purgeAllNotices() {
         // Обычные системные плашки
@@ -1567,7 +1561,7 @@
     // --- 13. Запуск и наблюдение ---
     function run() {
         purgeAllNotices();
-        insertSupportButton();
+        insertTgsBrandGroup();
         if (window.location.href.includes('/latest_alpha')) {
             const data = findGridAndCards();
             if (data) {
