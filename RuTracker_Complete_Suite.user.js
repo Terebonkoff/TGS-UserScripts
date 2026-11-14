@@ -3,7 +3,7 @@
 // @name:ru      RuTracker: Enhanced Suite by TGS
 // @name:en      RuTracker: Enhanced Suite by TGS
 // @namespace    https://rutracker.org/
-// @version      5.12
+// @version      5.13
 // @description  Единый мощный комплекс для RuTracker: встроенные превью и кнопка скачивания в списке раздач, идеальные колонки (Форум с ресайзером, компактный Автор ~3 см), боковое окно предпросмотра при наведении, единый тулбар в раздачах, полноразмерные скриншоты FastPic/IBB без мыла и полноэкранный Lightbox.
 // @description:en All-in-one suite for RuTracker: inline previews & download button in torrent lists, perfect column layout, right-dock hover screenshot preview, single toolbar in topics, full-size FastPic/IBB screenshots & Lightbox.
 // @author       Terebonkoff (TGS)
@@ -1203,6 +1203,7 @@
     function isBadgeOrTrashUrl(url) {
         if (!url) return true;
         const u = url.toLowerCase();
+        if (u.includes('static.pornolab.net') || u.includes('static.rutracker.org')) return true;
         if (u.includes('smilies/') || u.includes('.gif') || u.includes('avatars/') || u.includes('/ranks/')) return true;
         if (u.includes('/tags/') || u.includes('/genres/') || u.includes('/badges/') || u.includes('/icons/')) return true;
         if (u.includes('pornolab.net/forum/images/') || u.includes('rutracker.org/forum/images/')) return true;
@@ -1235,8 +1236,8 @@
                 pre.onload = () => {
                     const maxDim = Math.max(pre.naturalWidth, pre.naturalHeight);
                     const minDim = Math.min(pre.naturalWidth, pre.naturalHeight);
-                    // Строгий фильтр: отсекаем значки тегов/жанров (минимум 180px ширина или 100px высота)
-                    if (maxDim >= 180 && minDim >= 100) {
+                    // Пропускаем реальные скриншоты (FastPic 150x84, PixHost 120x90) и отсекаем мелкие мусорные значки
+                    if (maxDim >= 100 && minDim >= 45) {
                         finish(true);
                     } else {
                         finish(false);
@@ -1698,13 +1699,19 @@
         const screenshots = [];
         const seen = new Set();
 
-        const spWraps = postContent.querySelectorAll('.sp-wrap');
+        const spWraps = postContent.querySelectorAll('.sp-wrap, .sp-fold');
         const screenshotSpWraps = [];
         spWraps.forEach(wrap => {
-            const head = wrap.querySelector('.sp-head');
-            if (head && /скрин|screen|shot|пример|caps|кадр|превью|snaps|pic|арт|art|галере|sample|образц|иллюстрац/i.test(head.textContent)) {
-                const b = wrap.querySelector('.sp-body');
-                if (b) screenshotSpWraps.push(b);
+            const head = wrap.querySelector('.sp-head, .sp-title');
+            const body = wrap.querySelector('.sp-body');
+            const titleText = [
+                head ? head.textContent : '',
+                body ? (body.getAttribute('title') || '') : '',
+                wrap.getAttribute('title') || ''
+            ].join(' ');
+            if (/скрин|screen|shot|пример|caps|кадр|превью|snaps|pic|арт|art|галере|sample|образц|иллюстрац/i.test(titleText)) {
+                if (body) screenshotSpWraps.push(body);
+                else screenshotSpWraps.push(wrap);
             }
         });
         // Если есть спойлеры скриншотов - берем ТОЛЬКО из них, игнорируя бейджи из описания!
@@ -2156,20 +2163,26 @@
             sig.querySelectorAll('img, var').forEach(el => el.setAttribute('data-rt-ignore', 'true'));
         }
 
-        const spWraps = postBody.querySelectorAll('.sp-wrap');
+        const spWraps = postBody.querySelectorAll('.sp-wrap, .sp-fold');
         const screenshotSpWraps = [];
         spWraps.forEach(wrap => {
-            const head = wrap.querySelector('.sp-head');
-            if (head && /скрин|screen|shot|кадр|пример|caps|превью|snaps|pic/i.test(head.textContent)) {
+            const head = wrap.querySelector('.sp-head, .sp-title');
+            const body = wrap.querySelector('.sp-body');
+            const titleText = [
+                head ? head.textContent : '',
+                body ? (body.getAttribute('title') || '') : '',
+                wrap.getAttribute('title') || ''
+            ].join(' ');
+            if (/скрин|screen|shot|кадр|пример|caps|превью|snaps|pic|арт|art|галере|sample|образц|иллюстрац/i.test(titleText)) {
                 wrap.classList.add('sp-opened');
                 wrap.classList.remove('sp-folded');
-                head.classList.add('sp-opened');
-                head.classList.remove('folded');
-                const b = wrap.querySelector('.sp-body');
-                if (b) {
-                    b.style.display = 'block';
-                    screenshotSpWraps.push({ wrap, body: b });
+                if (head) {
+                    head.classList.add('sp-opened');
+                    head.classList.remove('folded');
                 }
+                const b = body || wrap;
+                b.style.display = 'block';
+                screenshotSpWraps.push({ wrap, body: b });
             }
         });
 
@@ -2196,7 +2209,7 @@
                     img.src = src;
                     img.className = 'postImg';
                     img.referrerPolicy = 'no-referrer';
-                    v.parentNode.replaceChild(img, v);
+                    if (v.parentNode) v.parentNode.replaceChild(img, v);
                 } else {
                     v.remove();
                 }
@@ -2238,11 +2251,6 @@
 
                 // ВСЕГДА оставляем рабочий исходный src изображения
                 img.src = originalSrc;
-                
-                // Если картинка сломалась - скрываем, чтобы не было битых [x]
-                img.onerror = () => {
-                    targetNode.style.display = 'none';
-                };
 
                 const galleryItem = {
                     src: originalSrc,
@@ -2272,7 +2280,7 @@
                     const pre = new Image();
                     pre.referrerPolicy = 'no-referrer';
                     pre.onload = () => {
-                        if (pre.naturalWidth >= 180) {
+                        if (pre.naturalWidth >= 100) {
                             img.src = candidateHd;
                             galleryItem.src = candidateHd;
                         }
@@ -2284,7 +2292,7 @@
                         const pre = new Image();
                         pre.referrerPolicy = 'no-referrer';
                         pre.onload = () => {
-                            if (pre.naturalWidth >= 180) {
+                            if (pre.naturalWidth >= 100) {
                                 img.src = fullUrl;
                                 galleryItem.src = fullUrl;
                             }
@@ -2491,7 +2499,7 @@
 
             document.addEventListener('click', (e) => {
                 if (!e.isTrusted) return;
-                if (e.target.closest('.sp-head')) {
+                if (e.target.closest('.sp-head, .sp-title, .sp-wrap, .sp-open-all')) {
                     setTimeout(processTopicScreenshots, 200);
                 }
             });
