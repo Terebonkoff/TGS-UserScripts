@@ -25,3 +25,33 @@
    - Adjust card grid sizes, banner widths, and screenshot dimensions to match your monitor and resolution.
 4. **🔗 Cleaned & Direct Windows Mirrors:**
    - Unmasks obfuscated redirect links, prioritizes official Windows builds, and filters out dead mirrors.
+
+---
+
+## ⚙️ Installation & Automatic Updates
+
+1. Install [Violentmonkey](https://violentmonkey.github.io/) (strongly recommended) or [Tampermonkey](https://www.tampermonkey.net/).
+2. Open the [**Direct Script Installation Link (v24.4)**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/F95Zone_Enhanced_Suite.user.js).
+3. Click **Confirm installation** in the browser tab.
+
+---
+
+## 💖 Support the Studio & Future Updates
+
+If you find this suite useful and want to support ongoing updates and 18+ game projects by **Terebonkoff Game Studio**:
+
+<p align="center">
+  <a href="https://boosty.to/terebonkoff?utm_source=userscript_f95&utm_medium=tgs_suite">
+    <img src="https://img.shields.io/badge/Support_on_Boosty-F15F2C?style=for-the-badge&logo=boosty&logoColor=white" alt="Support on Boosty" />
+  </a>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_f95&utm_medium=tgs_suite">
+    <img src="https://img.shields.io/badge/Support_on_Patreon-FF424D?style=for-the-badge&logo=patreon&logoColor=white" alt="Support on Patreon" />
+  </a>
+</p>
+
+| Method | Description & Perks | Direct Link |
+|---|---|---|
+| **☕ Boosty** | Support via Bank Cards (RU & Worldwide), PayPal, Crypto & One-time Donates | [**👉 Support via Boosty**](https://boosty.to/terebonkoff?utm_source=userscript_f95&utm_medium=tgs_suite) |
+| **💖 Patreon** | Monthly tiers, exclusive 18+ game development devlogs & private adult art packs | [**👉 Support via Patreon**](https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_f95&utm_medium=tgs_suite) |
+

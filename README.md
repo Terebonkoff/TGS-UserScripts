@@ -42,7 +42,19 @@ Each script is a complete standalone tool featuring deep layout optimization, ba
 All userscripts and downloaders are developed and actively maintained for free by **Terebonkoff Game Studio**.  
 If you appreciate our tools and want to support ongoing development and adult gaming projects, you can back us directly via:
 
-- ☕ [**Boosty: Terebonkoff Studio (Cards & PayPal)**](https://boosty.to/terebonkoff?utm_source=userscript_hub&utm_medium=tgs_suite) — Ideal for quick 1-click tips, bank cards, and PayPal without mandatory monthly subscriptions.
-- 💖 [**Patreon: Terebonkoff Game Studio**](https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_hub&utm_medium=tgs_suite) — Perfect for monthly backers who wish to follow game development updates, beta builds, and art previews.
+<p align="center">
+  <a href="https://boosty.to/terebonkoff?utm_source=userscript_hub&utm_medium=tgs_suite">
+    <img src="https://img.shields.io/badge/Support_on_Boosty-F15F2C?style=for-the-badge&logo=boosty&logoColor=white" alt="Support on Boosty" />
+  </a>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_hub&utm_medium=tgs_suite">
+    <img src="https://img.shields.io/badge/Support_on_Patreon-FF424D?style=for-the-badge&logo=patreon&logoColor=white" alt="Support on Patreon" />
+  </a>
+</p>
 
-*(Additional payment methods, including direct cryptocurrency donations, will be added in upcoming updates!)*
+| Platform | Recommended For | Direct Link |
+|---|---|---|
+| ☕ **Boosty** | Bank cards (RU & Worldwide), PayPal, Crypto & quick 1-click tips | [**👉 Support via Boosty**](https://boosty.to/terebonkoff?utm_source=userscript_hub&utm_medium=tgs_suite) |
+| 💖 **Patreon** | Monthly backers, 18+ game development devlogs & private adult art packs | [**👉 Support via Patreon**](https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_hub&utm_medium=tgs_suite) |
+
+> 💬 *Additional payment methods, including direct cryptocurrency donations, are currently being configured. Thank you for your support!*
