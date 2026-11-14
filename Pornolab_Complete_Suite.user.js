@@ -3,7 +3,7 @@
 // @name:ru      Pornolab: Enhanced Suite by TGS
 // @name:en      Pornolab: Enhanced Suite by TGS
 // @namespace    https://pornolab.net/
-// @version      5.7
+// @version      5.8
 // @description  Единый мощный комплекс для Pornolab: встроенные превью и кнопка скачивания в списке раздач, идеальные колонки (Форум с ресайзером, компактный Автор ~3 см), боковое окно предпросмотра при наведении, единый тулбар в раздачах, полноразмерные скриншоты FastPic/IMX/ImageTwist без мыла и полноэкранный Lightbox.
 // @description:en All-in-one suite for Pornolab: inline previews & download button in torrent lists, perfect column layout, right-dock hover screenshot preview, single toolbar in topics, full-size FastPic/IMX screenshots & Lightbox.
 // @author       Terebonkoff (TGS)
@@ -2416,21 +2416,22 @@
         const bar = document.createElement('div');
         bar.className = 'tgs-branding-bar ' + extraClass;
         bar.id = 'tgs-branding-bar';
+        bar.style.cssText = 'display:inline-flex !important; align-items:center !important; flex-direction:row !important; gap:8px !important; background:rgba(22, 27, 34, 0.95) !important; border:1px solid #363d4a !important; border-radius:6px !important; padding:3px 10px !important; box-shadow:0 2px 8px rgba(0,0,0,0.45) !important; white-space:nowrap !important; width:fit-content !important; max-width:fit-content !important; flex:0 0 auto !important; vertical-align:middle !important; user-select:none !important; box-sizing:border-box !important; margin:0 8px !important; z-index:1000 !important; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif !important;';
         bar.innerHTML = `
-            <span class="tgs-title-label">
-                <span class="tgs-logo-icon">🚀</span>
-                <a href="https://www.patreon.com/c/terebonkoff/about" target="_blank" rel="noopener noreferrer" class="tgs-brand-studio-link" title="Terebonkoff Game Studio">Terebonkoff Game Studio</a>
-                <span class="tgs-slash-sep">/</span>
-                <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-brand-scripts-link" title="TGS Scripts Repository">Scripts</a>
+            <span class="tgs-title-label" style="display:inline-flex !important; align-items:center !important; gap:5px !important; font-size:11px !important; color:#f0f6fc !important; font-weight:700 !important; letter-spacing:0.2px !important;">
+                <span class="tgs-logo-icon" style="font-size:12px !important; line-height:1 !important;">🚀</span>
+                <a href="https://www.patreon.com/c/terebonkoff/about" target="_blank" rel="noopener noreferrer" class="tgs-brand-studio-link" title="Terebonkoff Game Studio" style="color:#f8fafc !important; text-decoration:none !important; cursor:pointer !important; font-weight:700 !important;">Terebonkoff Game Studio</a>
+                <span class="tgs-slash-sep" style="color:rgba(255,255,255,0.4) !important; margin:0 1px !important;">/</span>
+                <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-brand-scripts-link" title="TGS Scripts Repository" style="color:#38bdf8 !important; text-decoration:none !important; cursor:pointer !important; font-weight:600 !important;">Scripts</a>
             </span>
-            <div class="tgs-actions">
-                <a href="https://boosty.to/terebonkoff" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-boosty" title="Support via Boosty (Cards & PayPal)">
+            <div class="tgs-actions" style="display:inline-flex !important; align-items:center !important; gap:6px !important;">
+                <a href="https://boosty.to/terebonkoff" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-boosty" title="Support via Boosty (Cards & PayPal)" style="display:inline-flex !important; align-items:center !important; gap:5px !important; padding:2px 8px !important; border-radius:4px !important; font-size:11px !important; font-weight:700 !important; text-decoration:none !important; line-height:1.2 !important; background:rgba(241, 95, 44, 0.22) !important; border:1px solid rgba(241, 95, 44, 0.65) !important; color:#ff8a65 !important; box-shadow:0 1px 4px rgba(0,0,0,0.3) !important;">
                     <span>☕</span> <span>Boosty</span>
                 </a>
-                <a href="https://www.patreon.com/c/terebonkoff/about" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-patreon" title="Support on Patreon">
+                <a href="https://www.patreon.com/c/terebonkoff/about" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-patreon" title="Support on Patreon" style="display:inline-flex !important; align-items:center !important; gap:5px !important; padding:2px 8px !important; border-radius:4px !important; font-size:11px !important; font-weight:700 !important; text-decoration:none !important; line-height:1.2 !important; background:linear-gradient(135deg, rgba(239, 68, 68, 0.28), rgba(225, 29, 72, 0.28)) !important; border:1px solid rgba(239, 68, 68, 0.75) !important; color:#ffffff !important; box-shadow:0 1px 4px rgba(0,0,0,0.3) !important;">
                     <span class="tgs-heart">💖</span> <span>Patreon</span>
                 </a>
-                <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-github" title="Official GitHub TGS Repository">
+                <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-github" title="Official GitHub TGS Repository" style="display:inline-flex !important; align-items:center !important; gap:5px !important; padding:2px 8px !important; border-radius:4px !important; font-size:11px !important; font-weight:700 !important; text-decoration:none !important; line-height:1.2 !important; background:rgba(33, 38, 45, 0.85) !important; border:1px solid #444c56 !important; color:#e6edf3 !important; box-shadow:0 1px 4px rgba(0,0,0,0.3) !important;">
                     <span>⭐</span> <span>GitHub</span>
                 </a>
             </div>

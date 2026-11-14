@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         COMIX ZIP Downloader & Live Stats by TGS
 // @namespace    https://www.patreon.com/Terebonkoff
-// @version      3.406
+// @version      3.407
 // @description  Downloads full-size images and batch chapters from adult comic sites into ZIP + live card stats (pages, downloads, favorites, rating, views) + visited green highlight
 // @author       Terebonkoff
 // @icon         https://purepng.com/public/uploads/thumbnail//sexy-little-caprice-in-white-dress-zly.png
