@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Vik1ngFile, MediaFire, Gofile & 1Fichier Downloader by TGS
 // @namespace    https://www.patreon.com/Terebonkoff
-// @version      4.0.0
+// @version      4.0.1
 // @description  Automates and accelerates downloads from MediaFire, Pixeldrain (bypasses speed limits), Gofile, 1Fichier, Datanodes, VIK1NGFILE, and unmasks F95Zone redirect links.
 // @author       Terebonkoff
 // @icon         https://purepng.com/public/uploads/thumbnail//sexy-little-caprice-in-white-dress-zly.png
@@ -22,6 +22,10 @@
 // @match        https://1fichier.com/*
 // @grant        window.close
 // @run-at       document-start
+// @downloadURL  https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/Vik1ngFile_MediaFire_Downloader_by_TGS.user.js
+// @updateURL    https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/Vik1ngFile_MediaFire_Downloader_by_TGS.user.js
+// @homepageURL  https://github.com/Terebonkoff/TGS-UserScripts
+// @supportURL   https://github.com/Terebonkoff/TGS-UserScripts/issues
 // ==/UserScript==
 
 (function() {
