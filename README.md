@@ -18,7 +18,7 @@
 
 | Скрипт | Назначение | Быстрая установка | Подробный обзор со скриншотами |
 |---|---|:---:|:---:|
-| 📚 **COMIX ZIP Downloader & Live Stats** | Пакетное скачивание глав в ZIP, живая статистика карточек (страницы, рейтинг, загрузки), статус VIEWED | [**🚀 Установить v3.402**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/COMIX_ZIP_Downloader_by_TGS.user.js) | [**📸 Смотреть скриншоты и обзор**](docs/COMIX_DOWNLOADER.md) |
+| 📚 **COMIX ZIP Downloader & Live Stats** | Пакетное скачивание глав в ZIP, живая статистика карточек (страницы, рейтинг, загрузки), статус VIEWED | [**🚀 Установить v3.403**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/COMIX_ZIP_Downloader_by_TGS.user.js) | [**📸 Смотреть скриншоты и обзор**](docs/COMIX_DOWNLOADER.md) |
 | 🚀 **F95Zone: Enhanced Suite** | Адаптивный макет под боковое меню, устранение обрезаний, прямое HD-превью и Lightbox | [**🚀 Установить v24.4**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/F95Zone_Enhanced_Suite.user.js) | [**📖 Описание возможностей**](docs/F95ZONE_ENHANCED_SUITE.md) |
 | 🔞 **Pornolab: Enhanced Suite** | Превью в списке, боковой док предпросмотра, вырезание донатов и плашек, HD Lightbox | [**🚀 Установить v5.4.2**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/Pornolab_Complete_Suite.user.js) | [**📖 Описание возможностей**](docs/PORNOLAB_ENHANCED_SUITE.md) |
 | 🧲 **RuTracker: Enhanced Suite** | Превью в списке, кнопка скачивания `.torrent`, компактный Автор, ресайзер колонок | [**🚀 Установить v5.4.2**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/RuTracker_Complete_Suite.user.js) | [**📖 Описание возможностей**](docs/RUTRACKER_ENHANCED_SUITE.md) |

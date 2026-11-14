@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         COMIX ZIP Downloader & Live Stats by TGS
 // @namespace    https://www.patreon.com/Terebonkoff
-// @version      3.402
+// @version      3.403
 // @description  Downloads full-size images and batch chapters from adult comic sites into ZIP + live card stats (pages, downloads, favorites, rating, views) + visited green highlight
 // @author       Terebonkoff
 // @icon         https://purepng.com/public/uploads/thumbnail//sexy-little-caprice-in-white-dress-zly.png
@@ -149,13 +149,53 @@
     // 🟢 СИСТЕМА УЧЁТА И ПОДСВЕТКИ ПРОСМОТРЕННЫХ КОМИКСОВ (ЗЕЛЁНАЯ РАМКА)
     // =========================================================================
     const VISITED_STORAGE_KEY = 'tgs_visited_comics_v1';
+    const FAVORITES_STORAGE_KEY = 'tgs_favorite_comics_v1';
 
     function getVisitedComics() {
         try {
-            const raw = localStorage.getItem(VISITED_STORAGE_KEY);
-            return raw ? JSON.parse(raw) : {};
+            return JSON.parse(localStorage.getItem(VISITED_STORAGE_KEY) || '{}');
         } catch (e) {
             return {};
+        }
+    }
+
+    function getFavoriteComics() {
+        try {
+            return JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY) || '{}');
+        } catch (e) {
+            return {};
+        }
+    }
+
+    function isComicFavorite(urlOrId) {
+        if (!urlOrId) return false;
+        try {
+            const key = normalizeComicKey(urlOrId);
+            if (!key) return false;
+            const favs = getFavoriteComics();
+            return !!favs[key];
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function toggleComicFavorite(urlOrId) {
+        if (!urlOrId) return false;
+        try {
+            const key = normalizeComicKey(urlOrId);
+            if (!key) return false;
+            const favs = getFavoriteComics();
+            if (favs[key]) {
+                delete favs[key];
+                localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favs));
+                return false;
+            } else {
+                favs[key] = Date.now();
+                localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favs));
+                return true;
+            }
+        } catch (e) {
+            return false;
         }
     }
 
@@ -192,16 +232,75 @@
         }
     }
 
-    function applyVisitedBorder(container) {
-        if (!container) return;
-        container.classList.add('tgs-visited-card');
-        let badge = container.querySelector('.tgs-visited-badge');
-        if (!badge) {
-            badge = document.createElement('span');
-            badge.className = 'tgs-visited-badge';
-            container.appendChild(badge);
+    function updateCardStatus(targetContainer, comicUrl) {
+        if (!targetContainer || !comicUrl) return;
+
+        const isFav = isComicFavorite(comicUrl);
+        const isVis = isComicVisited(comicUrl);
+
+        // 1. Рамки карточки (Золотая для Избранного, Зеленая для Просмотренного)
+        if (isFav) {
+            targetContainer.classList.remove('tgs-visited-card');
+            targetContainer.classList.add('tgs-favorite-card');
+        } else if (isVis) {
+            targetContainer.classList.remove('tgs-favorite-card');
+            targetContainer.classList.add('tgs-visited-card');
+        } else {
+            targetContainer.classList.remove('tgs-favorite-card');
+            targetContainer.classList.remove('tgs-visited-card');
         }
-        badge.innerText = t('badgeViewed');
+
+        // 2. Левый верхний статус-бейдж
+        let badge = targetContainer.querySelector('.tgs-status-badge');
+        if (isFav || isVis) {
+            if (!badge) {
+                badge = document.createElement('span');
+                badge.className = 'tgs-status-badge';
+                targetContainer.appendChild(badge);
+            }
+            if (isFav) {
+                badge.className = 'tgs-status-badge tgs-favorite-badge';
+                badge.innerText = '★ FAVORITE';
+            } else {
+                badge.className = 'tgs-status-badge tgs-visited-badge';
+                badge.innerText = t('badgeViewed');
+            }
+        } else if (badge) {
+            badge.remove();
+        }
+
+        // 3. Звёздочка Избранного в правом верхнем углу обложки
+        let starBtn = targetContainer.querySelector('.tgs-fav-star-btn');
+        if (!starBtn) {
+            starBtn = document.createElement('button');
+            starBtn.className = 'tgs-fav-star-btn';
+            starBtn.setAttribute('type', 'button');
+            starBtn.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+            `;
+            targetContainer.appendChild(starBtn);
+
+            starBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleComicFavorite(comicUrl);
+                updateCardStatus(targetContainer, comicUrl);
+            });
+        }
+
+        if (isFav) {
+            starBtn.classList.add('is-favorite');
+            starBtn.setAttribute('title', 'Удалить из избранного TGS');
+        } else {
+            starBtn.classList.remove('is-favorite');
+            starBtn.setAttribute('title', 'Добавить в избранное TGS (Золотая рамка)');
+        }
+    }
+
+    function applyVisitedBorder(container, comicUrl) {
+        if (comicUrl) updateCardStatus(container, comicUrl);
     }
 
     function checkCurrentPageVisited() {
@@ -316,6 +415,76 @@
             }
 
             /* Зеленая рамка для просмотренных комиксов */
+            
+            /* Золотая рамка Избранного */
+            .tgs-favorite-card {
+                outline: 3px solid #eab308 !important;
+                outline-offset: -2px !important;
+                box-shadow: 0 0 16px rgba(234, 179, 8, 0.85) !important;
+                border-radius: 6px !important;
+            }
+            .tgs-favorite-badge {
+                position: absolute !important;
+                top: 6px !important;
+                left: 6px !important;
+                background: linear-gradient(135deg, #facc15 0%, #ca8a04 100%) !important;
+                color: #0f172a !important;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+                font-size: 11px !important;
+                font-weight: 800 !important;
+                padding: 2px 7px !important;
+                border-radius: 4px !important;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.85) !important;
+                z-index: 25 !important;
+                letter-spacing: 0.5px !important;
+                pointer-events: none !important;
+            }
+
+            /* Кнопка-звёздочка в правом верхнем углу */
+            .tgs-fav-star-btn {
+                position: absolute !important;
+                top: 6px !important;
+                right: 6px !important;
+                width: 28px !important;
+                height: 28px !important;
+                border-radius: 50% !important;
+                background: rgba(15, 23, 42, 0.75) !important;
+                backdrop-filter: blur(4px) !important;
+                border: 1px solid rgba(255, 255, 255, 0.35) !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                cursor: pointer !important;
+                z-index: 30 !important;
+                transition: all 0.2s ease !important;
+                color: #ffffff !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6) !important;
+            }
+            .tgs-fav-star-btn:hover {
+                transform: scale(1.15) !important;
+                border-color: #facc15 !important;
+                background: rgba(15, 23, 42, 0.95) !important;
+            }
+            .tgs-fav-star-btn svg {
+                width: 17px !important;
+                height: 17px !important;
+                stroke: #ffffff !important;
+                fill: transparent !important;
+                transition: all 0.2s ease !important;
+            }
+            .tgs-fav-star-btn.is-favorite {
+                background: rgba(234, 179, 8, 0.25) !important;
+                border-color: #facc15 !important;
+                box-shadow: 0 0 10px rgba(250, 204, 21, 0.7) !important;
+            }
+            .tgs-fav-star-btn.is-favorite svg {
+                stroke: #eab308 !important;
+                fill: #facc15 !important;
+                filter: drop-shadow(0 0 4px rgba(250, 204, 21, 0.8)) !important;
+            }
+
             .tgs-visited-card {
                 outline: 3px solid #22c55e !important;
                 outline-offset: -2px !important;
@@ -1658,15 +1827,14 @@
         targetContainer.style.position = 'relative';
         targetContainer.style.display = 'block';
 
-        // Проверяем, был ли комикс уже просмотрен
-        if (isComicVisited(comicUrl)) {
-            applyVisitedBorder(targetContainer);
-        }
+        // Проверяем и применяем статус (Избранное / Просмотрено)
+        updateCardStatus(targetContainer, comicUrl);
 
-        // Нажатие на карточку сразу помечает её как просмотренную зелёной рамкой
-        card.addEventListener('click', () => {
+        // Нажатие на карточку помечает её как просмотренную (если клик не по звёздочке)
+        card.addEventListener('click', (e) => {
+            if (e.target.closest('.tgs-fav-star-btn')) return;
             markComicVisited(comicUrl);
-            applyVisitedBorder(targetContainer);
+            updateCardStatus(targetContainer, comicUrl);
         }, { passive: true });
 
         const overlay = document.createElement('div');
