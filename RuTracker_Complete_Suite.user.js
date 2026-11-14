@@ -3,7 +3,7 @@
 // @name:ru      RuTracker: Enhanced Suite by TGS
 // @name:en      RuTracker: Enhanced Suite by TGS
 // @namespace    https://rutracker.org/
-// @version      5.8
+// @version      5.9
 // @description  Единый мощный комплекс для RuTracker: встроенные превью и кнопка скачивания в списке раздач, идеальные колонки (Форум с ресайзером, компактный Автор ~3 см), боковое окно предпросмотра при наведении, единый тулбар в раздачах, полноразмерные скриншоты FastPic/IBB без мыла и полноэкранный Lightbox.
 // @description:en All-in-one suite for RuTracker: inline previews & download button in torrent lists, perfect column layout, right-dock hover screenshot preview, single toolbar in topics, full-size FastPic/IBB screenshots & Lightbox.
 // @author       Terebonkoff (TGS)
@@ -1176,14 +1176,29 @@
 
     function trySafeFastTransform(imgSrc) {
         if (!imgSrc) return null;
-        if (/i\d+\.pixhost\.to\/thumbs\//i.test(imgSrc)) {
+        // FastPic: /thumb/ -> /big/
+        if (/fastpic\.[a-z]+\/thumb\//i.test(imgSrc)) {
+            return imgSrc.replace(/\/thumb\//i, '/big/');
+        }
+        // PixHost: /thumbs/ -> /images/
+        if (/pixhost\.to\/thumbs\//i.test(imgSrc)) {
             return imgSrc.replace('/thumbs/', '/images/');
         }
+        // ImageBan: /thumbs/ -> /out/
+        if (/imageban\.ru\/thumbs?\//i.test(imgSrc)) {
+            return imgSrc.replace(/\/thumbs?\//i, '/out/');
+        }
+        // ImgBox: _b. or _s. -> _o.
         if (/imgbox\.com\//i.test(imgSrc) && /_[b|s]\./i.test(imgSrc)) {
             return imgSrc.replace(/_[b|s]\./i, '_o.');
         }
+        // PostImages: .th.jpg -> .jpg
         if (/postimg\.cc\//i.test(imgSrc) || /postimages\.org\//i.test(imgSrc)) {
             return imgSrc.replace(/\.th\.(jpe?g|png|webp)$/i, '.$1');
+        }
+        // Lossless.pics: /thumbnail/ -> /images/
+        if (/lossless\.pics\/thumbnail\//i.test(imgSrc)) {
+            return imgSrc.replace('/thumbnail/', '/images/');
         }
         return null;
     }
@@ -1203,7 +1218,8 @@
 
         const promises = items.map(item => {
             return new Promise((resolve) => {
-                const url = item.thumbUrl || item.fullUrl;
+                const url = trySafeFastTransform(item.thumbUrl) || 
+                            (/\.(jpe?g|png|webp)($|\?)/i.test(item.fullUrl) ? item.fullUrl : item.thumbUrl);
                 if (isBadgeOrTrashUrl(url)) {
                     resolve(null);
                     return;
@@ -1222,16 +1238,16 @@
                 pre.onload = () => {
                     const maxDim = Math.max(pre.naturalWidth, pre.naturalHeight);
                     const minDim = Math.min(pre.naturalWidth, pre.naturalHeight);
-                    if (maxDim >= 220 && minDim >= 120) {
+                    if (maxDim >= 50 && minDim >= 30) {
                         finish(true);
                     } else {
                         finish(false);
                     }
                 };
-                pre.onerror = () => finish(false);
+                pre.onerror = () => finish(true);
                 pre.src = url;
 
-                setTimeout(() => finish(false), 2200);
+                setTimeout(() => finish(true), 1200);
             });
         });
 
@@ -1763,17 +1779,22 @@
                     const item = validScreenshots[i];
                     const img = document.createElement('img');
                     img.className = 'pl-inline-thumb';
-                    img.src = item.thumbUrl || item.fullUrl;
+                    const hdUrl = trySafeFastTransform(item.thumbUrl) || 
+                                  (/\.(jpe?g|png|webp)($|\?)/i.test(item.fullUrl) ? item.fullUrl : item.thumbUrl);
+                    img.src = hdUrl;
                     img.loading = 'lazy';
                     img.referrerPolicy = 'no-referrer';
 
                     img.addEventListener('click', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        const galleryItems = validScreenshots.map(s => ({
-                            src: s.resolvedUrl || s.fullUrl,
-                            thumb: s.thumbUrl || s.resolvedUrl || s.fullUrl
-                        }));
+                        const galleryItems = validScreenshots.map(s => {
+                            const full = trySafeFastTransform(s.thumbUrl) || s.resolvedUrl || s.fullUrl;
+                            return {
+                                src: full,
+                                thumb: full
+                            };
+                        });
                         openLightbox(i, galleryItems);
                     });
 
@@ -2206,51 +2227,41 @@
                 processedKeys.add(dedupeKey);
 
                 const targetNode = parentA || img;
-                let isHandled = false;
+                if (targetNode.parentNode !== grid) {
+                    grid.appendChild(targetNode);
+                }
 
-                // Функция валидации: только проверенные и загруженные изображения добавляются в сетку
-                const attachIfValid = () => {
-                    if (isHandled) return;
-                    const maxDim = Math.max(img.naturalWidth, img.naturalHeight);
-                    const minDim = Math.min(img.naturalWidth, img.naturalHeight);
+                // Мгновенный Full HD апгрейд (FastPic, PixHost, ImageBan, PostImages)
+                const fastHd = trySafeFastTransform(originalSrc) || (/\.(jpe?g|png|webp)($|\?)/i.test(rawHref) ? rawHref : null);
+                if (fastHd && fastHd !== img.src) {
+                    img.src = fastHd;
+                }
 
-                    // Если картинка битая (0px) или мелкий бейдж (< 220px) — ПОЛНОСТЬЮ удаляем её из страницы!
-                    if (maxDim < 220 || minDim < 120) {
-                        isHandled = true;
-                        targetNode.remove();
-                        const gIdx = galleryImages.findIndex(g => g.el === img);
-                        if (gIdx !== -1) galleryImages.splice(gIdx, 1);
-                        return;
-                    }
+                const galleryItem = {
+                    src: fastHd || originalSrc,
+                    thumb: originalSrc,
+                    el: img,
+                    targetNode: targetNode,
+                    isScreenlist: false
+                };
+                galleryImages.push(galleryItem);
 
-                    isHandled = true;
-                    if (targetNode.parentNode !== grid) {
-                        grid.appendChild(targetNode);
-                    }
+                if (checkIfScreenlist(img, rawHref)) {
+                    markAsScreenlist(galleryItem);
+                }
 
-                    const galleryItem = {
-                        src: originalSrc,
-                        thumb: originalSrc,
-                        el: img,
-                        targetNode: targetNode,
-                        isScreenlist: false
-                    };
-                    galleryImages.push(galleryItem);
+                img.style.cursor = 'zoom-in';
+                img.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const idx = galleryImages.findIndex(g => g.src === img.src || g.thumb === img.src);
+                    openLightbox(idx !== -1 ? idx : 0);
+                });
 
-                    if (checkIfScreenlist(img, rawHref)) {
-                        markAsScreenlist(galleryItem);
-                    }
-
-                    img.style.cursor = 'zoom-in';
-                    img.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        const idx = galleryImages.findIndex(g => g.src === img.src || g.thumb === img.src);
-                        openLightbox(idx !== -1 ? idx : 0);
-                    });
-
+                // Если есть ссылка на хостинг - вытягиваем исходник в фоне без удаления элементов
+                if (!fastHd && rawHref && rawHref.startsWith('http')) {
                     resolveFullsizeFromHosting(rawHref, originalSrc, (fullUrl) => {
-                        if (!fullUrl || fullUrl === originalSrc) return;
+                        if (!fullUrl || fullUrl === img.src) return;
                         const pre = new Image();
                         pre.referrerPolicy = 'no-referrer';
                         pre.onload = () => {
@@ -2259,29 +2270,6 @@
                         };
                         pre.src = fullUrl;
                     });
-                };
-
-                const cleanupDead = () => {
-                    if (isHandled) return;
-                    isHandled = true;
-                    targetNode.remove();
-                    const gIdx = galleryImages.findIndex(g => g.el === img);
-                    if (gIdx !== -1) galleryImages.splice(gIdx, 1);
-                };
-
-                img.onerror = cleanupDead;
-
-                // Таймаут для зависших или битых хостингов (исключает 5 пустых черных квадратов)
-                setTimeout(() => {
-                    if (!isHandled && (!img.complete || img.naturalWidth === 0)) {
-                        cleanupDead();
-                    }
-                }, 3000);
-
-                if (img.complete && img.naturalWidth > 0) {
-                    attachIfValid();
-                } else {
-                    img.addEventListener('load', attachIfValid);
                 }
             });
         });
