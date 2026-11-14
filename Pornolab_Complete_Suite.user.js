@@ -3,7 +3,7 @@
 // @name:ru      Pornolab: Enhanced Suite by TGS
 // @name:en      Pornolab: Enhanced Suite by TGS
 // @namespace    https://pornolab.net/
-// @version      5.4.2
+// @version      5.5
 // @description  Единый мощный комплекс для Pornolab: встроенные превью и кнопка скачивания в списке раздач, идеальные колонки (Форум с ресайзером, компактный Автор ~3 см), боковое окно предпросмотра при наведении, единый тулбар в раздачах, полноразмерные скриншоты FastPic/IMX/ImageTwist без мыла и полноэкранный Lightbox.
 // @description:en All-in-one suite for Pornolab: inline previews & download button in torrent lists, perfect column layout, right-dock hover screenshot preview, single toolbar in topics, full-size FastPic/IMX screenshots & Lightbox.
 // @author       Terebonkoff (TGS)
@@ -2421,7 +2421,7 @@
                 <span class="tgs-logo-icon">🚀</span>
                 <a href="https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_pornolab&utm_medium=tgs_suite" target="_blank" rel="noopener noreferrer" class="tgs-brand-studio-link" title="Перейти на страницу Terebonkoff Game Studio на Patreon">Terebonkoff Game Studio</a>
                 <span class="tgs-slash-sep">/</span>
-                <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-brand-scripts-link" title="Перейти в репозиторий TGS Scripts на GitHub">TGS Scripts</a>
+                <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-brand-scripts-link" title="Перейти в репозиторий TGS Scripts на GitHub">Scripts</a>
             </span>
             <div class="tgs-actions">
                 <a href="https://boosty.to/terebonkoff?utm_source=userscript_pornolab&utm_medium=tgs_suite" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-boosty" title="Support via Boosty (Cards & PayPal)">

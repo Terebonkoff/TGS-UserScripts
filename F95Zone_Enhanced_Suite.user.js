@@ -3,7 +3,7 @@
 // @name:ru      F95Zone: Enhanced Suite by TGS
 // @name:en      F95Zone: Enhanced Suite by TGS
 // @namespace    https://www.patreon.com/Terebonkoff
-// @version      24.4
+// @version      24.5
 // @description  Адаптивный макет под боковое меню, прямое отображение HD-скриншотов, Lightbox, слайдеры размеров и удобные ссылки скачивания.
 // @description:en Adaptive layout for sidebar menu, direct HD screenshots, Lightbox viewer, size sliders, and clean Windows download links.
 // @author       Terebonkoff (TGS)
@@ -375,44 +375,191 @@
                 border-color: #ef4444 !important;
                 transform: scale(1.1) !important;
             }
-            /* 10. Кнопка поддержки Terebonkoff Game Studio в правом верхнем углу */
-            .f95-tgs-support-btn {
+            /* =========================================================================
+             * 10. ЕДИНАЯ КОМПАКТНАЯ ПЛАШКА TGS (в одну строчку, строго на длину текста)
+             * ========================================================================= */
+            .tgs-branding-bar {
                 display: inline-flex !important;
+                flex-direction: row !important;
                 align-items: center !important;
-                gap: 7px !important;
-                background: linear-gradient(135deg, rgba(239, 68, 68, 0.16), rgba(88, 101, 242, 0.22)) !important;
-                border: 1px solid rgba(239, 68, 68, 0.6) !important;
-                color: #ffffff !important;
-                padding: 4px 12px !important;
-                border-radius: 6px !important;
-                font-size: 12px !important;
-                font-weight: 700 !important;
-                text-decoration: none !important;
-                line-height: 1.2 !important;
-                margin-right: 14px !important;
-                transition: all 0.2s ease !important;
+                justify-content: flex-start !important;
                 white-space: nowrap !important;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45) !important;
-                cursor: pointer !important;
+                width: fit-content !important;
+                max-width: fit-content !important;
+                gap: 8px !important;
+                background: linear-gradient(135deg, rgba(20, 24, 33, 0.96), rgba(30, 20, 28, 0.96)) !important;
+                border: 1px solid rgba(244, 63, 94, 0.55) !important;
+                border-radius: 6px !important;
+                padding: 3px 10px !important;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 10px rgba(244, 63, 94, 0.15) !important;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+                font-size: 11px !important;
+                line-height: 1.2 !important;
                 user-select: none !important;
                 vertical-align: middle !important;
+                box-sizing: border-box !important;
+                z-index: 1000 !important;
             }
-            .f95-tgs-support-btn:hover {
-                background: linear-gradient(135deg, #ef4444, #dc2626) !important;
-                border-color: #ef4444 !important;
-                color: #ffffff !important;
-                box-shadow: 0 0 16px rgba(239, 68, 68, 0.75) !important;
-                transform: translateY(-1px) scale(1.02) !important;
+
+            .tgs-branding-bar .tgs-title-label {
+                display: inline-flex !important;
+                align-items: center !important;
+                gap: 5px !important;
+                font-weight: 700 !important;
+                white-space: nowrap !important;
             }
-            .f95-tgs-heart {
+
+            .tgs-branding-bar .tgs-logo-icon {
                 font-size: 13px !important;
                 line-height: 1 !important;
-                display: inline-block !important;
-                animation: f95-tgs-pulse 2s infinite ease-in-out !important;
             }
-            @keyframes f95-tgs-pulse {
-                0%, 100% { transform: scale(1); }
-                50% { transform: scale(1.22); }
+
+            .tgs-branding-bar .tgs-brand-studio-link {
+                color: #f43f5e !important;
+                text-decoration: none !important;
+                font-weight: 700 !important;
+                transition: all 0.15s ease !important;
+            }
+            .tgs-branding-bar .tgs-brand-studio-link:hover {
+                color: #fb7185 !important;
+                text-shadow: 0 0 6px rgba(251, 113, 133, 0.6) !important;
+            }
+
+            .tgs-branding-bar .tgs-slash-sep {
+                color: #64748b !important;
+                font-weight: 400 !important;
+                margin: 0 1px !important;
+            }
+
+            .tgs-branding-bar .tgs-brand-scripts-link {
+                color: #38bdf8 !important;
+                text-decoration: none !important;
+                font-weight: 600 !important;
+                transition: all 0.15s ease !important;
+            }
+            .tgs-branding-bar .tgs-brand-scripts-link:hover {
+                color: #7dd3fc !important;
+                text-shadow: 0 0 6px rgba(125, 211, 252, 0.6) !important;
+            }
+
+            .tgs-branding-bar .tgs-pipe-sep {
+                color: #475569 !important;
+                font-size: 10px !important;
+                margin: 0 2px !important;
+            }
+
+            .tgs-branding-bar .tgs-actions {
+                display: inline-flex !important;
+                align-items: center !important;
+                gap: 5px !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            .tgs-branding-bar .tgs-btn {
+                display: inline-flex !important;
+                align-items: center !important;
+                gap: 4px !important;
+                padding: 2px 7px !important;
+                border-radius: 4px !important;
+                font-size: 11px !important;
+                font-weight: 600 !important;
+                text-decoration: none !important;
+                line-height: 1.2 !important;
+                transition: all 0.15s ease !important;
+                white-space: nowrap !important;
+                border: 1px solid transparent !important;
+            }
+
+            .tgs-branding-bar .tgs-btn-boosty {
+                background: rgba(249, 115, 22, 0.16) !important;
+                color: #fb923c !important;
+                border-color: rgba(249, 115, 22, 0.45) !important;
+            }
+            .tgs-branding-bar .tgs-btn-boosty:hover {
+                background: #f97316 !important;
+                color: #ffffff !important;
+                border-color: #f97316 !important;
+                box-shadow: 0 0 8px rgba(249, 115, 22, 0.7) !important;
+            }
+
+            .tgs-branding-bar .tgs-btn-patreon {
+                background: rgba(244, 63, 94, 0.16) !important;
+                color: #fda4af !important;
+                border-color: rgba(244, 63, 94, 0.45) !important;
+            }
+            .tgs-branding-bar .tgs-btn-patreon:hover {
+                background: #f43f5e !important;
+                color: #ffffff !important;
+                border-color: #f43f5e !important;
+                box-shadow: 0 0 8px rgba(244, 63, 94, 0.7) !important;
+            }
+
+            .tgs-branding-bar .tgs-btn-github {
+                background: rgba(56, 189, 248, 0.16) !important;
+                color: #7dd3fc !important;
+                border-color: rgba(56, 189, 248, 0.45) !important;
+            }
+            .tgs-branding-bar .tgs-btn-github:hover {
+                background: #0284c7 !important;
+                color: #ffffff !important;
+                border-color: #0284c7 !important;
+                box-shadow: 0 0 8px rgba(56, 189, 248, 0.7) !important;
+            }
+
+            /* 11. Избранные игры (Розовая рамка) и сердечко на карточках */
+            .f95-card-favorited {
+                border: 2px solid #ec4899 !important;
+                box-shadow: 0 0 16px rgba(236, 72, 153, 0.65) !important;
+                border-radius: 8px !important;
+                transition: border 0.2s ease, box-shadow 0.2s ease !important;
+            }
+
+            .f95-fav-heart-btn {
+                position: absolute !important;
+                top: 8px !important;
+                right: 8px !important;
+                width: 30px !important;
+                height: 30px !important;
+                border-radius: 50% !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                font-size: 16px !important;
+                line-height: 1 !important;
+                cursor: pointer !important;
+                z-index: 60 !important;
+                user-select: none !important;
+                transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                background: rgba(15, 23, 42, 0.8) !important;
+                backdrop-filter: blur(4px) !important;
+                border: 1px solid rgba(255, 255, 255, 0.2) !important;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
+                opacity: 0;
+                pointer-events: auto !important;
+            }
+
+            *:hover > .f95-fav-heart-btn,
+            div:hover > .f95-fav-heart-btn,
+            a:hover > .f95-fav-heart-btn,
+            [class*="card"]:hover .f95-fav-heart-btn,
+            [class*="gameCard"]:hover .f95-fav-heart-btn,
+            .structItem:hover .f95-fav-heart-btn {
+                opacity: 0.65 !important;
+            }
+
+            .f95-fav-heart-btn:hover {
+                opacity: 1 !important;
+                transform: scale(1.22) !important;
+                background: rgba(15, 23, 42, 0.95) !important;
+                border-color: rgba(236, 72, 153, 0.6) !important;
+            }
+
+            .f95-fav-heart-btn.is-favorited {
+                opacity: 1 !important;
+                background: rgba(236, 72, 153, 0.25) !important;
+                border-color: rgba(236, 72, 153, 0.8) !important;
+                box-shadow: 0 0 10px rgba(236, 72, 153, 0.6) !important;
             }
         `;
     }
@@ -429,18 +576,19 @@
         bar.innerHTML = `
             <span class="tgs-title-label">
                 <span class="tgs-logo-icon">🚀</span>
-                <a href="https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_f95zone&utm_medium=tgs_suite" target="_blank" rel="noopener noreferrer" class="tgs-brand-studio-link" title="Перейти на страницу Terebonkoff Game Studio на Patreon">Terebonkoff Game Studio</a>
+                <a href="https://www.patreon.com/c/terebonkoff/about" target="_blank" rel="noopener noreferrer" class="tgs-brand-studio-link" title="Terebonkoff Game Studio">Terebonkoff Game Studio</a>
                 <span class="tgs-slash-sep">/</span>
-                <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-brand-scripts-link" title="Перейти в репозиторий TGS Scripts на GitHub">TGS Scripts</a>
+                <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-brand-scripts-link" title="TGS Scripts Repository">Scripts</a>
             </span>
+            <span class="tgs-pipe-sep">|</span>
             <div class="tgs-actions">
-                <a href="https://boosty.to/terebonkoff?utm_source=userscript_f95zone&utm_medium=tgs_suite" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-boosty" title="Support via Boosty (Cards & PayPal)">
+                <a href="https://boosty.to/terebonkoff" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-boosty" title="Поддержать на Boosty">
                     <span>☕</span> <span>Boosty</span>
                 </a>
-                <a href="https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_f95zone&utm_medium=tgs_suite" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-patreon" title="Support on Patreon">
-                    <span class="tgs-heart">💖</span> <span>Patreon</span>
+                <a href="https://www.patreon.com/c/terebonkoff/about" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-patreon" title="Поддержать на Patreon">
+                    <span>💖</span> <span>Patreon</span>
                 </a>
-                <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-github" title="Official GitHub TGS Repository">
+                <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-btn tgs-btn-github" title="Официальный GitHub репозиторий">
                     <span>⭐</span> <span>GitHub</span>
                 </a>
             </div>
@@ -476,8 +624,8 @@
 
 // --- 2. Очистка инфо-баннеров, подписей в чате и плашки Steam ---
     function purgeAllNotices() {
-        // Убираем старые отдельные кнопки если остались
-        document.querySelectorAll('#tgs-brand-group, #tgs-support-btn, .f95-tgs-support-btn').forEach(el => {
+        // Убираем старые отдельные кнопки и плашки
+        document.querySelectorAll('#tgs-brand-group, #tgs-support-btn, #f95-tgs-support-btn, .f95-tgs-support-btn, [class*="f95-tgs-support"]').forEach(el => {
             if (!el.closest('.tgs-branding-bar')) el.remove();
         });
 
@@ -756,6 +904,189 @@
         });
     }
 
+
+    // --- 8.0 Системная память избранных игр (Теребоньков Избранное) ---
+    const KEY_FAVORITES = 'f95_favorite_threads';
+
+    function getFavoriteThreads() {
+        try {
+            const raw = GM_getValue(KEY_FAVORITES, '{}');
+            return typeof raw === 'string' ? JSON.parse(raw) : (raw || {});
+        } catch (e) {
+            return {};
+        }
+    }
+
+    function isThreadFavorite(threadId) {
+        if (!threadId) return false;
+        const favs = getFavoriteThreads();
+        return Boolean(favs[threadId]);
+    }
+
+    function toggleThreadFavorite(threadId, title = '') {
+        if (!threadId) return false;
+        const favs = getFavoriteThreads();
+        let isFav = false;
+        if (favs[threadId]) {
+            delete favs[threadId];
+            isFav = false;
+        } else {
+            favs[threadId] = { id: threadId, title: title || '', time: Date.now() };
+            isFav = true;
+        }
+        GM_setValue(KEY_FAVORITES, JSON.stringify(favs));
+        return isFav;
+    }
+
+    function getCardThreadId(card) {
+        if (!card) return null;
+        if (card.dataset && card.dataset.threadId) return card.dataset.threadId;
+        const link = card.querySelector('a[href*="/threads/"]');
+        if (link && link.href) {
+            const m = link.href.match(/\/threads\/[^/]*?(\d+)(?:\/|$|\?)/);
+            if (m) return m[1];
+            const parts = link.href.split('/threads/')[1];
+            if (parts) {
+                const slug = parts.split('/')[0].split('?')[0];
+                if (slug) return slug;
+            }
+        }
+        return null;
+    }
+
+    function updateCardFavState(card, isFav) {
+        if (!card) return;
+        if (isFav) {
+            card.classList.add('f95-card-favorited');
+            card.style.setProperty('border', '2px solid #ec4899', 'important');
+            card.style.setProperty('box-shadow', '0 0 16px rgba(236, 72, 153, 0.65)', 'important');
+            card.style.setProperty('border-radius', '8px', 'important');
+        } else {
+            card.classList.remove('f95-card-favorited');
+            applyCardBorderByViews(card);
+        }
+    }
+
+    function applyCardBorderByViews(card) {
+        if (!card) return;
+        const threadId = getCardThreadId(card);
+        if (threadId && isThreadFavorite(threadId)) {
+            updateCardFavState(card, true);
+            return;
+        }
+        const viewsVal = card.dataset.tgsViews ? parseInt(card.dataset.tgsViews, 10) : null;
+        if (viewsVal !== null) {
+            card.dataset.tgsViews = viewsVal;
+        }
+
+        const threadId = getCardThreadId(card);
+        if (threadId && isThreadFavorite(threadId)) {
+            card.classList.add('f95-card-favorited');
+            card.style.setProperty('border', '2px solid #ec4899', 'important');
+            card.style.setProperty('box-shadow', '0 0 16px rgba(236, 72, 153, 0.65)', 'important');
+            card.style.setProperty('border-radius', '8px', 'important');
+        } else if (viewsVal !== null && viewsVal >= 2000000) {
+            card.classList.remove('f95-card-favorited');
+            card.style.setProperty('border', '2px solid #ffd700', 'important');
+            card.style.setProperty('box-shadow', '0 0 14px rgba(255, 215, 0, 0.45)', 'important');
+            card.style.setProperty('border-radius', '8px', 'important');
+        } else if (viewsVal !== null && viewsVal >= 500000) {
+            card.classList.remove('f95-card-favorited');
+            card.style.setProperty('border', '2px solid #d1d5db', 'important');
+            card.style.setProperty('box-shadow', '0 0 9px rgba(209, 213, 219, 0.35)', 'important');
+            card.style.setProperty('border-radius', '8px', 'important');
+        } else {
+            card.classList.remove('f95-card-favorited');
+            card.style.setProperty('border', 'none', 'important');
+            card.style.setProperty('box-shadow', 'none', 'important');
+        }
+
+        setupCardFavorite(card);
+    }
+
+    function setupCardFavorite(card) {
+        if (!card) return;
+        const threadId = getCardThreadId(card);
+        if (!threadId) return;
+
+        const img = card.querySelector('img');
+        const thumbWrap = (img ? img.closest('a, div') : null) || card;
+        if (!thumbWrap) return;
+
+        const pos = window.getComputedStyle(thumbWrap).position;
+        if (pos === 'static' || !pos) {
+            thumbWrap.style.setProperty('position', 'relative', 'important');
+        }
+
+        let heartBtn = thumbWrap.querySelector('.f95-fav-heart-btn');
+        if (!heartBtn) {
+            heartBtn = document.createElement('div');
+            heartBtn.className = 'f95-fav-heart-btn';
+            heartBtn.dataset.threadId = threadId;
+
+            // Hover effects via JS
+            card.addEventListener('mouseenter', () => {
+                if (heartBtn && !heartBtn.classList.contains('is-favorited')) {
+                    heartBtn.style.setProperty('opacity', '0.65', 'important');
+                }
+            });
+            card.addEventListener('mouseleave', () => {
+                if (heartBtn && !heartBtn.classList.contains('is-favorited')) {
+                    heartBtn.style.setProperty('opacity', '0', 'important');
+                }
+            });
+
+            heartBtn.addEventListener('mouseenter', () => {
+                heartBtn.style.setProperty('opacity', '1', 'important');
+                heartBtn.style.setProperty('transform', 'scale(1.22)', 'important');
+            });
+            heartBtn.addEventListener('mouseleave', () => {
+                if (!heartBtn.classList.contains('is-favorited')) {
+                    heartBtn.style.setProperty('opacity', '0.65', 'important');
+                }
+                heartBtn.style.setProperty('transform', 'scale(1)', 'important');
+            });
+
+            heartBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const threadLink = card.querySelector('a[href*="/threads/"]');
+                const gameTitle = threadLink ? (threadLink.textContent || threadLink.getAttribute('title') || '').trim() : '';
+                const newFav = toggleThreadFavorite(threadId, gameTitle);
+
+                document.querySelectorAll(`.f95-fav-heart-btn[data-thread-id="${threadId}"]`).forEach(btn => {
+                    btn.classList.toggle('is-favorited', newFav);
+                    btn.innerHTML = newFav ? '💖' : '🤍';
+                    btn.title = newFav ? 'В избранном! Нажмите, чтобы удалить' : 'Добавить в избранное (розовая рамка)';
+                    btn.style.setProperty('opacity', newFav ? '1' : '0.65', 'important');
+                    const pCard = btn.closest('.f95-card-favorited, [data-thread-id], .structItem, [class*="card"]') || btn.parentElement.parentElement;
+                    if (pCard) {
+                        if (newFav) {
+                            pCard.classList.add('f95-card-favorited');
+                            pCard.style.setProperty('border', '2px solid #ec4899', 'important');
+                            pCard.style.setProperty('box-shadow', '0 0 16px rgba(236, 72, 153, 0.65)', 'important');
+                            pCard.style.setProperty('border-radius', '8px', 'important');
+                        } else {
+                            pCard.classList.remove('f95-card-favorited');
+                            applyCardBorderByViews(pCard);
+                        }
+                    }
+                });
+            });
+
+            thumbWrap.appendChild(heartBtn);
+        }
+
+        const isFav = isThreadFavorite(threadId);
+        heartBtn.classList.toggle('is-favorited', isFav);
+        heartBtn.innerHTML = isFav ? '💖' : '🤍';
+        heartBtn.title = isFav ? 'В избранном! Нажмите, чтобы удалить' : 'Добавить в избранное (розовая рамка)';
+        if (isFav) {
+            heartBtn.style.setProperty('opacity', '1', 'important');
+            updateCardFavState(card, true);
+        }
+    }
+
     // --- 8. Рамки, глазики, лайки, NEW ---
     function processCardStats(card) {
         let viewsVal = null;
@@ -828,18 +1159,33 @@
             if (!eyeIcon) eyeIcon = statSvgs[1];
         }
 
-        if (viewsVal !== null && viewsVal >= 2000000) {
+        if (viewsVal !== null) {
+            card.dataset.tgsViews = viewsVal;
+        }
+
+        const threadId = getCardThreadId(card);
+        if (threadId && isThreadFavorite(threadId)) {
+            card.classList.add('f95-card-favorited');
+            card.style.setProperty('border', '2px solid #ec4899', 'important');
+            card.style.setProperty('box-shadow', '0 0 16px rgba(236, 72, 153, 0.65)', 'important');
+            card.style.setProperty('border-radius', '8px', 'important');
+        } else if (viewsVal !== null && viewsVal >= 2000000) {
+            card.classList.remove('f95-card-favorited');
             card.style.setProperty('border', '2px solid #ffd700', 'important');
             card.style.setProperty('box-shadow', '0 0 14px rgba(255, 215, 0, 0.45)', 'important');
             card.style.setProperty('border-radius', '8px', 'important');
         } else if (viewsVal !== null && viewsVal >= 500000) {
+            card.classList.remove('f95-card-favorited');
             card.style.setProperty('border', '2px solid #d1d5db', 'important');
             card.style.setProperty('box-shadow', '0 0 9px rgba(209, 213, 219, 0.35)', 'important');
             card.style.setProperty('border-radius', '8px', 'important');
         } else {
+            card.classList.remove('f95-card-favorited');
             card.style.setProperty('border', 'none', 'important');
             card.style.setProperty('box-shadow', 'none', 'important');
         }
+
+        setupCardFavorite(card);
 
         if (eyeIcon && viewsVal !== null) {
             if (viewsVal >= 5000000) applyGoldColor(eyeIcon, true);
@@ -1566,16 +1912,52 @@
         });
     }
 
+
+    // --- 12. Сканирование карточек на всех страницах (главная, каталоги, latest_alpha) ---
+    function scanAllF95Cards() {
+        // 1. Сетка карточек на latest_alpha
+        const data = findGridAndCards();
+        if (data && data.cards) {
+            data.cards.forEach(card => {
+                processCardStats(card);
+            });
+        }
+
+        // 2. Карточки и списки игр на главной странице и в форумах
+        const candidates = document.querySelectorAll(
+            '.structItem--thread, [data-thread-id], .grid-item, .item-card, [class*="card--"], [class*="gameCard"], [class*="thread-card"]'
+        );
+        candidates.forEach(card => {
+            if (card.querySelector('a[href*="/threads/"]')) {
+                setupCardFavorite(card);
+                const threadId = getCardThreadId(card);
+                if (threadId && isThreadFavorite(threadId)) {
+                    updateCardFavState(card, true);
+                }
+            }
+        });
+
+        // 3. Дополнительный поиск любых ссылок на игры с превью
+        document.querySelectorAll('a[href*="/threads/"]').forEach(a => {
+            const img = a.querySelector('img');
+            if (img && !img.classList.contains('avatar') && !a.closest('.avatar, .p-nav, .tgs-branding-bar')) {
+                const card = a.closest('.structItem, [class*="card"], [class*="item"], div') || a;
+                setupCardFavorite(card);
+            }
+        });
+    }
+
     // --- 13. Запуск и наблюдение ---
     function run() {
         purgeAllNotices();
         mountF95TgsBar();
+        scanAllF95Cards();
+
         if (window.location.href.includes('/latest_alpha')) {
             const data = findGridAndCards();
             if (data) {
                 adjustAlphaLayout(data);
                 setupAlphaControls(data.gridContainer);
-                data.cards.forEach(processCardStats);
             }
         } else if (window.location.href.includes('/threads/')) {
             processThreadPage();

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Vik1ngFile, MediaFire, Gofile & 1Fichier Downloader by TGS
 // @namespace    https://www.patreon.com/Terebonkoff
-// @version      4.0.1
+// @version      4.0.2
 // @description  Automates and accelerates downloads from MediaFire, Pixeldrain (bypasses speed limits), Gofile, 1Fichier, Datanodes, VIK1NGFILE, and unmasks F95Zone redirect links.
 // @author       Terebonkoff
 // @icon         https://purepng.com/public/uploads/thumbnail//sexy-little-caprice-in-white-dress-zly.png
@@ -347,8 +347,8 @@
                 content.appendChild(descDiv);
 
                 const footer = document.createElement('div');
-                footer.style.cssText = 'text-align: center; border-top: 1px solid #2f3136; padding-top: 6px;';
-                footer.innerHTML = '<a id="tgs-author-link" href="https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_downloader&utm_medium=tgs_suite" target="_blank" style="font-size: 11px; color: #7289da; text-decoration: none; font-weight: bold; margin-right: 8px;">💖 Support Me</a> | <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" style="font-size: 11px; color: #57ab5a; text-decoration: none; font-weight: bold; margin-left: 8px;">⭐ GitHub</a>';
+                footer.style.cssText = 'text-align: center; border-top: 1px solid #2f3136; padding-top: 6px; font-size: 11px; font-family: sans-serif;';
+                footer.innerHTML = '<span style="font-weight: bold; color: #f43f5e;">🚀 Terebonkoff Game Studio</span> <span style="color: #64748b;">/</span> <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" style="color: #38bdf8; text-decoration: none; font-weight: bold;">Scripts</a> <span style="color: #475569;">|</span> <a href="https://boosty.to/terebonkoff" target="_blank" style="color: #fb923c; text-decoration: none; margin: 0 4px;">☕ Boosty</a> <a href="https://www.patreon.com/c/terebonkoff/about" target="_blank" style="color: #fda4af; text-decoration: none; margin: 0 4px;">💖 Patreon</a> <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" style="color: #7dd3fc; text-decoration: none; margin: 0 4px;">⭐ GitHub</a>';
                 content.appendChild(footer);
                 panel.appendChild(content);
                 document.body.appendChild(panel);

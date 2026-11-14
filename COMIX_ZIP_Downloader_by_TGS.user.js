@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         COMIX ZIP Downloader & Live Stats by TGS
 // @namespace    https://www.patreon.com/Terebonkoff
-// @version      3.403
+// @version      3.404
 // @description  Downloads full-size images and batch chapters from adult comic sites into ZIP + live card stats (pages, downloads, favorites, rating, views) + visited green highlight
 // @author       Terebonkoff
 // @icon         https://purepng.com/public/uploads/thumbnail//sexy-little-caprice-in-white-dress-zly.png
@@ -1920,10 +1920,17 @@
         group.id = 'tgs-brand-group';
         group.className = 'tgs-brand-group';
         group.innerHTML = `
-            <a href="https://www.patreon.com/c/terebonkoff/about?utm_source=userscript_comix&utm_medium=tgs_suite" target="_blank" rel="noopener noreferrer" class="tgs-support-btn" title="Поддержать Terebonkoff Game Studio на Patreon">
-                <span class="tgs-heart">💖</span> <span>Support Me</span>
+            <span style="font-weight: 700; color: #f43f5e; margin-right: 2px;">🚀 Terebonkoff Game Studio</span>
+            <span style="color: #64748b; margin-right: 2px;">/</span>
+            <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: none; font-weight: 600; margin-right: 4px;">Scripts</a>
+            <span style="color: #475569; margin-right: 4px;">|</span>
+            <a href="https://boosty.to/terebonkoff" target="_blank" rel="noopener noreferrer" class="tgs-support-btn" style="background: rgba(249, 115, 22, 0.16) !important; color: #fb923c !important; border-color: rgba(249, 115, 22, 0.45) !important;" title="Поддержать на Boosty">
+                <span>☕</span> <span>Boosty</span>
             </a>
-            <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-github-btn" title="Официальный GitHub TGS: все скрипты и обновления">
+            <a href="https://www.patreon.com/c/terebonkoff/about" target="_blank" rel="noopener noreferrer" class="tgs-support-btn" style="background: rgba(244, 63, 94, 0.16) !important; color: #fda4af !important; border-color: rgba(244, 63, 94, 0.45) !important;" title="Поддержать на Patreon">
+                <span>💖</span> <span>Patreon</span>
+            </a>
+            <a href="https://github.com/Terebonkoff/TGS-UserScripts" target="_blank" rel="noopener noreferrer" class="tgs-github-btn" style="background: rgba(56, 189, 248, 0.16) !important; color: #7dd3fc !important; border-color: rgba(56, 189, 248, 0.45) !important;" title="Официальный GitHub TGS: все скрипты и обновления">
                 <span>⭐</span> <span>GitHub</span>
             </a>
         `;
