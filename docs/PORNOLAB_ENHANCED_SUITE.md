@@ -1,6 +1,7 @@
 # 🔞 Pornolab: Enhanced Suite by TGS
 
-[![Version](https://img.shields.io/badge/version-5.4.2-blue.svg)](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/Pornolab_Complete_Suite.user.js)
+[![Version](https://img.shields.io/badge/version-5.8-blue.svg)](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/Pornolab_Complete_Suite.user.js)
+[![Greasy Fork](https://img.shields.io/badge/Greasy%20Fork-Install-red.svg)](https://greasyfork.org/ru/scripts/605545-pornolab-enhanced-suite-by-tgs)
 [![Violentmonkey](https://img.shields.io/badge/Violentmonkey-compatible-green.svg)](https://violentmonkey.github.io/)
 [![18+ Content](https://img.shields.io/badge/Content-18%2B%20Adult%20Only-red.svg)](https://github.com/Terebonkoff/TGS-UserScripts)
 
@@ -11,7 +12,10 @@
 
 ## ⚡ Fast 1-Click Install
 
-- [**👉 Install Pornolab Suite (v5.4.2)**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/Pornolab_Complete_Suite.user.js)
+| Source | Direct Link |
+|---|---|
+| **🚀 GitHub Direct (v5.8)** | [**👉 Install via GitHub**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/Pornolab_Complete_Suite.user.js) |
+| **🦊 Greasy Fork Mirror** | [**👉 Install via Greasy Fork**](https://greasyfork.org/ru/scripts/605545-pornolab-enhanced-suite-by-tgs) |
 
 ---
 

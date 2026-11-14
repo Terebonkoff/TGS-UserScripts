@@ -1,6 +1,7 @@
 # ⚡ Vik1ngFile, MediaFire, Gofile & 1Fichier Downloader by TGS
 
-[![Version](https://img.shields.io/badge/version-4.0.1-blue.svg)](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/Vik1ngFile_MediaFire_Downloader_by_TGS.user.js)
+[![Version](https://img.shields.io/badge/version-4.0.5-blue.svg)](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/Vik1ngFile_MediaFire_Downloader_by_TGS.user.js)
+[![Greasy Fork](https://img.shields.io/badge/Greasy%20Fork-Install-red.svg)](https://greasyfork.org/ru/scripts/605548-vik1ngfile-mediafire-gofile-1fichier-downloader-by-tgs)
 [![Violentmonkey](https://img.shields.io/badge/Violentmonkey-compatible-green.svg)](https://violentmonkey.github.io/)
 
 > **Fast download automator and speed enhancer for multi-host storage.**  
@@ -10,7 +11,10 @@
 
 ## ⚡ Fast 1-Click Install
 
-- [**👉 Install Downloader Suite (v4.0.1)**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/Vik1ngFile_MediaFire_Downloader_by_TGS.user.js)
+| Source | Direct Link |
+|---|---|
+| **🚀 GitHub Direct (v4.0.5)** | [**👉 Install via GitHub**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/Vik1ngFile_MediaFire_Downloader_by_TGS.user.js) |
+| **🦊 Greasy Fork Mirror** | [**👉 Install via Greasy Fork**](https://greasyfork.org/ru/scripts/605548-vik1ngfile-mediafire-gofile-1fichier-downloader-by-tgs) |
 
 ---
 
