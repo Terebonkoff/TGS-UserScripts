@@ -3,7 +3,7 @@
 // @name:ru      RuTracker: Enhanced Suite by TGS
 // @name:en      RuTracker: Enhanced Suite by TGS
 // @namespace    https://rutracker.org/
-// @version      5.14
+// @version      5.15
 // @description  Единый мощный комплекс для RuTracker: встроенные превью и кнопка скачивания в списке раздач, идеальные колонки (Форум с ресайзером, компактный Автор ~3 см), боковое окно предпросмотра при наведении, единый тулбар в раздачах, полноразмерные скриншоты FastPic/IBB без мыла и полноэкранный Lightbox.
 // @description:en All-in-one suite for RuTracker: inline previews & download button in torrent lists, perfect column layout, right-dock hover screenshot preview, single toolbar in topics, full-size FastPic/IBB screenshots & Lightbox.
 // @author       Terebonkoff (TGS)
@@ -364,6 +364,7 @@
                 padding: 6px 0 !important;
                 white-space: nowrap !important;
             }
+            /* Горизонтальные превью: эталонные 350x196 (16:9), до 5 штук в ряду */
             .pl-inline-thumb {
                 width: 350px !important;
                 max-width: calc(20% - 7px) !important;
@@ -381,6 +382,18 @@
                 min-width: 0 !important;
                 box-sizing: border-box !important;
                 transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease !important;
+            }
+            /* Вертикальные превью (арт, манга, портреты): эталонные 196x350 в полный рост, до 8 штук в ряду */
+            .pl-inline-imgs-container.pl-inline-vertical .pl-inline-thumb,
+            .pl-inline-thumb.pl-thumb-vertical {
+                width: 196px !important;
+                max-width: calc(12.5% - 7px) !important;
+                height: 350px !important;
+                max-height: 350px !important;
+                aspect-ratio: 196 / 350 !important;
+                object-fit: cover !important;
+                object-position: center top !important;
+                flex: 0 1 calc(12.5% - 7px) !important;
             }
             .pl-inline-thumb:hover {
                 transform: scale(1.03) !important;
@@ -1242,6 +1255,9 @@
                     const minDim = Math.min(pre.naturalWidth, pre.naturalHeight);
                     // Пропускаем реальные скриншоты (FastPic 150x84, PixHost 120x90) и отсекаем мелкие мусорные значки
                     if (maxDim >= 100 && minDim >= 45) {
+                        item.naturalWidth = pre.naturalWidth;
+                        item.naturalHeight = pre.naturalHeight;
+                        item.isVertical = pre.naturalHeight > pre.naturalWidth;
                         finish(true);
                     } else {
                         finish(false);
@@ -1773,18 +1789,23 @@
 
         // 2. Встроенные превью: валидируем в памяти без мерцания
         if (showInlinePreviews && screenshots && screenshots.length > 0) {
-            const candidates = screenshots.slice(0, 25);
+            const candidates = screenshots.slice(0, 30);
             filterValidScreenshots(candidates).then(validScreenshots => {
                 if (validScreenshots.length === 0) return;
 
-                const imgContainer = document.createElement('div');
-                imgContainer.className = 'pl-inline-imgs-container';
+                // Автоматически определяем ориентацию скриншотов в раздаче
+                const verticalCount = validScreenshots.filter(s => s.isVertical).length;
+                const isMostlyVertical = verticalCount >= Math.ceil(validScreenshots.length / 2);
 
-                const limit = Math.min(validScreenshots.length, 5);
+                const imgContainer = document.createElement('div');
+                imgContainer.className = 'pl-inline-imgs-container' + (isMostlyVertical ? ' pl-inline-vertical' : '');
+
+                // Для вертикальных (арт, манга) эталон 196x350 (8 в ряд), для горизонтальных (видео) эталон 350x196 (5 в ряд)
+                const limit = Math.min(validScreenshots.length, isMostlyVertical ? 8 : 5);
                 for (let i = 0; i < limit; i++) {
                     const item = validScreenshots[i];
                     const img = document.createElement('img');
-                    img.className = 'pl-inline-thumb';
+                    img.className = 'pl-inline-thumb' + (item.isVertical ? ' pl-thumb-vertical' : '');
                     img.src = item.thumbUrl || item.fullUrl;
                     img.loading = 'lazy';
                     img.referrerPolicy = 'no-referrer';
