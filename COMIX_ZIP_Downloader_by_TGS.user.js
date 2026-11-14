@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         COMIX ZIP Downloader & Live Stats by TGS
 // @namespace    https://www.patreon.com/Terebonkoff
-// @version      3.401
+// @version      3.402
 // @description  Downloads full-size images and batch chapters from adult comic sites into ZIP + live card stats (pages, downloads, favorites, rating, views) + visited green highlight
 // @author       Terebonkoff
 // @icon         https://purepng.com/public/uploads/thumbnail//sexy-little-caprice-in-white-dress-zly.png
@@ -1224,7 +1224,7 @@
     // =========================================================================
     // 📊 НАДЁЖНАЯ ОЧЕРЕДЬ ЗАПРОСОВ (АНТИ-ЗАВИСАНИЕ) И ПАРСИНГ СТАТИСТИКИ
     // =========================================================================
-    const STATS_CACHE_PREFIX = 'tgs_cstats_v6_';
+    const STATS_CACHE_PREFIX = 'tgs_cstats_v7_';
     const STATS_CACHE_TTL = 3 * 24 * 60 * 60 * 1000;
     const reqQueue = [];
     let runningReqs = 0;
@@ -1391,9 +1391,8 @@
             const parser = new DOMParser();
             const doc = parser.parseFromString(htmlText, 'text/html');
 
-            // --- 1. IMHENTAI.XXX & HENTAIERA.COM ---
-            if (url.includes('imhentai.xxx') || url.includes('hentaiera.com')) {
-                // Точный поиск страниц "Pages: 621"
+            // --- 1. IMHENTAI.XXX ---
+            if (url.includes('imhentai.xxx')) {
                 const pMatch = htmlText.match(/Pages:\s*<[^>]*>([0-9,]+)<\/[^>]*>/i) ||
                                htmlText.match(/Pages:\s*([0-9,]+)/i) ||
                                htmlText.match(/class="[^"]*pages[^"]*"[^>]*>[\s\S]*?([0-9,]+)/i);
@@ -1401,14 +1400,10 @@
                     pages = (pMatch[1] || pMatch[2] || pMatch[3]).replace(/,/g, '');
                 }
 
-                // Избранное: "Favourite (660)"
                 const fMatch = htmlText.match(/Favourite\s*\(([0-9,]+)\)/i) ||
                                htmlText.match(/Favorite\s*\(([0-9,]+)\)/i);
-                if (fMatch) {
-                    favorites = fMatch[1];
-                }
+                if (fMatch) favorites = fMatch[1];
 
-                // Скачивания: вкладка Downloads / кнопка Download (2102) / Downloads: 2102
                 const dMatch = htmlText.match(/Download[s]?\s*[:(]\s*([0-9,]+)/i) ||
                                htmlText.match(/fa-download[^>]*><\/i>[\s\S]*?([0-9,]+)/i) ||
                                htmlText.match(/class="[^"]*download[^"]*"[^>]*>[\s\S]*?([0-9,]+)/i);
@@ -1423,6 +1418,28 @@
                 }
 
                 doneCallback({ pages, rating: null, favorites, downloads, views: null });
+                return;
+            }
+
+            // --- 1.1 HENTAIERA.COM ---
+            if (url.includes('hentaiera.com')) {
+                // Страницы сайт сам отображает на каждой карточке (.inside_p), поэтому pages = null
+
+                // Избранное: Favourite (<span>1</span>) или Favourite (123)
+                const fMatch = htmlText.match(/Favourite\s*\(\s*(?:<[^>]+>)?([0-9,]+)(?:<\/[^>]+>)?\s*\)/i) ||
+                               htmlText.match(/id="add_fav_btn"[^>]*>[\s\S]*?([0-9,]+)/i);
+                if (fMatch) {
+                    favorites = (fMatch[1] || fMatch[2]).replace(/,/g, '');
+                }
+
+                // Скачивания: Download (<span>1</span>) или dl_new
+                const dMatch = htmlText.match(/Download\s*\(\s*(?:<[^>]+>)?([0-9,]+)(?:<\/[^>]+>)?\s*\)/i) ||
+                               htmlText.match(/id="dl_new"[^>]*>[\s\S]*?([0-9,]+)/i);
+                if (dMatch) {
+                    downloads = (dMatch[1] || dMatch[2]).replace(/,/g, '');
+                }
+
+                doneCallback({ pages: null, rating: null, favorites, downloads, views: null });
                 return;
             }
 
