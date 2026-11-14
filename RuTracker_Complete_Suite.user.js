@@ -3,7 +3,7 @@
 // @name:ru      RuTracker: Enhanced Suite by TGS
 // @name:en      RuTracker: Enhanced Suite by TGS
 // @namespace    https://rutracker.org/
-// @version      5.9
+// @version      5.10
 // @description  Единый мощный комплекс для RuTracker: встроенные превью и кнопка скачивания в списке раздач, идеальные колонки (Форум с ресайзером, компактный Автор ~3 см), боковое окно предпросмотра при наведении, единый тулбар в раздачах, полноразмерные скриншоты FastPic/IBB без мыла и полноэкранный Lightbox.
 // @description:en All-in-one suite for RuTracker: inline previews & download button in torrent lists, perfect column layout, right-dock hover screenshot preview, single toolbar in topics, full-size FastPic/IBB screenshots & Lightbox.
 // @author       Terebonkoff (TGS)
@@ -356,22 +356,26 @@
             }
             .pl-inline-imgs-container {
                 display: flex !important;
-                flex-wrap: wrap !important;
+                flex-wrap: nowrap !important;
+                align-items: center !important;
                 gap: 8px !important;
                 overflow: hidden !important;
                 max-width: 100% !important;
                 padding: 4px 0 !important;
+                white-space: nowrap !important;
             }
             .pl-inline-thumb {
-                max-height: var(--rt-inline-img-h, 200px) !important;
+                max-height: var(--rt-inline-img-h, 180px) !important;
+                max-width: calc(25% - 8px) !important;
                 height: auto !important;
                 width: auto !important;
-                object-fit: contain !important;
+                object-fit: cover !important;
                 display: block !important;
                 cursor: zoom-in !important;
                 border-radius: 5px !important;
                 border: 1px solid #30363d !important;
                 background: #111419 !important;
+                flex: 0 0 auto !important;
                 transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease !important;
             }
             .pl-inline-thumb:hover {
@@ -1774,7 +1778,7 @@
                 const imgContainer = document.createElement('div');
                 imgContainer.className = 'pl-inline-imgs-container';
 
-                const limit = Math.min(validScreenshots.length, 20);
+                const limit = Math.min(validScreenshots.length, 4);
                 for (let i = 0; i < limit; i++) {
                     const item = validScreenshots[i];
                     const img = document.createElement('img');

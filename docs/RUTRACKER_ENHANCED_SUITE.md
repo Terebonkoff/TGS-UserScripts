@@ -1,6 +1,6 @@
 # 🧲 RuTracker: Enhanced Suite by TGS
 
-[![Version](https://img.shields.io/badge/version-5.9-blue.svg)](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/RuTracker_Complete_Suite.user.js)
+[![Version](https://img.shields.io/badge/version-5.10-blue.svg)](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/RuTracker_Complete_Suite.user.js)
 [![Greasy Fork](https://img.shields.io/badge/Greasy%20Fork-Install-red.svg)](https://greasyfork.org/ru/scripts/605546-rutracker-enhanced-suite-by-tgs)
 [![Violentmonkey](https://img.shields.io/badge/Violentmonkey-compatible-green.svg)](https://violentmonkey.github.io/)
 
@@ -13,7 +13,7 @@
 
 | Source | Direct Link |
 |---|---|
-| **🚀 GitHub Direct (v5.9)** | [**👉 Install via GitHub**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/RuTracker_Complete_Suite.user.js) |
+| **🚀 GitHub Direct (v5.10)** | [**👉 Install via GitHub**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/RuTracker_Complete_Suite.user.js) |
 | **🦊 Greasy Fork Mirror** | [**👉 Install via Greasy Fork**](https://greasyfork.org/ru/scripts/605546-rutracker-enhanced-suite-by-tgs) |
 
 ---
