@@ -3,7 +3,7 @@
 // @name:ru      Pornolab: Enhanced Suite by TGS
 // @name:en      Pornolab: Enhanced Suite by TGS
 // @namespace    https://pornolab.net/
-// @version      5.10
+// @version      5.11
 // @description  Единый мощный комплекс для Pornolab: встроенные превью и кнопка скачивания в списке раздач, идеальные колонки (Форум с ресайзером, компактный Автор ~3 см), боковое окно предпросмотра при наведении, единый тулбар в раздачах, полноразмерные скриншоты FastPic/IMX/ImageTwist без мыла и полноэкранный Lightbox.
 // @description:en All-in-one suite for Pornolab: inline previews & download button in torrent lists, perfect column layout, right-dock hover screenshot preview, single toolbar in topics, full-size FastPic/IMX screenshots & Lightbox.
 // @author       Terebonkoff (TGS)
@@ -1170,10 +1170,6 @@
 
     function trySafeFastTransform(imgSrc) {
         if (!imgSrc) return null;
-        // FastPic: /thumb/ -> /big/
-        if (/fastpic\.[a-z]+\/thumb\//i.test(imgSrc)) {
-            return imgSrc.replace(/\/thumb\//i, '/big/');
-        }
         // PixHost: /thumbs/ -> /images/
         if (/pixhost\.to\/thumbs\//i.test(imgSrc)) {
             return imgSrc.replace('/thumbs/', '/images/');
@@ -1190,10 +1186,6 @@
         if (/postimg\.cc\//i.test(imgSrc) || /postimages\.org\//i.test(imgSrc)) {
             return imgSrc.replace(/\.th\.(jpe?g|png|webp)$/i, '.$1');
         }
-        // Lossless.pics: /thumbnail/ -> /images/
-        if (/lossless\.pics\/thumbnail\//i.test(imgSrc)) {
-            return imgSrc.replace('/thumbnail/', '/images/');
-        }
         return null;
     }
 
@@ -1202,6 +1194,8 @@
         if (!url) return true;
         const u = url.toLowerCase();
         if (u.includes('smilies/') || u.includes('.gif') || u.includes('avatars/') || u.includes('/ranks/')) return true;
+        if (u.includes('/tags/') || u.includes('/genres/') || u.includes('/badges/') || u.includes('/icons/')) return true;
+        if (u.includes('pornolab.net/forum/images/') || u.includes('rutracker.org/forum/images/')) return true;
         if (/\b(badge|genre|tag|icon|btn|flag|star|rating|logo|banner)\b/i.test(u)) return true;
         if (/\b(turn-based|jrpg|adv|rpg_maker|visual_novel|uncensored|pixel|action|adventure|simulation|strategy|anime)\.(png|jpg|webp)/i.test(u)) return true;
         return false;
@@ -1212,8 +1206,7 @@
 
         const promises = items.map(item => {
             return new Promise((resolve) => {
-                const url = trySafeFastTransform(item.thumbUrl) || 
-                            (/\.(jpe?g|png|webp)($|\?)/i.test(item.fullUrl) ? item.fullUrl : item.thumbUrl);
+                const url = item.thumbUrl || item.fullUrl;
                 if (isBadgeOrTrashUrl(url)) {
                     resolve(null);
                     return;
@@ -1232,17 +1225,22 @@
                 pre.onload = () => {
                     const maxDim = Math.max(pre.naturalWidth, pre.naturalHeight);
                     const minDim = Math.min(pre.naturalWidth, pre.naturalHeight);
-                    if (maxDim >= 50 && minDim >= 30) {
+                    // Строгий фильтр: отсекаем значки тегов/жанров (минимум 180px ширина или 100px высота)
+                    if (maxDim >= 180 && minDim >= 100) {
                         finish(true);
                     } else {
                         finish(false);
                     }
                 };
-                pre.onerror = () => finish(true);
+                pre.onerror = () => finish(false); // Битая картинка (404) никогда не проходит в превью!
                 pre.src = url;
 
-                setTimeout(() => finish(true), 1200);
+                setTimeout(() => finish(false), 2500);
             });
+        });
+
+        return Promise.all(promises).then(res => res.filter(Boolean));
+    }
         });
 
         return Promise.all(promises).then(res => res.filter(Boolean));
@@ -1708,7 +1706,7 @@
         const screenshotSpWraps = [];
         spWraps.forEach(wrap => {
             const head = wrap.querySelector('.sp-head');
-            if (head && /скрин|screen|shot|пример|caps|кадр|превью|snaps|pic/i.test(head.textContent)) {
+            if (head && /скрин|screen|shot|пример|caps|кадр|превью|snaps|pic|арт|art|галере|sample|образц|иллюстрац/i.test(head.textContent)) {
                 const b = wrap.querySelector('.sp-body');
                 if (b) screenshotSpWraps.push(b);
             }
@@ -1725,13 +1723,10 @@
                     thumbUrl = node.getAttribute('src') || '';
                 }
                 thumbUrl = (thumbUrl || '').trim();
-                if (!thumbUrl || thumbUrl.includes('smilies/') || thumbUrl.includes('.gif') || thumbUrl.includes('avatars/')) return;
-                // Фильтр иконок жанров, тегов и бейджей
-                if (/\b(badge|genre|tag|icon|btn|flag|star)\b/i.test(thumbUrl) ||
-                    /\b(turn-based|jrpg|visual_novel|uncensored|rpg_maker)\b/i.test(thumbUrl)) return;
-
                 const parentA = node.closest('a');
                 let fullUrl = parentA ? (parentA.getAttribute('href') || parentA.href || '') : thumbUrl;
+
+                if (!thumbUrl || isBadgeOrTrashUrl(thumbUrl) || isBadgeOrTrashUrl(fullUrl)) return;
 
                 const key = thumbUrl + fullUrl;
                 if (seen.has(key)) return;
@@ -1783,20 +1778,30 @@
                     const item = validScreenshots[i];
                     const img = document.createElement('img');
                     img.className = 'pl-inline-thumb';
-                    const hdUrl = trySafeFastTransform(item.thumbUrl) || 
-                                  (/\.(jpe?g|png|webp)($|\?)/i.test(item.fullUrl) ? item.fullUrl : item.thumbUrl);
-                    img.src = hdUrl;
+                    img.src = item.thumbUrl || item.fullUrl;
                     img.loading = 'lazy';
                     img.referrerPolicy = 'no-referrer';
+
+                    // Если прямая ссылка на картинку - пробуем обновить на HD только при успешной загрузке
+                    if (item.fullUrl && item.fullUrl !== img.src && /\.(jpe?g|png|webp)($|\?)/i.test(item.fullUrl)) {
+                        const pre = new Image();
+                        pre.referrerPolicy = 'no-referrer';
+                        pre.onload = () => { img.src = item.fullUrl; };
+                        pre.src = item.fullUrl;
+                    }
+
+                    img.onerror = () => {
+                        img.style.display = 'none';
+                    };
 
                     img.addEventListener('click', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
                         const galleryItems = validScreenshots.map(s => {
-                            const full = trySafeFastTransform(s.thumbUrl) || s.resolvedUrl || s.fullUrl;
+                            const full = s.resolvedUrl || s.fullUrl || s.thumbUrl;
                             return {
                                 src: full,
-                                thumb: full
+                                thumb: s.thumbUrl || full
                             };
                         });
                         openLightbox(i, galleryItems);
@@ -2235,14 +2240,16 @@
                     grid.appendChild(targetNode);
                 }
 
-                // Мгновенный Full HD апгрейд (FastPic, PixHost, ImageBan, PostImages)
-                const fastHd = trySafeFastTransform(originalSrc) || (/\.(jpe?g|png|webp)($|\?)/i.test(rawHref) ? rawHref : null);
-                if (fastHd && fastHd !== img.src) {
-                    img.src = fastHd;
-                }
+                // ВСЕГДА оставляем рабочий исходный src изображения
+                img.src = originalSrc;
+                
+                // Если картинка сломалась - скрываем, чтобы не было битых [x]
+                img.onerror = () => {
+                    targetNode.style.display = 'none';
+                };
 
                 const galleryItem = {
-                    src: fastHd || originalSrc,
+                    src: originalSrc,
                     thumb: originalSrc,
                     el: img,
                     targetNode: targetNode,
@@ -2262,15 +2269,29 @@
                     openLightbox(idx !== -1 ? idx : 0);
                 });
 
-                // Если есть ссылка на хостинг - вытягиваем исходник в фоне без удаления элементов
-                if (!fastHd && rawHref && rawHref.startsWith('http')) {
+                // В фоне через Image() проверяем, можно ли улучшить до Full HD
+                // И ТОЛЬКО если картинка РЕАЛЬНО успешно загрузилась в памяти - обновляем img.src!
+                const candidateHd = trySafeFastTransform(originalSrc) || (/\.(jpe?g|png|webp)($|\?)/i.test(rawHref) ? rawHref : null);
+                if (candidateHd && candidateHd !== originalSrc) {
+                    const pre = new Image();
+                    pre.referrerPolicy = 'no-referrer';
+                    pre.onload = () => {
+                        if (pre.naturalWidth >= 180) {
+                            img.src = candidateHd;
+                            galleryItem.src = candidateHd;
+                        }
+                    };
+                    pre.src = candidateHd;
+                } else if (rawHref && rawHref.startsWith('http') && rawHref !== originalSrc) {
                     resolveFullsizeFromHosting(rawHref, originalSrc, (fullUrl) => {
                         if (!fullUrl || fullUrl === img.src) return;
                         const pre = new Image();
                         pre.referrerPolicy = 'no-referrer';
                         pre.onload = () => {
-                            img.src = fullUrl;
-                            galleryItem.src = fullUrl;
+                            if (pre.naturalWidth >= 180) {
+                                img.src = fullUrl;
+                                galleryItem.src = fullUrl;
+                            }
                         };
                         pre.src = fullUrl;
                     });
