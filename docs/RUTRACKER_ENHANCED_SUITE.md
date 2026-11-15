@@ -26,11 +26,15 @@
 
 ## 📸 Визуальная презентация возможностей
 
-### 🎬 Живая видеодемонстрация работы скрипта (Full HD, 52 сек)
-<video src="https://github.com/Terebonkoff/TGS-UserScripts/blob/main/assets/videos/rutracker_presentation.mp4" controls="controls" muted="muted" width="100%" style="border-radius:8px;"></video>
+### 🎬 Живая демонстрация работы скрипта в действии
+<p align="center">
+  <a href="https://github.com/Terebonkoff/TGS-UserScripts/blob/main/assets/videos/rutracker_presentation.mp4">
+    <img src="https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/assets/videos/rutracker_preview.webp" alt="Демонстрация RuTracker: Enhanced Suite" width="960" style="border-radius:8px;" />
+  </a>
+</p>
 
-> 💡 *Прямая ссылка для онлайн-просмотра или скачивания:*  
-> [**▶️ Нажмите здесь, чтобы открыть видеоролик RuTracker (MP4, 52 сек)**](https://github.com/Terebonkoff/TGS-UserScripts/blob/main/assets/videos/rutracker_presentation.mp4)
+> 💡 *Кликните по анимации выше или по ссылке, чтобы открыть полный видеоролик (52 сек) во встроенном плеере GitHub:*  
+> [**▶️ Смотреть полный видеоролик в плеере GitHub (MP4, 1080p, 52 сек)**](https://github.com/Terebonkoff/TGS-UserScripts/blob/main/assets/videos/rutracker_presentation.mp4)
 
 ---
 

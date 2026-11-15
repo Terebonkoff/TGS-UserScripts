@@ -27,11 +27,11 @@ Each script is a complete standalone tool featuring deep layout optimization, ba
 
 ---
 
-## 🎬 Live Video Demonstrations
+## 🎬 Live Demonstrations & Video Showcases
 
-| 🧲 **RuTracker: Enhanced Suite (Full Tour)** | 🔞 **Pornolab: Enhanced Suite (Full Tour)** |
+| 🧲 **RuTracker: Enhanced Suite (Live Showcase)** | 🔞 **Pornolab: Enhanced Suite (Live Showcase)** |
 |:---:|:---:|
-| <video src="https://github.com/Terebonkoff/TGS-UserScripts/blob/main/assets/videos/rutracker_presentation.mp4" controls="controls" muted="muted" width="100%"></video><br>[**▶️ Watch RuTracker Video (52s, MP4)**](https://github.com/Terebonkoff/TGS-UserScripts/blob/main/assets/videos/rutracker_presentation.mp4) | <video src="https://github.com/Terebonkoff/TGS-UserScripts/blob/main/assets/videos/pornolab_presentation.mp4" controls="controls" muted="muted" width="100%"></video><br>[**▶️ Watch Pornolab Video (47s, MP4)**](https://github.com/Terebonkoff/TGS-UserScripts/blob/main/assets/videos/pornolab_presentation.mp4) |
+| [![RuTracker Live Demo](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/assets/videos/rutracker_preview.webp)](https://github.com/Terebonkoff/TGS-UserScripts/blob/main/assets/videos/rutracker_presentation.mp4)<br>[**▶️ Watch Full Video on GitHub (52s, 1080p)**](https://github.com/Terebonkoff/TGS-UserScripts/blob/main/assets/videos/rutracker_presentation.mp4) | [![Pornolab Live Demo](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/assets/videos/pornolab_preview.webp)](https://github.com/Terebonkoff/TGS-UserScripts/blob/main/assets/videos/pornolab_presentation.mp4)<br>[**▶️ Watch Full Video on GitHub (47s, 1080p)**](https://github.com/Terebonkoff/TGS-UserScripts/blob/main/assets/videos/pornolab_presentation.mp4) |
 
 ---
 
