@@ -1838,7 +1838,7 @@
                 const screenshotsOnly = validCandidates.filter(s => !s.isCover);
 
                 // Определение вертикального типа (арт, манга, комиксы)
-                const isArtOrManga = /\[art\]|\[manga\]|\[comic\]|\[hentai manga\]|хентай|манга|арт|комикс/i.test(document.title + ' ' + (td ? td.textContent : ''));
+                const isArtOrManga = /\b(art|manga|comic|hentai manga|хентай|манга|арт|комикс)\b|\[art\]|\[manga\]/i.test(document.title + ' ' + (td ? td.textContent : ''));
                 const maxTotal = isArtOrManga ? 8 : 5;
                 const neededScreenshots = Math.max(0, maxTotal - covers.length);
                 const itemsToRender = [...covers, ...screenshotsOnly.slice(0, neededScreenshots)].slice(0, maxTotal);
