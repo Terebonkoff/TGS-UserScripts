@@ -3,7 +3,7 @@
 // @name:ru      RuTracker: Enhanced Suite by TGS
 // @name:en      RuTracker: Enhanced Suite by TGS
 // @namespace    https://rutracker.org/
-// @version      5.25
+// @version      5.26
 // @description  Единый мощный комплекс для RuTracker: встроенные превью и кнопка скачивания в списке раздач, идеальные колонки (Форум с ресайзером, компактный Автор ~3 см), боковое окно предпросмотра при наведении, единый тулбар в раздачах, полноразмерные скриншоты FastPic/IBB без мыла и полноэкранный Lightbox.
 // @description:en All-in-one suite for RuTracker: inline previews & download button in torrent lists, perfect column layout, right-dock hover screenshot preview, single toolbar in topics, full-size FastPic/IBB screenshots & Lightbox.
 // @author       Terebonkoff (TGS)
@@ -1186,21 +1186,46 @@
             fullUrl = url;
         }
 
-        if (typeof GM_xmlhttpRequest !== 'undefined') {
-            GM_xmlhttpRequest({
-                method: 'GET',
-                url: fullUrl,
-                overrideMimeType: 'text/html; charset=windows-1251',
-                headers: {
-                    'User-Agent': navigator.userAgent,
-                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                    'Referer': referer || window.location.href
-                },
-                onload: (res) => callback(res.responseText, res.finalUrl || fullUrl),
-                onerror: () => callback('', fullUrl)
-            });
-        } else {
-            fetch(fullUrl).then(r => r.text()).then(html => callback(html, fullUrl)).catch(() => callback('', fullUrl));
+        // 1. Для страниц RuTracker всегда сначала пробуем нативный fetch с декодером Windows-1251
+        const isSameOrigin = fullUrl.startsWith(window.location.origin) || fullUrl.includes(window.location.hostname);
+        if (isSameOrigin && typeof fetch !== 'undefined') {
+            fetch(fullUrl, { credentials: 'include' })
+                .then(res => {
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
+                    return res.arrayBuffer();
+                })
+                .then(buf => {
+                    let html = '';
+                    try {
+                        html = new TextDecoder('windows-1251').decode(buf);
+                    } catch (e) {
+                        html = new TextDecoder('utf-8').decode(buf);
+                    }
+                    callback(html, fullUrl);
+                })
+                .catch(() => {
+                    tryGm();
+                });
+            return;
+        }
+
+        tryGm();
+
+        function tryGm() {
+            if (typeof GM_xmlhttpRequest !== 'undefined') {
+                try {
+                    GM_xmlhttpRequest({
+                        method: 'GET',
+                        url: fullUrl,
+                        onload: (res) => callback(res.responseText || '', res.finalUrl || fullUrl),
+                        onerror: () => callback('', fullUrl)
+                    });
+                } catch (e) {
+                    callback('', fullUrl);
+                }
+            } else {
+                callback('', fullUrl);
+            }
         }
     }
 
@@ -1289,8 +1314,7 @@
         if (u.includes('smilies/') || u.includes('.gif') || u.includes('avatars/') || u.includes('/ranks/')) return true;
         if (u.includes('/tags/') || u.includes('/genres/') || u.includes('/badges/') || u.includes('/icons/')) return true;
         if (u.includes('pornolab.net/forum/images/') || u.includes('rutracker.org/forum/images/')) return true;
-        if (/\b(badge|genre|tag|icon|btn|flag|star|rating|logo|banner)\b/i.test(u)) return true;
-        if (/\b(turn-based|jrpg|adv|rpg_maker|visual_novel|uncensored|pixel|action|adventure|simulation|strategy|anime)\.(png|jpg|webp)/i.test(u)) return true;
+        if (/(badge|genre|tag|icon|btn|flag|rating)/i.test(u)) return true;
         return false;
     }
 
@@ -1827,7 +1851,8 @@
     }
 
         function parseTopicDocument(doc) {
-        const postContent = doc.querySelector('.post_body') || doc.body;
+        if (!doc) return { dlUrl: null, screenshots: [], isVertical: false };
+        const postContent = doc.querySelector('.post_body, .postbody, #post_body, .message, td.message, [id^="post-"]') || doc.body;
         const dlLinkNode = doc.querySelector('.dl-stub.dl-link, a[href*="dl.php?t="], a.attach_link, a[href*="download.php?id="]');
         let dlUrl = dlLinkNode ? (dlLinkNode.getAttribute('href') || dlLinkNode.href) : null;
         if (dlUrl && !dlUrl.startsWith('http')) {
@@ -1845,32 +1870,23 @@
 
         const screenshots = [];
         const seen = new Set();
-        const spoilerFirstImgMap = new Map();
 
-        // Подсчитываем количество картинок в каждом спойлере
-        const spoilerCountMap = new Map();
-        postContent.querySelectorAll('.sp-wrap, .sp-fold').forEach(wrap => {
-            const count = wrap.querySelectorAll('var.postImg, img.postImg, img').length;
-            spoilerCountMap.set(wrap, count);
-        });
-
-        let nonSpoilerCoverCount = 0;
-
-        // Сканируем все картинки в раздаче (включая шапку и спойлеры)
-        postContent.querySelectorAll('var.postImg, img.postImg, img').forEach(node => {
+        // Сканируем все картинки в посте
+        postContent.querySelectorAll('var.postImg, img.postImg, img, var').forEach(node => {
             if (node.closest('.signature, .user_sig, .post_sig')) return;
 
             let thumbUrl = '';
             if (node.tagName.toLowerCase() === 'var') {
-                thumbUrl = node.getAttribute('title') || node.getAttribute('data-src') || '';
+                thumbUrl = node.getAttribute('title') || node.getAttribute('data-src') || node.getAttribute('data-original') || '';
             } else {
-                thumbUrl = node.getAttribute('src') || '';
+                thumbUrl = node.getAttribute('src') || node.getAttribute('data-src') || node.getAttribute('data-original') || node.getAttribute('title') || '';
             }
             thumbUrl = (thumbUrl || '').trim();
+            if (!thumbUrl || isBadgeOrTrashUrl(thumbUrl)) return;
+
             const parentA = node.closest('a');
             let fullUrl = parentA ? (parentA.getAttribute('href') || parentA.href || '') : thumbUrl;
-
-            if (!thumbUrl || isBadgeOrTrashUrl(thumbUrl) || isBadgeOrTrashUrl(fullUrl)) return;
+            if (fullUrl.startsWith('#') || fullUrl.startsWith('javascript:')) fullUrl = thumbUrl;
 
             const key = thumbUrl + fullUrl;
             if (seen.has(key)) return;
@@ -1880,38 +1896,16 @@
             const inSpoiler = !!wrap;
             let isScreenlist = checkIfScreenlist(node, fullUrl);
 
-            if (inSpoiler) {
-                const head = wrap.querySelector('.sp-head, .sp-title');
-                const body = wrap.querySelector('.sp-body');
-                const tText = [head ? head.textContent : '', body ? (body.getAttribute('title') || '') : '', wrap.getAttribute('title') || ''].join(' ');
-
-                if (/скринлист|screenlist|sheet|proof|caps/i.test(tText)) {
-                    if (!/скриншот|screenshot/i.test(tText)) {
-                        // Спойлер исключительно со скринлистами
-                        isScreenlist = true;
-                    } else {
-                        // Спойлер смешанный ("Скриншоты и скринлисты"): ТОЛЬКО первая картинка — это обзорный скринлист!
-                        if (!spoilerFirstImgMap.has(wrap)) {
-                            spoilerFirstImgMap.set(wrap, true);
-                            isScreenlist = true;
-                        }
-                    }
-                } else if (spoilerCountMap.get(wrap) === 1 && /sheet|proof|caps/i.test(fullUrl + ' ' + thumbUrl)) {
-                    isScreenlist = true;
-                }
-            }
-
-            // Обложки: строго первые 1 или 2 картинки ВНЕ спойлеров и не являющиеся скринлистами
-            let isCover = false;
-            if (!inSpoiler && !isScreenlist) {
-                if (nonSpoilerCoverCount < 2) {
-                    isCover = true;
-                    nonSpoilerCoverCount++;
-                }
-            }
+            // Обложка: первая картинка вне спойлеров (или просто первая картинка)
+            let isCover = !inSpoiler && !isScreenlist && screenshots.filter(s => s.isCover).length < 2;
 
             screenshots.push({ thumbUrl, fullUrl, isCover, isScreenlist, inSpoiler, resolvedUrl: null });
         });
+
+        // Если все картинки оказались внутри спойлеров, первая картинка назначается обложкой
+        if (screenshots.length > 0 && !screenshots.some(s => s.isCover)) {
+            screenshots[0].isCover = true;
+        }
 
         return { dlUrl, screenshots, isVertical };
     }
@@ -2211,59 +2205,59 @@
     }
 
         function renderPreviewScreenshots(rawScreenshots, bodyEl, countEl) {
-        bodyEl.innerHTML = `<div style="padding:40px; text-align:center; color:#8b949e; font-size:14px;">${t.loadingScreenshots}</div>`;
-        countEl.textContent = '...';
+        const validScreenshots = (rawScreenshots || []).filter(s => !isBadgeOrTrashUrl(s.thumbUrl));
+        countEl.textContent = validScreenshots.length;
 
-        filterValidScreenshots(rawScreenshots).then(validScreenshots => {
-            bodyEl.innerHTML = '';
-            countEl.textContent = validScreenshots.length;
+        if (validScreenshots.length === 0) {
+            bodyEl.innerHTML = `<div style="padding:40px; text-align:center; color:#8b949e;">${t.noScreenshotsFound}</div>`;
+            return;
+        }
 
-            if (validScreenshots.length === 0) {
-                bodyEl.innerHTML = `<div style="padding:40px; text-align:center; color:#8b949e;">${t.noScreenshotsFound}</div>`;
-                return;
-            }
+        bodyEl.innerHTML = '';
+        const grid = document.createElement('div');
+        grid.className = 'rt-pv-grid';
 
-            const grid = document.createElement('div');
-            grid.className = 'rt-pv-grid';
+        validScreenshots.forEach((item, index) => {
+            const wrap = document.createElement('div');
+            wrap.className = 'rt-pv-thumb-wrap';
 
-            validScreenshots.forEach((item, index) => {
-                const wrap = document.createElement('div');
-                wrap.className = 'rt-pv-thumb-wrap';
+            const img = document.createElement('img');
+            img.className = 'rt-pv-thumb-img';
+            img.src = item.thumbUrl || item.fullUrl;
+            img.loading = 'lazy';
+            img.referrerPolicy = 'no-referrer';
 
-                const img = document.createElement('img');
-                img.className = 'rt-pv-thumb-img';
-                img.src = item.thumbUrl || item.fullUrl;
-                img.loading = 'lazy';
-                img.referrerPolicy = 'no-referrer';
+            img.onerror = () => {
+                img.style.opacity = '0.35';
+            };
 
-                resolveFullsizeFromHosting(item.fullUrl, item.thumbUrl, (resolvedUrl) => {
-                    if (!resolvedUrl || resolvedUrl === img.src) return;
-                    const pre = new Image();
-                    pre.referrerPolicy = 'no-referrer';
-                    pre.onload = () => {
-                        img.src = resolvedUrl;
-                        item.resolvedUrl = resolvedUrl;
-                    };
-                    pre.src = resolvedUrl;
-                });
-
-                wrap.appendChild(img);
-                wrap.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const galleryItems = validScreenshots.map(s => ({
-                        src: s.resolvedUrl || s.fullUrl,
-                        thumb: s.thumbUrl || s.resolvedUrl || s.fullUrl
-                    }));
-                    openLightbox(index, galleryItems);
-                });
-
-                grid.appendChild(wrap);
+            resolveFullsizeFromHosting(item.fullUrl, item.thumbUrl, (resolvedUrl) => {
+                if (!resolvedUrl || resolvedUrl === img.src) return;
+                const pre = new Image();
+                pre.referrerPolicy = 'no-referrer';
+                pre.onload = () => {
+                    img.src = resolvedUrl;
+                    item.resolvedUrl = resolvedUrl;
+                };
+                pre.src = resolvedUrl;
             });
 
-            bodyEl.appendChild(grid);
-            positionPreviewWindow();
+            wrap.appendChild(img);
+            wrap.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const galleryItems = validScreenshots.map(s => ({
+                    src: s.resolvedUrl || s.fullUrl,
+                    thumb: s.thumbUrl || s.resolvedUrl || s.fullUrl
+                }));
+                openLightbox(index, galleryItems);
+            });
+
+            grid.appendChild(wrap);
         });
+
+        bodyEl.appendChild(grid);
+        positionPreviewWindow();
     }
 
     function initListHoverPreviews() {
