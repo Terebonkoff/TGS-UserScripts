@@ -101,3 +101,20 @@
 [2026-11-15 15:27:32] Successfully finished install cycle for: RuTracker: Enhanced Suite (Alias)
 [2026-11-15 15:27:33] Removed pending_urls.txt
 [2026-11-15 15:27:33] === All scripts processed successfully! ===
+[2026-11-15 15:55:15] === Starting auto reinstall helper for 2 item(s) ===
+[2026-11-15 15:55:15] Processing script: RuTracker: Enhanced Suite
+[2026-11-15 15:55:15] Opening URL: https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/9376aceed77a1131636a775daf709616d8dfe2f5/RuTracker_Complete_Suite.user.js
+[2026-11-15 15:55:15] Detected confirm tab: 'Установка скрипта - Violentmonkey, профиль Виктор В. — Яндекс Браузер' (after 0.4s)
+[2026-11-15 15:55:16] Sending Ctrl+Enter to trigger Reinstall/Install...
+[2026-11-15 15:55:17] Title after Ctrl+Enter: 'RuTracker: Enhanced Suite by TGS - Установка скрипта - Violentmonkey, профиль Виктор В. — Яндекс Браузер'
+[2026-11-15 15:55:17] Tab still open, sending Ctrl+W to close it...
+[2026-11-15 15:55:17] Successfully finished install cycle for: RuTracker: Enhanced Suite
+[2026-11-15 15:55:18] Processing script: RuTracker: Enhanced Suite (Alias)
+[2026-11-15 15:55:18] Opening URL: https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/9376aceed77a1131636a775daf709616d8dfe2f5/RuTracker_Enhanced_Suite.user.js
+[2026-11-15 15:55:19] Detected confirm tab: 'Установка скрипта - Violentmonkey, профиль Виктор В. — Яндекс Браузер' (after 0.4s)
+[2026-11-15 15:55:19] Sending Ctrl+Enter to trigger Reinstall/Install...
+[2026-11-15 15:55:20] Title after Ctrl+Enter: 'RuTracker: Enhanced Suite by TGS - Установка скрипта - Violentmonkey, профиль Виктор В. — Яндекс Браузер'
+[2026-11-15 15:55:20] Tab still open, sending Ctrl+W to close it...
+[2026-11-15 15:55:21] Successfully finished install cycle for: RuTracker: Enhanced Suite (Alias)
+[2026-11-15 15:55:22] Removed pending_urls.txt
+[2026-11-15 15:55:22] === All scripts processed successfully! ===
