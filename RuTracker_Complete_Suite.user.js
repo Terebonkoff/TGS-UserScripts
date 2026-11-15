@@ -2198,8 +2198,8 @@
                 </label>
             </div>
             <div class="rt-toolbar-right">
-                <div id="rt-tb-tgs-container"></div>
                 <button class="rt-btn rt-tb-gallery-btn" title="Открыть просмотрщик во весь экран">${t.viewGallery}</button>
+                <div id="rt-tb-tgs-container"></div>
             </div>
         `;
 
@@ -2245,6 +2245,7 @@
         
         const tgsCont = toolbar.querySelector('#rt-tb-tgs-container');
         if (tgsCont) {
+            tgsCont.innerHTML = '';
             tgsCont.appendChild(createTgsBrandBar());
         }
 
