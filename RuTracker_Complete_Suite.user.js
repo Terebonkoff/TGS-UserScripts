@@ -3,7 +3,7 @@
 // @name:ru      RuTracker: Enhanced Suite by TGS
 // @name:en      RuTracker: Enhanced Suite by TGS
 // @namespace    https://rutracker.org/
-// @version      5.17
+// @version      5.18
 // @description  Единый мощный комплекс для RuTracker: встроенные превью и кнопка скачивания в списке раздач, идеальные колонки (Форум с ресайзером, компактный Автор ~3 см), боковое окно предпросмотра при наведении, единый тулбар в раздачах, полноразмерные скриншоты FastPic/IBB без мыла и полноэкранный Lightbox.
 // @description:en All-in-one suite for RuTracker: inline previews & download button in torrent lists, perfect column layout, right-dock hover screenshot preview, single toolbar in topics, full-size FastPic/IBB screenshots & Lightbox.
 // @author       Terebonkoff (TGS)
@@ -384,12 +384,6 @@
                 transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease !important;
             }
             /* Широкие горизонтальные превью (считаются за 2 слота): до 40% ширины строки */
-            .pl-inline-thumb.pl-thumb-wide {
-                width: 700px !important;
-                max-width: calc(40% - 7px) !important;
-                flex: 0 1 calc(40% - 7px) !important;
-                aspect-ratio: auto !important;
-            }
             /* Вертикальные превью (арт, манга, портреты): эталонные 196x350 в полный рост, до 8 штук в ряду */
             .pl-inline-imgs-container.pl-inline-vertical .pl-inline-thumb,
             .pl-inline-thumb.pl-thumb-vertical {
@@ -1267,8 +1261,6 @@
                         item.naturalHeight = pre.naturalHeight;
                         item.isVertical = pre.naturalHeight > pre.naturalWidth;
                         item.aspectRatio = pre.naturalWidth / pre.naturalHeight;
-                        // Широкое горизонтальное превью (обложка высокого разрешения или широкий баннер)
-                        item.isWide = (item.isCover && (item.naturalWidth >= 600 || item.aspectRatio >= 1.9)) || (item.aspectRatio >= 2.1);
                         finish(true);
                     } else {
                         finish(false);
@@ -1280,7 +1272,6 @@
                         item.naturalWidth = item.naturalWidth || 600;
                         item.naturalHeight = item.naturalHeight || 400;
                         item.aspectRatio = 1.5;
-                        item.isWide = true;
                         finish(true);
                     } else {
                         finish(false);
@@ -1296,7 +1287,6 @@
                         item.naturalWidth = item.naturalWidth || 600;
                         item.naturalHeight = item.naturalHeight || 400;
                         item.aspectRatio = 1.5;
-                        item.isWide = true;
                         finish(true);
                     } else {
                         finish(false);
@@ -1866,34 +1856,14 @@
                 const imgContainer = document.createElement('div');
                 imgContainer.className = 'pl-inline-imgs-container' + (isMostlyVertical ? ' pl-inline-vertical' : '');
 
-                // Для вертикальных раздач лимит 8 картинок.
-                // Для горизонтальных раздач считаем слоты (широкие картинки/обложки считаем за 2 слота, максимум 5 слотов)
-                const itemsToRender = [];
-                if (isMostlyVertical) {
-                    const limit = Math.min(orderedCandidates.length, 8);
-                    for (let i = 0; i < limit; i++) {
-                        itemsToRender.push({ item: orderedCandidates[i], isWide: false });
-                    }
-                } else {
-                    let totalSlots = 0;
-                    const maxSlots = 5;
-                    for (const cand of orderedCandidates) {
-                        const weight = cand.isWide ? 2 : 1;
-                        if (totalSlots + weight > maxSlots && itemsToRender.length > 0) {
-                            break;
-                        }
-                        cand.slotWeight = weight;
-                        itemsToRender.push({ item: cand, isWide: cand.isWide });
-                        totalSlots += weight;
-                        if (totalSlots >= maxSlots) break;
-                    }
-                }
+                // Для вертикальных раздач лимит 8 картинок (196x350).
+                // Для горизонтальных раздач эталон 350x196: ровно до 5 картинок (1 превью + 4 кадра, или 2 превью + 3 кадра, или 5 кадров).
+                const maxCount = isMostlyVertical ? 8 : 5;
+                const itemsToRender = orderedCandidates.slice(0, maxCount);
 
-                itemsToRender.forEach(({ item, isWide }, i) => {
+                itemsToRender.forEach((item, i) => {
                     const img = document.createElement('img');
-                    img.className = 'pl-inline-thumb' + 
-                        (item.isVertical ? ' pl-thumb-vertical' : '') +
-                        (isWide ? ' pl-thumb-wide' : '');
+                    img.className = 'pl-inline-thumb' + (item.isVertical ? ' pl-thumb-vertical' : '');
                     img.src = item.thumbUrl || item.fullUrl;
                     img.loading = 'lazy';
                     img.referrerPolicy = 'no-referrer';
