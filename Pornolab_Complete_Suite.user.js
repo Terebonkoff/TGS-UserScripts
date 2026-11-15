@@ -3,7 +3,7 @@
 // @name:ru      Pornolab: Enhanced Suite by TGS
 // @name:en      Pornolab: Enhanced Suite by TGS
 // @namespace    https://pornolab.net/
-// @version      5.18
+// @version      5.19
 // @description  Единый мощный комплекс для Pornolab: встроенные превью и кнопка скачивания в списке раздач, идеальные колонки (Форум с ресайзером, компактный Автор ~3 см), боковое окно предпросмотра при наведении, единый тулбар в раздачах, полноразмерные скриншоты FastPic/IMX/ImageTwist без мыла и полноэкранный Lightbox.
 // @description:en All-in-one suite for Pornolab: inline previews & download button in torrent lists, perfect column layout, right-dock hover screenshot preview, single toolbar in topics, full-size FastPic/IMX screenshots & Lightbox.
 // @author       Terebonkoff (TGS)
@@ -1227,7 +1227,10 @@
     function filterValidScreenshots(items) {
         if (!items || items.length === 0) return Promise.resolve([]);
 
-        const promises = items.map(item => {
+        // Проверяем до 12 кандидатов, чтобы не забивать сетевые сокеты браузера
+        const toCheck = items.slice(0, 12);
+
+        const promises = toCheck.map(item => {
             return new Promise((resolve) => {
                 const url = item.thumbUrl || item.fullUrl;
                 if (isBadgeOrTrashUrl(url)) {
@@ -1239,67 +1242,50 @@
                 pre.referrerPolicy = 'no-referrer';
                 let resolved = false;
 
-                const finish = (valid) => {
+                const finish = (keep) => {
                     if (resolved) return;
                     resolved = true;
-                    resolve(valid ? item : null);
+                    resolve(keep ? item : null);
                 };
 
                 pre.onload = () => {
                     const maxDim = Math.max(pre.naturalWidth, pre.naturalHeight);
                     const minDim = Math.min(pre.naturalWidth, pre.naturalHeight);
-                    // Пропускаем реальные скриншоты (FastPic 150x84, PixHost 120x90) и отсекаем мелкие мусорные значки
-                    if (maxDim >= 100 && minDim >= 45) {
+                    if (maxDim >= 80 && minDim >= 40) {
                         item.naturalWidth = pre.naturalWidth;
                         item.naturalHeight = pre.naturalHeight;
                         item.isVertical = pre.naturalHeight > pre.naturalWidth;
                         item.aspectRatio = pre.naturalWidth / pre.naturalHeight;
                         finish(true);
                     } else {
+                        // Мелкие мусорные значки отсекаем
                         finish(false);
                     }
                 };
-                pre.onerror = () => {
-                    if (item.isCover) {
-                        // Обложку никогда не выбрасываем при сетевом сбое предзагрузки
-                        item.naturalWidth = item.naturalWidth || 600;
-                        item.naturalHeight = item.naturalHeight || 400;
-                        item.aspectRatio = 1.5;
-                        finish(true);
-                    } else {
-                        finish(false);
-                    }
-                };
-                pre.src = url;
 
-                // Для обложек увеличенный таймаут 6 сек, чтобы не терялись в очереди сетевых запросов
-                const timeoutMs = item.isCover ? 6000 : 3500;
+                // При сетевой задержке или ошибке стороннего хостинга НЕ выбрасываем кадры!
+                // Браузер сам их отрисует через нативный lazy loading в DOM
+                pre.onerror = () => {
+                    item.naturalWidth = item.naturalWidth || 350;
+                    item.naturalHeight = item.naturalHeight || 196;
+                    item.aspectRatio = item.aspectRatio || 1.78;
+                    finish(true);
+                };
+
                 setTimeout(() => {
                     if (resolved) return;
-                    if (item.isCover) {
-                        item.naturalWidth = item.naturalWidth || 600;
-                        item.naturalHeight = item.naturalHeight || 400;
-                        item.aspectRatio = 1.5;
-                        finish(true);
-                    } else {
-                        finish(false);
-                    }
-                }, timeoutMs);
+                    item.naturalWidth = item.naturalWidth || 350;
+                    item.naturalHeight = item.naturalHeight || 196;
+                    item.aspectRatio = item.aspectRatio || 1.78;
+                    finish(true);
+                }, 3000);
+
+                pre.src = url;
             });
         });
 
         return Promise.all(promises).then(res => {
-            const valid = res.filter(Boolean);
-            // Если в видео-раздаче есть горизонтальные кадры (>= 1.35), то любой вертикальный лист внутри спойлера (<= 1.05) — это скринлист!
-            const hasHorizontal = valid.some(s => s.aspectRatio && s.aspectRatio >= 1.35);
-            valid.forEach(s => {
-                if (s.isCover) return; // Обложки никогда не помечаем скринлистами!
-                if (s.isScreenlist) return;
-                if (s.inSpoiler && hasHorizontal && s.aspectRatio && s.aspectRatio <= 1.05) {
-                    s.isScreenlist = true;
-                }
-            });
-            return valid;
+            return res.filter(Boolean);
         });
     }
 
@@ -1760,6 +1746,13 @@
         const seen = new Set();
         const spoilerFirstImgMap = new Map();
 
+        // Подсчитываем количество картинок в каждом спойлере
+        const spoilerCountMap = new Map();
+        postContent.querySelectorAll('.sp-wrap, .sp-fold').forEach(wrap => {
+            const count = wrap.querySelectorAll('var.postImg, img.postImg, img').length;
+            spoilerCountMap.set(wrap, count);
+        });
+
         // Сканируем все картинки в раздаче (включая шапку и спойлеры)
         postContent.querySelectorAll('var.postImg, img.postImg, img').forEach(node => {
             if (node.closest('.signature, .user_sig, .post_sig')) return;
@@ -1781,7 +1774,7 @@
             seen.add(key);
 
             const wrap = node.closest('.sp-wrap, .sp-fold');
-            // Если картинка находится вне спойлера — это обложка/постер раздачи!
+            // Если картинка находится вне спойлера — это обложка/превью раздачи!
             const isCover = !wrap;
 
             let isScreenlist = false;
@@ -1797,12 +1790,14 @@
                         // Спойлер исключительно со скринлистами
                         isScreenlist = true;
                     } else {
-                        // Спойлер смешанный ("Скриншоты и скринлисты"): первая картинка — это обзорный лист/скринлист!
+                        // Спойлер смешанный ("Скриншоты и скринлисты"): ТОЛЬКО первая картинка — это обзорный скринлист!
                         if (!spoilerFirstImgMap.has(wrap)) {
                             spoilerFirstImgMap.set(wrap, true);
                             isScreenlist = true;
                         }
                     }
+                } else if (spoilerCountMap.get(wrap) === 1 && /sheet|proof|caps/i.test(fullUrl + ' ' + thumbUrl)) {
+                    isScreenlist = true;
                 }
             }
 
@@ -1847,22 +1842,22 @@
                 const previewCandidates = validScreenshots.filter(s => !s.isScreenlist);
                 if (previewCandidates.length === 0) return;
 
-                // Разделяем: обложки (постеры) СТРОГО ПЕРВЫМИ, затем кадры фильма
+                // Разделяем: обложки (постеры/превью) и скриншоты
                 const covers = previewCandidates.filter(s => s.isCover);
-                const nonCovers = previewCandidates.filter(s => !s.isCover);
-                const orderedCandidates = [...covers, ...nonCovers];
+                const screenshotsOnly = previewCandidates.filter(s => !s.isCover);
 
-                // Автоматически определяем ориентацию скриншотов в раздаче
-                const verticalCount = orderedCandidates.filter(s => s.isVertical).length;
-                const isMostlyVertical = verticalCount >= Math.ceil(orderedCandidates.length / 2);
+                // Автоматически определяем ориентацию (по скриншотам или обложкам)
+                const verticalCount = previewCandidates.filter(s => s.isVertical).length;
+                const isMostlyVertical = verticalCount >= Math.ceil(previewCandidates.length / 2);
 
                 const imgContainer = document.createElement('div');
                 imgContainer.className = 'pl-inline-imgs-container' + (isMostlyVertical ? ' pl-inline-vertical' : '');
 
-                // Для вертикальных раздач лимит 8 картинок (196x350).
-                // Для горизонтальных раздач эталон 350x196: ровно до 5 картинок (1 превью + 4 кадра, или 2 превью + 3 кадра, или 5 кадров).
-                const maxCount = isMostlyVertical ? 8 : 5;
-                const itemsToRender = orderedCandidates.slice(0, maxCount);
+                // Для вертикальных раздач лимит 8 картинок.
+                // Для горизонтальных раздач ровно 5 картинок (1 превью + 4 кадра, или 2 превью + 3 кадра, или 5 кадров).
+                const maxTotal = isMostlyVertical ? 8 : 5;
+                const neededScreenshots = Math.max(0, maxTotal - covers.length);
+                const itemsToRender = [...covers, ...screenshotsOnly.slice(0, neededScreenshots)].slice(0, maxTotal);
 
                 itemsToRender.forEach((item, i) => {
                     const img = document.createElement('img');
@@ -1878,11 +1873,11 @@
                         }
                     };
 
-                    img.title = item.isCover ? '🖼️ Обложка (кликните для просмотра в галерее)' : `Кадр ${i + 1} (кликните для просмотра в галерее)`;
+                    img.title = item.isCover ? '🖼️ Превью (кликните для просмотра в галерее)' : `Кадр ${i + 1} (кликните для просмотра в галерее)`;
                     img.addEventListener('click', (e) => {
                         e.stopPropagation();
                         e.preventDefault();
-                        const galleryItems = orderedCandidates.map(s => ({
+                        const galleryItems = previewCandidates.map(s => ({
                             thumbUrl: s.thumbUrl,
                             fullUrl: s.fullUrl,
                             resolvedUrl: s.resolvedUrl,
