@@ -3,7 +3,7 @@
 // @name:ru      RuTracker: Enhanced Suite by TGS
 // @name:en      RuTracker: Enhanced Suite by TGS
 // @namespace    https://rutracker.org/
-// @version      5.21
+// @version      5.22
 // @description  Единый мощный комплекс для RuTracker: встроенные превью и кнопка скачивания в списке раздач, идеальные колонки (Форум с ресайзером, компактный Автор ~3 см), боковое окно предпросмотра при наведении, единый тулбар в раздачах, полноразмерные скриншоты FastPic/IBB без мыла и полноэкранный Lightbox.
 // @description:en All-in-one suite for RuTracker: inline previews & download button in torrent lists, perfect column layout, right-dock hover screenshot preview, single toolbar in topics, full-size FastPic/IBB screenshots & Lightbox.
 // @author       Terebonkoff (TGS)
@@ -1739,6 +1739,11 @@
             dlUrl = window.location.origin + (dlUrl.startsWith('/') ? '' : '/forum/') + dlUrl;
         }
 
+        const mainTitle = doc.querySelector('#topic-title, .maintitle')?.textContent || '';
+        const forumPath = doc.querySelector('.nav, #nav-top, .breadcrumb')?.textContent || '';
+        const isExcluded = /(x-art|met-art|sexart)/i.test(mainTitle);
+        const isVertical = !isExcluded && (/(manga|comic|hentai manga|doujinshi|art pack|h-manga|хентай|манга|арт|комикс)|\[art\]|\[manga\]/i.test(mainTitle + ' ' + forumPath + ' ' + doc.title));
+
         const screenshots = [];
         const seen = new Set();
         const spoilerFirstImgMap = new Map();
@@ -1749,6 +1754,8 @@
             const count = wrap.querySelectorAll('var.postImg, img.postImg, img').length;
             spoilerCountMap.set(wrap, count);
         });
+
+        let nonSpoilerCoverCount = 0;
 
         // Сканируем все картинки в раздаче (включая шапку и спойлеры)
         postContent.querySelectorAll('var.postImg, img.postImg, img').forEach(node => {
@@ -1771,13 +1778,10 @@
             seen.add(key);
 
             const wrap = node.closest('.sp-wrap, .sp-fold');
-            // Если картинка находится вне спойлера — это обложка/превью раздачи!
-            const isCover = !wrap;
+            const inSpoiler = !!wrap;
+            let isScreenlist = checkIfScreenlist(node, fullUrl);
 
-            let isScreenlist = false;
-            if (!isCover && wrap) {
-                isScreenlist = checkIfScreenlist(node, fullUrl);
-
+            if (inSpoiler) {
                 const head = wrap.querySelector('.sp-head, .sp-title');
                 const body = wrap.querySelector('.sp-body');
                 const tText = [head ? head.textContent : '', body ? (body.getAttribute('title') || '') : '', wrap.getAttribute('title') || ''].join(' ');
@@ -1798,16 +1802,25 @@
                 }
             }
 
-            screenshots.push({ thumbUrl, fullUrl, isCover, isScreenlist, inSpoiler: !!wrap, resolvedUrl: null });
+            // Обложки: строго первые 1 или 2 картинки ВНЕ спойлеров и не являющиеся скринлистами
+            let isCover = false;
+            if (!inSpoiler && !isScreenlist) {
+                if (nonSpoilerCoverCount < 2) {
+                    isCover = true;
+                    nonSpoilerCoverCount++;
+                }
+            }
+
+            screenshots.push({ thumbUrl, fullUrl, isCover, isScreenlist, inSpoiler, resolvedUrl: null });
         });
 
-        return { dlUrl, screenshots };
+        return { dlUrl, screenshots, isVertical };
     }
 
         function renderInlineContent(td, data) {
         if (!td || td.querySelector('.rt-inline-wrap')) return;
 
-        const { dlUrl, screenshots } = data;
+        const { dlUrl, screenshots, isVertical } = data;
         if (!dlUrl && (!screenshots || screenshots.length === 0)) return;
 
         const wrap = document.createElement('div');
@@ -1829,7 +1842,7 @@
             wrap.appendChild(dlRow);
         }
 
-        // 2. Встроенные превью: мгновенный прямой рендер ровно до 5 картинок в строку (или до 8 вертикальных)
+        // 2. Встроенные превью: ровно 5 картинок в строку (или ровно 8 вертикальных для арт/манги)
         if (showInlinePreviews && screenshots && screenshots.length > 0) {
             // Исключаем скринлисты и мусорные значки
             const validCandidates = screenshots.filter(s => !s.isScreenlist && !isBadgeOrTrashUrl(s.thumbUrl));
@@ -1837,11 +1850,23 @@
                 const covers = validCandidates.filter(s => s.isCover);
                 const screenshotsOnly = validCandidates.filter(s => !s.isCover);
 
-                // Определение вертикального типа (арт, манга, комиксы)
-                const isArtOrManga = /\b(art|manga|comic|hentai manga|хентай|манга|арт|комикс)\b|\[art\]|\[manga\]/i.test(document.title + ' ' + (td ? td.textContent : ''));
+                const rowText = (td ? td.closest('tr')?.textContent || td.textContent : '') + ' ' + document.title;
+                const isExcluded = /(x-art|met-art|sexart)/i.test(rowText);
+                const isArtOrManga = !isExcluded && (isVertical || /(manga|comic|hentai manga|doujinshi|art pack|h-manga|хентай|манга|арт|комикс)|\[art\]|\[manga\]/i.test(rowText));
                 const maxTotal = isArtOrManga ? 8 : 5;
-                const neededScreenshots = Math.max(0, maxTotal - covers.length);
-                const itemsToRender = [...covers, ...screenshotsOnly.slice(0, neededScreenshots)].slice(0, maxTotal);
+
+                // Берем до 2 обложек
+                const coversToTake = covers.slice(0, Math.min(2, maxTotal));
+                const neededScreenshots = Math.max(0, maxTotal - coversToTake.length);
+                const screenshotsToTake = screenshotsOnly.slice(0, neededScreenshots);
+
+                let itemsToRender = [...coversToTake, ...screenshotsToTake];
+
+                // Если скриншотов не хватило до maxTotal, добираем из остальных валидных кадров
+                if (itemsToRender.length < maxTotal) {
+                    const remaining = validCandidates.filter(c => !itemsToRender.includes(c));
+                    itemsToRender.push(...remaining.slice(0, maxTotal - itemsToRender.length));
+                }
 
                 const imgContainer = document.createElement('div');
                 imgContainer.className = 'rt-inline-imgs-container' + (isArtOrManga ? ' rt-inline-vertical' : '');
@@ -1855,15 +1880,15 @@
                     img.onload = () => {
                         if (img.naturalHeight > img.naturalWidth && !img.classList.contains('rt-thumb-vertical')) {
                             img.classList.add('rt-thumb-vertical');
-                            if (!imgContainer.classList.contains('rt-inline-vertical')) {
+                            if (isArtOrManga && !imgContainer.classList.contains('rt-inline-vertical')) {
                                 imgContainer.classList.add('rt-inline-vertical');
                             }
                         }
                     };
 
                     img.onerror = () => {
-                        // При ошибке картинки тихо скрываем её без поломки соседних
-                        img.remove();
+                        img.style.opacity = '0.35';
+                        img.title = 'Кадр временно недоступен на фотохостинге';
                     };
 
                     img.title = item.isCover ? '🖼️ Превью (кликните для просмотра)' : `Кадр ${i + 1} (кликните для просмотра)`;
