@@ -3,7 +3,7 @@
 // @name:ru      RuTracker: Enhanced Suite by TGS
 // @name:en      RuTracker: Enhanced Suite by TGS
 // @namespace    https://rutracker.org/
-// @version      5.19
+// @version      5.20
 // @description  Единый мощный комплекс для RuTracker: встроенные превью и кнопка скачивания в списке раздач, идеальные колонки (Форум с ресайзером, компактный Автор ~3 см), боковое окно предпросмотра при наведении, единый тулбар в раздачах, полноразмерные скриншоты FastPic/IBB без мыла и полноэкранный Lightbox.
 // @description:en All-in-one suite for RuTracker: inline previews & download button in torrent lists, perfect column layout, right-dock hover screenshot preview, single toolbar in topics, full-size FastPic/IBB screenshots & Lightbox.
 // @author       Terebonkoff (TGS)
@@ -1829,23 +1829,17 @@
             wrap.appendChild(dlRow);
         }
 
-        // 2. Встроенные превью: валидируем в памяти без мерцания
+        // 2. Встроенные превью: мгновенный рендер без блокировок и таймаутов
         if (showInlinePreviews && screenshots && screenshots.length > 0) {
-            const candidates = screenshots.slice(0, 30);
-            filterValidScreenshots(candidates).then(validScreenshots => {
-                if (validScreenshots.length === 0) return;
+            // Исключаем скринлисты и мусорные значки
+            const validCandidates = screenshots.filter(s => !s.isScreenlist && !isBadgeOrTrashUrl(s.thumbUrl));
+            if (validCandidates.length > 0) {
+                const covers = validCandidates.filter(s => s.isCover);
+                const screenshotsOnly = validCandidates.filter(s => !s.isCover);
 
-                // ОБЯЗАТЕЛЬНО исключаем скринлисты из превью в списке раздач!
-                const previewCandidates = validScreenshots.filter(s => !s.isScreenlist);
-                if (previewCandidates.length === 0) return;
-
-                // Разделяем: обложки (постеры/превью) и скриншоты
-                const covers = previewCandidates.filter(s => s.isCover);
-                const screenshotsOnly = previewCandidates.filter(s => !s.isCover);
-
-                // Автоматически определяем ориентацию (по скриншотам или обложкам)
-                const verticalCount = previewCandidates.filter(s => s.isVertical).length;
-                const isMostlyVertical = verticalCount >= Math.ceil(previewCandidates.length / 2);
+                // Автоматически определяем ориентацию (по флагу вертикальности)
+                const verticalCount = validCandidates.filter(s => s.isVertical).length;
+                const isMostlyVertical = verticalCount >= Math.ceil(validCandidates.length / 2);
 
                 const imgContainer = document.createElement('div');
                 imgContainer.className = 'pl-inline-imgs-container' + (isMostlyVertical ? ' pl-inline-vertical' : '');
@@ -1863,18 +1857,30 @@
                     img.loading = 'lazy';
                     img.referrerPolicy = 'no-referrer';
 
-                    // Предотвращаем мерцание и авто-корректируем ориентацию
+                    // Мгновенная авто-коррекция и отсечение микро-значков при загрузке
                     img.onload = () => {
+                        if (img.naturalWidth > 0 && img.naturalWidth < 60 && img.naturalHeight < 60) {
+                            img.remove();
+                            return;
+                        }
                         if (img.naturalHeight > img.naturalWidth && !img.classList.contains('pl-thumb-vertical')) {
                             img.classList.add('pl-thumb-vertical');
                         }
                     };
 
-                    img.title = item.isCover ? '🖼️ Превью (кликните для просмотра в галерее)' : `Кадр ${i + 1} (кликните для просмотра в галерее)`;
+                    img.onerror = () => {
+                        // Если превью хостинга заблокировано, пробуем полный URL
+                        if (item.fullUrl && item.fullUrl !== item.thumbUrl && !img.dataset.triedFull) {
+                            img.dataset.triedFull = 'true';
+                            img.src = item.fullUrl;
+                        }
+                    };
+
+                    img.title = item.isCover ? '🖼️ Превью (кликните для просмотра)' : `Кадр ${i + 1} (кликните для просмотра)`;
                     img.addEventListener('click', (e) => {
                         e.stopPropagation();
                         e.preventDefault();
-                        const galleryItems = previewCandidates.map(s => ({
+                        const galleryItems = validCandidates.map(s => ({
                             thumbUrl: s.thumbUrl,
                             fullUrl: s.fullUrl,
                             resolvedUrl: s.resolvedUrl,
@@ -1890,7 +1896,7 @@
                 if (itemsToRender.length > 0) {
                     wrap.appendChild(imgContainer);
                 }
-            });
+            }
         }
 
         td.appendChild(wrap);
