@@ -29,6 +29,11 @@ SCRIPTS = {
         "base_file": "rutracker_complete_suite.user.js",
         "name": "RuTracker: Enhanced Suite"
     },
+    "rutracker_enhanced": {
+        "file": "RuTracker_Enhanced_Suite.user.js",
+        "base_file": "rutracker_enhanced_suite.user.js",
+        "name": "RuTracker: Enhanced Suite (Alias)"
+    },
     "comix": {
         "file": "COMIX_ZIP_Downloader_by_TGS.user.js",
         "base_file": "COMIX_ZIP_Downloader_by_TGS.user.js",

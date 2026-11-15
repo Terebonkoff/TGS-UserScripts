@@ -3,7 +3,7 @@
 // @name:ru      Pornolab: Enhanced Suite by TGS
 // @name:en      Pornolab: Enhanced Suite by TGS
 // @namespace    https://pornolab.net/
-// @version      5.22
+// @version      5.23
 // @description  Единый мощный комплекс для Pornolab: встроенные превью и кнопка скачивания в списке раздач, идеальные колонки (Форум с ресайзером, компактный Автор ~3 см), боковое окно предпросмотра при наведении, единый тулбар в раздачах, полноразмерные скриншоты FastPic/IMX/ImageTwist без мыла и полноэкранный Lightbox.
 // @description:en All-in-one suite for Pornolab: inline previews & download button in torrent lists, perfect column layout, right-dock hover screenshot preview, single toolbar in topics, full-size FastPic/IMX screenshots & Lightbox.
 // @author       Terebonkoff (TGS)
@@ -1120,21 +1120,32 @@
     }
 
     function fetchPage(url, callback, referer) {
+        if (!url) {
+            callback('', url);
+            return;
+        }
+        let fullUrl = url;
+        try {
+            fullUrl = new URL(url, window.location.href).href;
+        } catch (e) {
+            fullUrl = url;
+        }
+
         if (typeof GM_xmlhttpRequest !== 'undefined') {
             GM_xmlhttpRequest({
                 method: 'GET',
-                url: url,
+                url: fullUrl,
                 overrideMimeType: 'text/html; charset=windows-1251',
                 headers: {
                     'User-Agent': navigator.userAgent,
                     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                    'Referer': referer || url
+                    'Referer': referer || window.location.href
                 },
-                onload: (res) => callback(res.responseText, res.finalUrl || url),
-                onerror: () => callback('', url)
+                onload: (res) => callback(res.responseText, res.finalUrl || fullUrl),
+                onerror: () => callback('', fullUrl)
             });
         } else {
-            fetch(url).then(r => r.text()).then(html => callback(html, url)).catch(() => callback('', url));
+            fetch(fullUrl).then(r => r.text()).then(html => callback(html, fullUrl)).catch(() => callback('', fullUrl));
         }
     }
 
@@ -1702,9 +1713,12 @@
             }
 
             const rawHref = anchor.getAttribute('href') || anchor.href;
-            const fullLink = rawHref.startsWith('http')
-                ? rawHref
-                : new URL(rawHref.replace(/^\.\//, '/forum/'), window.location.origin).href;
+            let fullLink = rawHref;
+            try {
+                fullLink = new URL(rawHref, window.location.href).href;
+            } catch (e) {
+                fullLink = anchor.href || rawHref;
+            }
 
             const topicIdMatch = fullLink.match(/[?&]t=(\d+)/);
             const topicId = topicIdMatch ? topicIdMatch[1] : null;
@@ -1905,7 +1919,7 @@
                             isScreenlist: s.isScreenlist,
                             isCover: s.isCover
                         }));
-                        openLightbox(galleryItems, i);
+                        openLightbox(i, galleryItems);
                     });
 
                     imgContainer.appendChild(img);
@@ -2027,14 +2041,21 @@
         positionPreviewWindow();
         previewWindow.classList.add('rt-pv-visible');
 
-        const topicHref = link.getAttribute('href') || link.href;
+        const rawHref = link.getAttribute('href') || link.href;
+        let topicHref = rawHref;
+        try {
+            topicHref = new URL(rawHref, window.location.href).href;
+        } catch (e) {
+            topicHref = link.href || rawHref;
+        }
+
         const topicIdMatch = topicHref.match(/[?&]t=(\d+)/);
         const topicId = topicIdMatch ? topicIdMatch[1] : null;
 
         const bodyEl = previewWindow.querySelector('#rt-pv-body');
         const countEl = previewWindow.querySelector('#rt-pv-count');
 
-        if (topicId && topicDataCache[topicId] && topicDataCache[topicId].screenshots) {
+        if (topicId && topicDataCache[topicId] && topicDataCache[topicId].screenshots && topicDataCache[topicId].screenshots.length > 0) {
             renderPreviewScreenshots(topicDataCache[topicId].screenshots, bodyEl, countEl);
             return;
         }
@@ -2045,11 +2066,18 @@
         const reqId = ++activePreviewRequestId;
         fetchPage(topicHref, (html) => {
             if (reqId !== activePreviewRequestId) return;
+            if (!html) {
+                countEl.textContent = '0';
+                bodyEl.innerHTML = `<div style="padding:40px; text-align:center; color:#8b949e;">${t.noScreenshotsFound}</div>`;
+                return;
+            }
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
             const data = parseTopicDocument(doc);
 
-            if (topicId) topicDataCache[topicId] = data;
+            if (topicId && data.screenshots && data.screenshots.length > 0) {
+                topicDataCache[topicId] = data;
+            }
             renderPreviewScreenshots(data.screenshots, bodyEl, countEl);
         });
     }

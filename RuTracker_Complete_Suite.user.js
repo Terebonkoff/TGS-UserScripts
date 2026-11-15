@@ -3,7 +3,7 @@
 // @name:ru      RuTracker: Enhanced Suite by TGS
 // @name:en      RuTracker: Enhanced Suite by TGS
 // @namespace    https://rutracker.org/
-// @version      5.22
+// @version      5.23
 // @description  Единый мощный комплекс для RuTracker: встроенные превью и кнопка скачивания в списке раздач, идеальные колонки (Форум с ресайзером, компактный Автор ~3 см), боковое окно предпросмотра при наведении, единый тулбар в раздачах, полноразмерные скриншоты FastPic/IBB без мыла и полноэкранный Lightbox.
 // @description:en All-in-one suite for RuTracker: inline previews & download button in torrent lists, perfect column layout, right-dock hover screenshot preview, single toolbar in topics, full-size FastPic/IBB screenshots & Lightbox.
 // @author       Terebonkoff (TGS)
@@ -315,19 +315,19 @@
             /* -----------------------------------------------------------------
              * ВСТРОЕННЫЕ ПРЕВЬЮ И КНОПКА СКАЧИВАНИЯ В СПИСКЕ РАЗДАЧ
              * ----------------------------------------------------------------- */
-            .pl-inline-wrap {
+            .rt-inline-wrap, .pl-inline-wrap {
                 margin-top: 8px !important;
                 margin-bottom: 6px !important;
                 display: flex !important;
                 flex-direction: column !important;
                 gap: 7px !important;
             }
-            .pl-inline-dl-row {
+            .rt-inline-dl-row, .pl-inline-dl-row {
                 display: flex !important;
                 align-items: center !important;
                 gap: 8px !important;
             }
-            .pl-inline-dl-btn {
+            .rt-inline-dl-btn, .pl-inline-dl-btn {
                 display: inline-flex !important;
                 align-items: center !important;
                 gap: 5px !important;
@@ -347,14 +347,14 @@
                 width: fit-content !important;
                 max-width: fit-content !important;
             }
-            .pl-inline-dl-btn:hover {
+            .rt-inline-dl-btn:hover, .pl-inline-dl-btn:hover {
                 background: #0369a1 !important;
                 color: #ffffff !important;
                 transform: translateY(-1px) !important;
                 text-decoration: none !important;
                 box-shadow: 0 4px 10px rgba(2, 132, 199, 0.65) !important;
             }
-            .pl-inline-imgs-container {
+            .rt-inline-imgs-container, .pl-inline-imgs-container {
                 display: flex !important;
                 flex-direction: row !important;
                 align-items: center !important;
@@ -365,7 +365,7 @@
                 white-space: nowrap !important;
             }
             /* Горизонтальные превью (1 слот): эталонные 350x196 (16:9), до 5 слотов в ряду */
-            .pl-inline-thumb {
+            .rt-inline-thumb, .pl-inline-thumb {
                 width: 350px !important;
                 max-width: calc(20% - 7px) !important;
                 height: 196px !important;
@@ -383,9 +383,10 @@
                 box-sizing: border-box !important;
                 transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease !important;
             }
-            /* Широкие горизонтальные превью (считаются за 2 слота): до 40% ширины строки */
             /* Вертикальные превью (арт, манга, портреты): эталонные 196x350 в полный рост, до 8 штук в ряду */
+            .rt-inline-imgs-container.rt-inline-vertical .rt-inline-thumb,
             .pl-inline-imgs-container.pl-inline-vertical .pl-inline-thumb,
+            .rt-inline-thumb.rt-thumb-vertical,
             .pl-inline-thumb.pl-thumb-vertical {
                 width: 196px !important;
                 max-width: calc(12.5% - 7px) !important;
@@ -396,7 +397,7 @@
                 object-position: center top !important;
                 flex: 0 1 calc(12.5% - 7px) !important;
             }
-            .pl-inline-thumb:hover {
+            .rt-inline-thumb:hover, .pl-inline-thumb:hover {
                 transform: scale(1.03) !important;
                 border-color: #58a6ff !important;
                 box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6) !important;
@@ -1123,21 +1124,32 @@
     }
 
     function fetchPage(url, callback, referer) {
+        if (!url) {
+            callback('', url);
+            return;
+        }
+        let fullUrl = url;
+        try {
+            fullUrl = new URL(url, window.location.href).href;
+        } catch (e) {
+            fullUrl = url;
+        }
+
         if (typeof GM_xmlhttpRequest !== 'undefined') {
             GM_xmlhttpRequest({
                 method: 'GET',
-                url: url,
+                url: fullUrl,
                 overrideMimeType: 'text/html; charset=windows-1251',
                 headers: {
                     'User-Agent': navigator.userAgent,
                     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                    'Referer': referer || url
+                    'Referer': referer || window.location.href
                 },
-                onload: (res) => callback(res.responseText, res.finalUrl || url),
-                onerror: () => callback('', url)
+                onload: (res) => callback(res.responseText, res.finalUrl || fullUrl),
+                onerror: () => callback('', fullUrl)
             });
         } else {
-            fetch(url).then(r => r.text()).then(html => callback(html, url)).catch(() => callback('', url));
+            fetch(fullUrl).then(r => r.text()).then(html => callback(html, fullUrl)).catch(() => callback('', fullUrl));
         }
     }
 
@@ -1668,7 +1680,7 @@
      * 7. ВСТРОЕННЫЕ ПРЕВЬЮ И КНОПКА СКАЧИВАНИЯ В СПИСКЕ РАЗДАЧ
      * ========================================================================= */
     function initInlineListPreviews() {
-        const rows = document.querySelectorAll('tr.tCenter, tr.hl-tr, tr[id^="tr-"], tr[id^="trs-tr-"]');
+        const rows = document.querySelectorAll('tr.tCenter, tr.hl-tr, tr[id^="tor-"], tr[id^="tr-"], tr[id^="trs-tr-"]');
 
         const fetchQueue = [];
         let activeRequests = 0;
@@ -1687,7 +1699,7 @@
         rows.forEach((row, index) => {
             if (row.dataset.rtProcessed) return;
 
-            const td = row.querySelector('td.t-title, td.row4.tLeft, td.tt') ||
+            const td = row.querySelector('td.t-title, td.row4.tLeft, td.tt, td.topic-title') ||
                        Array.from(row.querySelectorAll('td')).find(c => c.querySelector('a.tLink, a.tt-text, a[href*="viewtopic.php?t="]'));
             const anchor = td?.querySelector('a.tLink, a.tt-text, a.topictitle, a[href*="viewtopic.php?t="]');
 
@@ -1699,15 +1711,18 @@
             }
 
             const rawHref = anchor.getAttribute('href') || anchor.href;
-            const fullLink = rawHref.startsWith('http')
-                ? rawHref
-                : new URL(rawHref.replace(/^\.\//, '/forum/'), window.location.origin).href;
+            let fullLink = rawHref;
+            try {
+                fullLink = new URL(rawHref, window.location.href).href;
+            } catch (e) {
+                fullLink = anchor.href || rawHref;
+            }
 
             const topicIdMatch = fullLink.match(/[?&]t=(\d+)/);
             const topicId = topicIdMatch ? topicIdMatch[1] : null;
 
             fetchQueue.push((onDone) => {
-                if (topicId && topicDataCache[topicId]) {
+                if (topicId && topicDataCache[topicId] && topicDataCache[topicId].screenshots && topicDataCache[topicId].screenshots.length > 0) {
                     renderInlineContent(td, topicDataCache[topicId]);
                     onDone();
                     return;
@@ -1715,11 +1730,15 @@
 
                 fetchPage(fullLink, (html) => {
                     try {
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(html, 'text/html');
-                        const data = parseTopicDocument(doc);
-                        if (topicId) topicDataCache[topicId] = data;
-                        renderInlineContent(td, data);
+                        if (html) {
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(html, 'text/html');
+                            const data = parseTopicDocument(doc);
+                            if (topicId && data.screenshots && data.screenshots.length > 0) {
+                                topicDataCache[topicId] = data;
+                            }
+                            renderInlineContent(td, data);
+                        }
                     } catch (err) {
                         console.error('Error parsing topic:', err);
                     }
@@ -1733,10 +1752,14 @@
 
         function parseTopicDocument(doc) {
         const postContent = doc.querySelector('.post_body') || doc.body;
-        const dlLinkNode = postContent.querySelector('.dl-stub.dl-link, a[href*="dl.php?t="], a.attach_link');
+        const dlLinkNode = doc.querySelector('.dl-stub.dl-link, a[href*="dl.php?t="], a.attach_link, a[href*="download.php?id="]');
         let dlUrl = dlLinkNode ? (dlLinkNode.getAttribute('href') || dlLinkNode.href) : null;
         if (dlUrl && !dlUrl.startsWith('http')) {
-            dlUrl = window.location.origin + (dlUrl.startsWith('/') ? '' : '/forum/') + dlUrl;
+            try {
+                dlUrl = new URL(dlUrl, window.location.href).href;
+            } catch (e) {
+                dlUrl = window.location.origin + (dlUrl.startsWith('/') ? '' : '/forum/') + dlUrl;
+            }
         }
 
         const mainTitle = doc.querySelector('#topic-title, .maintitle')?.textContent || '';
@@ -1902,7 +1925,7 @@
                             isScreenlist: s.isScreenlist,
                             isCover: s.isCover
                         }));
-                        openLightbox(galleryItems, i);
+                        openLightbox(i, galleryItems);
                     });
 
                     imgContainer.appendChild(img);
@@ -2024,14 +2047,21 @@
         positionPreviewWindow();
         previewWindow.classList.add('rt-pv-visible');
 
-        const topicHref = link.getAttribute('href') || link.href;
+        const rawHref = link.getAttribute('href') || link.href;
+        let topicHref = rawHref;
+        try {
+            topicHref = new URL(rawHref, window.location.href).href;
+        } catch (e) {
+            topicHref = link.href || rawHref;
+        }
+
         const topicIdMatch = topicHref.match(/[?&]t=(\d+)/);
         const topicId = topicIdMatch ? topicIdMatch[1] : null;
 
         const bodyEl = previewWindow.querySelector('#rt-pv-body');
         const countEl = previewWindow.querySelector('#rt-pv-count');
 
-        if (topicId && topicDataCache[topicId] && topicDataCache[topicId].screenshots) {
+        if (topicId && topicDataCache[topicId] && topicDataCache[topicId].screenshots && topicDataCache[topicId].screenshots.length > 0) {
             renderPreviewScreenshots(topicDataCache[topicId].screenshots, bodyEl, countEl);
             return;
         }
@@ -2042,11 +2072,18 @@
         const reqId = ++activePreviewRequestId;
         fetchPage(topicHref, (html) => {
             if (reqId !== activePreviewRequestId) return;
+            if (!html) {
+                countEl.textContent = '0';
+                bodyEl.innerHTML = `<div style="padding:40px; text-align:center; color:#8b949e;">${t.noScreenshotsFound}</div>`;
+                return;
+            }
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
             const data = parseTopicDocument(doc);
 
-            if (topicId) topicDataCache[topicId] = data;
+            if (topicId && data.screenshots && data.screenshots.length > 0) {
+                topicDataCache[topicId] = data;
+            }
             renderPreviewScreenshots(data.screenshots, bodyEl, countEl);
         });
     }
@@ -2117,7 +2154,7 @@
             if (isPreviewLocked) return;
             const link = e.target.closest('a.tLink, a.tt-text, a.topictitle, a[href*="viewtopic.php?t="]');
             if (!link) return;
-            if (link.closest('#torrent-preview') || link.closest('.pl-inline-wrap')) return;
+            if (link.closest('#torrent-preview') || link.closest('.rt-inline-wrap') || link.closest('.pl-inline-wrap')) return;
 
             clearTimeout(closeTimeout);
             clearTimeout(hoverTimeout);
