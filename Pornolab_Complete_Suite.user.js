@@ -3,7 +3,7 @@
 // @name:ru      Pornolab: Enhanced Suite by TGS
 // @name:en      Pornolab: Enhanced Suite by TGS
 // @namespace    https://pornolab.net/
-// @version      5.15
+// @version      5.16
 // @description  Единый мощный комплекс для Pornolab: встроенные превью и кнопка скачивания в списке раздач, идеальные колонки (Форум с ресайзером, компактный Автор ~3 см), боковое окно предпросмотра при наведении, единый тулбар в раздачах, полноразмерные скриншоты FastPic/IMX/ImageTwist без мыла и полноэкранный Lightbox.
 // @description:en All-in-one suite for Pornolab: inline previews & download button in torrent lists, perfect column layout, right-dock hover screenshot preview, single toolbar in topics, full-size FastPic/IMX screenshots & Lightbox.
 // @author       Terebonkoff (TGS)
@@ -356,7 +356,7 @@
                 padding: 6px 0 !important;
                 white-space: nowrap !important;
             }
-            /* Горизонтальные превью: эталонные 350x196 (16:9), до 5 штук в ряду */
+            /* Горизонтальные превью (1 слот): эталонные 350x196 (16:9), до 5 слотов в ряду */
             .pl-inline-thumb {
                 width: 350px !important;
                 max-width: calc(20% - 7px) !important;
@@ -374,6 +374,13 @@
                 min-width: 0 !important;
                 box-sizing: border-box !important;
                 transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease !important;
+            }
+            /* Широкие горизонтальные превью (считаются за 2 слота): до 40% ширины строки */
+            .pl-inline-thumb.pl-thumb-wide {
+                width: 700px !important;
+                max-width: calc(40% - 7px) !important;
+                flex: 0 1 calc(40% - 7px) !important;
+                aspect-ratio: auto !important;
             }
             /* Вертикальные превью (арт, манга, портреты): эталонные 196x350 в полный рост, до 8 штук в ряду */
             .pl-inline-imgs-container.pl-inline-vertical .pl-inline-thumb,
@@ -1251,19 +1258,33 @@
                         item.naturalWidth = pre.naturalWidth;
                         item.naturalHeight = pre.naturalHeight;
                         item.isVertical = pre.naturalHeight > pre.naturalWidth;
+                        item.aspectRatio = pre.naturalWidth / pre.naturalHeight;
+                        // Широкое горизонтальное превью (например, 800x533 или 16:9)
+                        item.isWide = item.aspectRatio >= 1.35;
                         finish(true);
                     } else {
                         finish(false);
                     }
                 };
-                pre.onerror = () => finish(false); // Битая картинка (404) никогда не проходит в превью!
+                pre.onerror = () => finish(false);
                 pre.src = url;
 
                 setTimeout(() => finish(false), 2500);
             });
         });
 
-        return Promise.all(promises).then(res => res.filter(Boolean));
+        return Promise.all(promises).then(res => {
+            const valid = res.filter(Boolean);
+            // Если в раздаче есть горизонтальные скриншоты (видео), то любая одиночная узкая вертикальная картинка (h/w >= 1.25) — это скринлист!
+            const hasHorizontal = valid.some(s => s.aspectRatio && s.aspectRatio >= 1.15);
+            valid.forEach(s => {
+                if (s.isScreenlist) return;
+                if (hasHorizontal && s.aspectRatio && s.aspectRatio <= 0.85) {
+                    s.isScreenlist = true;
+                }
+            });
+            return valid;
+        });
     }
 
     function resolveFullsizeFromHosting(rawHref, currentImgSrc, onFound) {
@@ -1722,44 +1743,38 @@
         const screenshots = [];
         const seen = new Set();
 
-        const spWraps = postContent.querySelectorAll('.sp-wrap, .sp-fold');
-        const screenshotSpWraps = [];
-        spWraps.forEach(wrap => {
-            const head = wrap.querySelector('.sp-head, .sp-title');
-            const body = wrap.querySelector('.sp-body');
-            const titleText = [
-                head ? head.textContent : '',
-                body ? (body.getAttribute('title') || '') : '',
-                wrap.getAttribute('title') || ''
-            ].join(' ');
-            if (/скрин|screen|shot|пример|caps|кадр|превью|snaps|pic|арт|art|галере|sample|образц|иллюстрац/i.test(titleText)) {
-                if (body) screenshotSpWraps.push(body);
-                else screenshotSpWraps.push(wrap);
+        // Сканируем все картинки в раздаче (включая шапку и спойлеры)
+        postContent.querySelectorAll('var.postImg, img.postImg, img').forEach(node => {
+            if (node.closest('.signature, .user_sig, .post_sig')) return;
+
+            let thumbUrl = '';
+            if (node.tagName.toLowerCase() === 'var') {
+                thumbUrl = node.getAttribute('title') || node.getAttribute('data-src') || '';
+            } else {
+                thumbUrl = node.getAttribute('src') || '';
             }
-        });
-        // Если есть спойлеры скриншотов - берем ТОЛЬКО из них, игнорируя бейджи из описания!
-        const targetContainers = screenshotSpWraps.length > 0 ? screenshotSpWraps : [postContent];
+            thumbUrl = (thumbUrl || '').trim();
+            const parentA = node.closest('a');
+            let fullUrl = parentA ? (parentA.getAttribute('href') || parentA.href || '') : thumbUrl;
 
-        targetContainers.forEach(container => {
-            container.querySelectorAll('var.postImg, img.postImg, img').forEach(node => {
-                let thumbUrl = '';
-                if (node.tagName.toLowerCase() === 'var') {
-                    thumbUrl = node.getAttribute('title') || node.getAttribute('data-src') || '';
-                } else {
-                    thumbUrl = node.getAttribute('src') || '';
+            if (!thumbUrl || isBadgeOrTrashUrl(thumbUrl) || isBadgeOrTrashUrl(fullUrl)) return;
+
+            const key = thumbUrl + fullUrl;
+            if (seen.has(key)) return;
+            seen.add(key);
+
+            let isScreenlist = checkIfScreenlist(node, fullUrl);
+            const wrap = node.closest('.sp-wrap, .sp-fold');
+            if (!isScreenlist && wrap) {
+                const head = wrap.querySelector('.sp-head, .sp-title');
+                const body = wrap.querySelector('.sp-body');
+                const tText = [head ? head.textContent : '', body ? (body.getAttribute('title') || '') : '', wrap.getAttribute('title') || ''].join(' ');
+                if (/скринлист|screenlist|sheet|caps|proof/i.test(tText)) {
+                    isScreenlist = true;
                 }
-                thumbUrl = (thumbUrl || '').trim();
-                const parentA = node.closest('a');
-                let fullUrl = parentA ? (parentA.getAttribute('href') || parentA.href || '') : thumbUrl;
+            }
 
-                if (!thumbUrl || isBadgeOrTrashUrl(thumbUrl) || isBadgeOrTrashUrl(fullUrl)) return;
-
-                const key = thumbUrl + fullUrl;
-                if (seen.has(key)) return;
-                seen.add(key);
-
-                screenshots.push({ thumbUrl, fullUrl, resolvedUrl: null });
-            });
+            screenshots.push({ thumbUrl, fullUrl, isScreenlist, resolvedUrl: null });
         });
 
         return { dlUrl, screenshots };
@@ -1796,19 +1811,45 @@
             filterValidScreenshots(candidates).then(validScreenshots => {
                 if (validScreenshots.length === 0) return;
 
+                // ОБЯЗАТЕЛЬНО исключаем скринлисты из превью в списке раздач!
+                const previewCandidates = validScreenshots.filter(s => !s.isScreenlist);
+                if (previewCandidates.length === 0) return;
+
                 // Автоматически определяем ориентацию скриншотов в раздаче
-                const verticalCount = validScreenshots.filter(s => s.isVertical).length;
-                const isMostlyVertical = verticalCount >= Math.ceil(validScreenshots.length / 2);
+                const verticalCount = previewCandidates.filter(s => s.isVertical).length;
+                const isMostlyVertical = verticalCount >= Math.ceil(previewCandidates.length / 2);
 
                 const imgContainer = document.createElement('div');
                 imgContainer.className = 'pl-inline-imgs-container' + (isMostlyVertical ? ' pl-inline-vertical' : '');
 
-                // Для вертикальных (арт, манга) эталон 196x350 (8 в ряд), для горизонтальных (видео) эталон 350x196 (5 в ряд)
-                const limit = Math.min(validScreenshots.length, isMostlyVertical ? 8 : 5);
-                for (let i = 0; i < limit; i++) {
-                    const item = validScreenshots[i];
+                // Для вертикальных раздач лимит 8 картинок.
+                // Для горизонтальных раздач считаем слоты (широкие картинки считаем за 2 слота, максимум 5 слотов)
+                const itemsToRender = [];
+                if (isMostlyVertical) {
+                    const limit = Math.min(previewCandidates.length, 8);
+                    for (let i = 0; i < limit; i++) {
+                        itemsToRender.push({ item: previewCandidates[i], isWide: false });
+                    }
+                } else {
+                    let totalSlots = 0;
+                    const maxSlots = 5;
+                    for (const cand of previewCandidates) {
+                        const weight = cand.isWide ? 2 : 1;
+                        if (totalSlots + weight > maxSlots && itemsToRender.length > 0) {
+                            break;
+                        }
+                        cand.slotWeight = weight;
+                        itemsToRender.push({ item: cand, isWide: cand.isWide });
+                        totalSlots += weight;
+                        if (totalSlots >= maxSlots) break;
+                    }
+                }
+
+                itemsToRender.forEach(({ item, isWide }, i) => {
                     const img = document.createElement('img');
-                    img.className = 'pl-inline-thumb' + (item.isVertical ? ' pl-thumb-vertical' : '');
+                    img.className = 'pl-inline-thumb' + 
+                        (item.isVertical ? ' pl-thumb-vertical' : '') +
+                        (isWide ? ' pl-thumb-wide' : '');
                     img.src = item.thumbUrl || item.fullUrl;
                     img.loading = 'lazy';
                     img.referrerPolicy = 'no-referrer';
@@ -1828,7 +1869,7 @@
                     img.addEventListener('click', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        const galleryItems = validScreenshots.map(s => {
+                        const galleryItems = previewCandidates.map(s => {
                             const full = s.resolvedUrl || s.fullUrl || s.thumbUrl;
                             return {
                                 src: full,
@@ -1839,7 +1880,7 @@
                     });
 
                     imgContainer.appendChild(img);
-                }
+                });
 
                 wrap.appendChild(imgContainer);
             });
@@ -2072,8 +2113,11 @@
     let currentLightboxIdx = 0;
 
     function checkIfScreenlist(img, href) {
-        const text = ((img.alt || '') + ' ' + (img.title || '') + ' ' + href).toLowerCase();
-        return text.includes('screenlist') || text.includes('скринлист') || text.includes('screens') || text.includes('caps');
+        const text = (((img && img.alt) || '') + ' ' + ((img && img.title) || '') + ' ' + (href || '')).toLowerCase();
+        if (/screenlist|скринлист|sheet|proof|\bcaps\b|ascr-s/i.test(text)) return true;
+        const parentA = img && img.closest ? img.closest('a') : null;
+        if (parentA && (parentA.classList.contains('ascr-s') || parentA.classList.contains('ascr-txt'))) return true;
+        return false;
     }
 
     function markAsScreenlist(item) {
