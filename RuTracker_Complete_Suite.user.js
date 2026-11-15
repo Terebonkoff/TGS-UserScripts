@@ -3,7 +3,7 @@
 // @name:ru      RuTracker: Enhanced Suite by TGS
 // @name:en      RuTracker: Enhanced Suite by TGS
 // @namespace    https://rutracker.org/
-// @version      5.26
+// @version      5.27
 // @description  Единый мощный комплекс для RuTracker: встроенные превью и кнопка скачивания в списке раздач, идеальные колонки (Форум с ресайзером, компактный Автор ~3 см), боковое окно предпросмотра при наведении, единый тулбар в раздачах, полноразмерные скриншоты FastPic/IBB без мыла и полноэкранный Lightbox.
 // @description:en All-in-one suite for RuTracker: inline previews & download button in torrent lists, perfect column layout, right-dock hover screenshot preview, single toolbar in topics, full-size FastPic/IBB screenshots & Lightbox.
 // @author       Terebonkoff (TGS)
@@ -189,7 +189,11 @@
     const BASE_SCREENLIST_MAX_W = 1920;
     const BASE_SCREENLIST_MAX_H = 1620;
 
-    const savedForumWidth = localStorage.getItem('rt_forum_col_w') || '220px';
+    let savedForumWidth = localStorage.getItem('rt_forum_col_w');
+    if (!savedForumWidth || savedForumWidth === '220px') {
+        savedForumWidth = '110px';
+        try { localStorage.setItem('rt_forum_col_w', '110px'); } catch (e) {}
+    }
     const savedPreviewCols = localStorage.getItem('rt_pv_cols') || '3';
     const resolvedUrlCache = {};
     const topicDataCache = {};
@@ -222,13 +226,13 @@
             table.forumline td.rt-forum-col,
             .vf-table th.rt-forum-col,
             .vf-table td.rt-forum-col {
-                width: var(--rt-forum-col-w, 220px) !important;
-                max-width: var(--rt-forum-col-w, 220px) !important;
-                min-width: 130px !important;
-                padding: 8px 10px !important;
+                width: var(--rt-forum-col-w, 110px) !important;
+                max-width: var(--rt-forum-col-w, 110px) !important;
+                min-width: 90px !important;
+                padding: 6px 8px !important;
                 box-sizing: border-box !important;
-                font-size: 12px !important;
-                line-height: 1.4 !important;
+                font-size: 11px !important;
+                line-height: 1.35 !important;
                 position: relative !important;
                 vertical-align: middle !important;
             }
@@ -320,9 +324,9 @@
              * КОЛОНКА ПРЕВЬЮ (ОБЛОЖКИ/ПОСТЕРЫ) В ТАБЛИЦЕ РАЗДАЧ
              * ----------------------------------------------------------------- */
             th.rt-preview-col {
-                width: 86px !important;
-                min-width: 86px !important;
-                max-width: 96px !important;
+                width: 160px !important;
+                min-width: 150px !important;
+                max-width: 175px !important;
                 text-align: center !important;
                 font-weight: 700 !important;
                 color: #c9d1d9 !important;
@@ -330,18 +334,18 @@
                 user-select: none !important;
             }
             td.rt-preview-col {
-                width: 86px !important;
-                min-width: 86px !important;
-                max-width: 96px !important;
+                width: 160px !important;
+                min-width: 150px !important;
+                max-width: 175px !important;
                 text-align: center !important;
                 vertical-align: middle !important;
                 padding: 6px 4px !important;
             }
             .rt-poster-box {
-                width: 76px !important;
-                height: 104px !important;
+                width: 145px !important;
+                height: 200px !important;
                 margin: 0 auto !important;
-                border-radius: 6px !important;
+                border-radius: 8px !important;
                 border: 1px solid #30363d !important;
                 background: #111419 !important;
                 overflow: hidden !important;
@@ -353,9 +357,9 @@
                 box-sizing: border-box !important;
             }
             .rt-poster-box:hover {
-                transform: scale(1.08) !important;
+                transform: scale(1.04) !important;
                 border-color: #58a6ff !important;
-                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7) !important;
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.8) !important;
                 z-index: 5 !important;
             }
             .rt-poster-img {
@@ -1309,12 +1313,27 @@
     
     function isBadgeOrTrashUrl(url) {
         if (!url) return true;
-        const u = url.toLowerCase();
-        if (u.includes('static.pornolab.net') || u.includes('static.rutracker.org')) return true;
+        const u = url.toLowerCase().trim();
+        // SVG или короткие data-URI (иконки)
+        if (u.startsWith('data:image/svg') || (u.startsWith('data:') && u.length < 5000)) return true;
+        // Системные и служебные пути трекера
+        if (u.includes('static.pornolab.net') || u.includes('static.rutracker.org') || u.includes('static.rutracker.cc')) return true;
         if (u.includes('smilies/') || u.includes('.gif') || u.includes('avatars/') || u.includes('/ranks/')) return true;
         if (u.includes('/tags/') || u.includes('/genres/') || u.includes('/badges/') || u.includes('/icons/')) return true;
         if (u.includes('pornolab.net/forum/images/') || u.includes('rutracker.org/forum/images/')) return true;
-        if (/(badge|genre|tag|icon|btn|flag|rating)/i.test(u)) return true;
+
+        // Кнопки скачивания, магнет-ссылки и значки магнита
+        if (u.startsWith('magnet:') || /magnet/i.test(u)) return true;
+        if (/(magnet|magneto|magnit)/i.test(u)) return true;
+
+        // Крестики, кнопки закрытия, отмены, удаления и предупреждения
+        if (/(cross|close|cancel|delete|forbidden|warning|error)/i.test(u)) return true;
+        if (/(cross|close|cancel|delete)[._-]/i.test(u) || /[._-](cross|close|cancel|delete)\./i.test(u)) return true;
+
+        // Общие бейджи, иконки, флаги и рейтинг
+        if (/(badge|genres?|tags?|icons?|ico|btn|button|buttons|flags?|ratings?|seed|leech|tracker)/i.test(u)) return true;
+        if (/[._-](ico|btn|icon|badge|magnet|cross|close)/i.test(u)) return true;
+
         return false;
     }
 
@@ -1327,7 +1346,7 @@
         const promises = toCheck.map(item => {
             return new Promise((resolve) => {
                 const url = item.thumbUrl || item.fullUrl;
-                if (isBadgeOrTrashUrl(url)) {
+                if (isBadgeOrTrashUrl(url) || isBadgeOrTrashUrl(item.fullUrl) || isBadgeOrTrashUrl(item.thumbUrl)) {
                     resolve(null);
                     return;
                 }
@@ -1345,7 +1364,8 @@
                 pre.onload = () => {
                     const maxDim = Math.max(pre.naturalWidth, pre.naturalHeight);
                     const minDim = Math.min(pre.naturalWidth, pre.naturalHeight);
-                    if (maxDim >= 80 && minDim >= 40) {
+                    // Скриншоты и постеры всегда имеют приличный размер (от 120px по большей стороне)
+                    if (maxDim >= 120 && minDim >= 50) {
                         item.naturalWidth = pre.naturalWidth;
                         item.naturalHeight = pre.naturalHeight;
                         item.isVertical = pre.naturalHeight > pre.naturalWidth;
@@ -1357,9 +1377,12 @@
                     }
                 };
 
-                // При сетевой задержке или ошибке стороннего хостинга НЕ выбрасываем кадры!
-                // Браузер сам их отрисует через нативный lazy loading в DOM
+                // При сетевой задержке или ошибке стороннего хостинга отсекаем мусор
                 pre.onerror = () => {
+                    if (isBadgeOrTrashUrl(url) || isBadgeOrTrashUrl(item.fullUrl)) {
+                        finish(false);
+                        return;
+                    }
                     item.naturalWidth = item.naturalWidth || 350;
                     item.naturalHeight = item.naturalHeight || 196;
                     item.aspectRatio = item.aspectRatio || 1.78;
@@ -1368,6 +1391,10 @@
 
                 setTimeout(() => {
                     if (resolved) return;
+                    if (isBadgeOrTrashUrl(url) || isBadgeOrTrashUrl(item.fullUrl)) {
+                        finish(false);
+                        return;
+                    }
                     item.naturalWidth = item.naturalWidth || 350;
                     item.naturalHeight = item.naturalHeight || 196;
                     item.aspectRatio = item.aspectRatio || 1.78;
@@ -1705,7 +1732,7 @@
             if (!forumTh.querySelector('.rt-col-resizer')) {
                 const resizer = document.createElement('div');
                 resizer.className = 'rt-col-resizer';
-                resizer.title = 'Перетащите ширину колонки Форум (двойной клик — сброс на 220px)';
+                resizer.title = 'Перетащите ширину колонки Форум (двойной клик — сброс на 110px)';
 
                 let startX = 0;
                 let startWidth = 0;
@@ -1736,8 +1763,8 @@
                 resizer.addEventListener('dblclick', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    document.documentElement.style.setProperty('--rt-forum-col-w', '220px');
-                    localStorage.setItem('rt_forum_col_w', '220px');
+                    document.documentElement.style.setProperty('--rt-forum-col-w', '110px');
+                    localStorage.setItem('rt_forum_col_w', '110px');
                 });
 
                 forumTh.appendChild(resizer);
@@ -1865,8 +1892,8 @@
 
         const mainTitle = doc.querySelector('#topic-title, .maintitle')?.textContent || '';
         const forumPath = doc.querySelector('.nav, #nav-top, .breadcrumb')?.textContent || '';
-        const isExcluded = /(x-art|met-art|sexart)/i.test(mainTitle);
-        const isVertical = !isExcluded && (/(manga|comic|hentai manga|doujinshi|art pack|h-manga|хентай|манга|арт|комикс)|\[art\]|\[manga\]/i.test(mainTitle + ' ' + forumPath + ' ' + doc.title));
+        const isExcluded = / (x-art|met-art|sexart) /i.test(mainTitle);
+        const isVertical = !isExcluded && (/ (manga|comic|hentai manga|doujinshi|art pack|h-manga|хентай|манга|арт|комикс) |\[art\]|\[manga\]/i.test(mainTitle + ' ' + forumPath + ' ' + doc.title));
 
         const screenshots = [];
         const seen = new Set();
@@ -1874,6 +1901,25 @@
         // Сканируем все картинки в посте
         postContent.querySelectorAll('var.postImg, img.postImg, img, var').forEach(node => {
             if (node.closest('.signature, .user_sig, .post_sig')) return;
+
+            // Проверяем родительскую ссылку (магнет, скачивание, профиль)
+            const parentA = node.closest('a');
+            const rawHref = parentA ? (parentA.getAttribute('href') || parentA.href || '').trim() : '';
+            if (rawHref.startsWith('magnet:') || /magnet/i.test(rawHref)) return;
+            if (rawHref.includes('profile.php') || rawHref.includes('viewforum.php')) return;
+
+            // Проверяем метаданные тега и контейнера на мусорные значки
+            const combinedMeta = [
+                node.className,
+                node.getAttribute('class'),
+                node.getAttribute('alt'),
+                node.getAttribute('title'),
+                parentA?.className,
+                parentA?.getAttribute('class'),
+                parentA?.getAttribute('title')
+            ].filter(Boolean).join(' ').toLowerCase();
+
+            if (/(magnet|cross|close|cancel|delete|download_btn|btn_download|download-button)/i.test(combinedMeta)) return;
 
             let thumbUrl = '';
             if (node.tagName.toLowerCase() === 'var') {
@@ -1884,9 +1930,14 @@
             thumbUrl = (thumbUrl || '').trim();
             if (!thumbUrl || isBadgeOrTrashUrl(thumbUrl)) return;
 
-            const parentA = node.closest('a');
-            let fullUrl = parentA ? (parentA.getAttribute('href') || parentA.href || '') : thumbUrl;
+            let fullUrl = rawHref || thumbUrl;
             if (fullUrl.startsWith('#') || fullUrl.startsWith('javascript:')) fullUrl = thumbUrl;
+            if (isBadgeOrTrashUrl(fullUrl)) return;
+
+            // Проверяем атрибуты размеров (иконки 16x16, 24x24, 32x32, 48x48 отсекаем)
+            const wAttr = parseInt(node.getAttribute('width') || node.style?.width || '0', 10);
+            const hAttr = parseInt(node.getAttribute('height') || node.style?.height || '0', 10);
+            if ((wAttr > 0 && wAttr <= 64) || (hAttr > 0 && hAttr <= 64)) return;
 
             const key = thumbUrl + fullUrl;
             if (seen.has(key)) return;
@@ -1919,7 +1970,7 @@
         const { screenshots } = data;
         if (!screenshots || screenshots.length === 0) return;
 
-        const validCandidates = screenshots.filter(s => !s.isScreenlist && !isBadgeOrTrashUrl(s.thumbUrl));
+        const validCandidates = screenshots.filter(s => !s.isScreenlist && !isBadgeOrTrashUrl(s.thumbUrl) && !isBadgeOrTrashUrl(s.fullUrl));
         const coverItem = validCandidates.find(s => s.isCover) || validCandidates[0];
         if (!coverItem) return;
 
@@ -1979,7 +2030,7 @@
         // 2. Встроенные превью: ровно 5 картинок в строку (или ровно 8 вертикальных для арт/манги)
         if (showInlinePreviews && screenshots && screenshots.length > 0) {
             // Исключаем скринлисты и мусорные значки
-            const validCandidates = screenshots.filter(s => !s.isScreenlist && !isBadgeOrTrashUrl(s.thumbUrl));
+            const validCandidates = screenshots.filter(s => !s.isScreenlist && !isBadgeOrTrashUrl(s.thumbUrl) && !isBadgeOrTrashUrl(s.fullUrl));
             if (validCandidates.length > 0) {
                 const covers = validCandidates.filter(s => s.isCover);
                 const screenshotsOnly = validCandidates.filter(s => !s.isCover);
@@ -2205,7 +2256,7 @@
     }
 
         function renderPreviewScreenshots(rawScreenshots, bodyEl, countEl) {
-        const validScreenshots = (rawScreenshots || []).filter(s => !isBadgeOrTrashUrl(s.thumbUrl));
+        const validScreenshots = (rawScreenshots || []).filter(s => !isBadgeOrTrashUrl(s.thumbUrl) && !isBadgeOrTrashUrl(s.fullUrl));
         countEl.textContent = validScreenshots.length;
 
         if (validScreenshots.length === 0) {
@@ -2264,25 +2315,31 @@
         document.addEventListener('mouseover', (e) => {
             if (isPreviewLocked) return;
             const target = e.target;
-            if (target.closest('#torrent-preview') || target.closest('.rt-inline-wrap') || target.closest('.pl-inline-wrap')) return;
+            // Не открываем при наведении на само окно, постер, встроенные превью или кнопки
+            if (target.closest('#torrent-preview') || 
+                target.closest('.rt-inline-wrap') || 
+                target.closest('.pl-inline-wrap') || 
+                target.closest('.rt-poster-box') || 
+                target.closest('.rt-preview-col')) return;
 
-            const row = target.closest('tr');
-            const link = target.closest('a.tLink, a.tt-text, a.topictitle, a[href*="viewtopic.php?t="]') ||
-                         row?.querySelector('a.tLink, a.tt-text, a.topictitle, a[href*="viewtopic.php?t="]');
+            // СТРОГО И ТОЛЬКО при наведении на само название темы/раздачи
+            const link = target.closest('a.tLink, a.tt-text, a.topictitle, a[href*="viewtopic.php?t="]');
             if (!link) return;
+
+            // Исключаем ссылки вне основной темы
+            if (link.closest('.rt-forum-col') || link.closest('.rt-author-col') || link.closest('.u-name') || link.closest('.author') || link.closest('.rt-inline-dl-row')) return;
 
             clearTimeout(closeTimeout);
             clearTimeout(hoverTimeout);
-            hoverTimeout = setTimeout(() => showPreview(link), 350);
+            hoverTimeout = setTimeout(() => showPreview(link), 300);
         });
 
         document.addEventListener('mouseout', (e) => {
             if (isPreviewLocked) return;
-            const link = e.target.closest('a.tLink, a.tt-text, a.topictitle, a[href*="viewtopic.php?t="]') ||
-                         e.target.closest('.rt-poster-box');
+            const link = e.target.closest('a.tLink, a.tt-text, a.topictitle, a[href*="viewtopic.php?t="]');
             if (!link) return;
             clearTimeout(hoverTimeout);
-            closeTimeout = setTimeout(hidePreview, 350);
+            closeTimeout = setTimeout(hidePreview, 300);
         });
     }
 
