@@ -27,10 +27,10 @@
 ## 📸 Визуальная презентация возможностей
 
 ### 🎬 Живая видеодемонстрация работы скрипта (Full HD, 52 сек)
-<video src="https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/assets/videos/rutracker_presentation.mp4" controls="controls" muted="muted" width="100%" style="border-radius:8px;"></video>
+<video src="https://github.com/Terebonkoff/TGS-UserScripts/blob/main/assets/videos/rutracker_presentation.mp4" controls="controls" muted="muted" width="100%" style="border-radius:8px;"></video>
 
 > 💡 *Прямая ссылка для онлайн-просмотра или скачивания:*  
-> [**▶️ Нажмите здесь, чтобы открыть видеоролик RuTracker (MP4, 52 сек)**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/assets/videos/rutracker_presentation.mp4)
+> [**▶️ Нажмите здесь, чтобы открыть видеоролик RuTracker (MP4, 52 сек)**](https://github.com/Terebonkoff/TGS-UserScripts/blob/main/assets/videos/rutracker_presentation.mp4)
 
 ---
 
