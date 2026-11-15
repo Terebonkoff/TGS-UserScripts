@@ -3,7 +3,7 @@
 // @name:ru      Pornolab: Enhanced Suite by TGS
 // @name:en      Pornolab: Enhanced Suite by TGS
 // @namespace    https://pornolab.net/
-// @version      5.16
+// @version      5.17
 // @description  Единый мощный комплекс для Pornolab: встроенные превью и кнопка скачивания в списке раздач, идеальные колонки (Форум с ресайзером, компактный Автор ~3 см), боковое окно предпросмотра при наведении, единый тулбар в раздачах, полноразмерные скриншоты FastPic/IMX/ImageTwist без мыла и полноэкранный Lightbox.
 // @description:en All-in-one suite for Pornolab: inline previews & download button in torrent lists, perfect column layout, right-dock hover screenshot preview, single toolbar in topics, full-size FastPic/IMX screenshots & Lightbox.
 // @author       Terebonkoff (TGS)
@@ -1130,6 +1130,7 @@
             GM_xmlhttpRequest({
                 method: 'GET',
                 url: url,
+                overrideMimeType: 'text/html; charset=windows-1251',
                 headers: {
                     'User-Agent': navigator.userAgent,
                     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -1259,27 +1260,52 @@
                         item.naturalHeight = pre.naturalHeight;
                         item.isVertical = pre.naturalHeight > pre.naturalWidth;
                         item.aspectRatio = pre.naturalWidth / pre.naturalHeight;
-                        // Широкое горизонтальное превью (например, 800x533 или 16:9)
-                        item.isWide = item.aspectRatio >= 1.35;
+                        // Широкое горизонтальное превью (обложка высокого разрешения или широкий баннер)
+                        item.isWide = (item.isCover && (item.naturalWidth >= 600 || item.aspectRatio >= 1.9)) || (item.aspectRatio >= 2.1);
                         finish(true);
                     } else {
                         finish(false);
                     }
                 };
-                pre.onerror = () => finish(false);
+                pre.onerror = () => {
+                    if (item.isCover) {
+                        // Обложку никогда не выбрасываем при сетевом сбое предзагрузки
+                        item.naturalWidth = item.naturalWidth || 600;
+                        item.naturalHeight = item.naturalHeight || 400;
+                        item.aspectRatio = 1.5;
+                        item.isWide = true;
+                        finish(true);
+                    } else {
+                        finish(false);
+                    }
+                };
                 pre.src = url;
 
-                setTimeout(() => finish(false), 2500);
+                // Для обложек увеличенный таймаут 6 сек, чтобы не терялись в очереди сетевых запросов
+                const timeoutMs = item.isCover ? 6000 : 3500;
+                setTimeout(() => {
+                    if (resolved) return;
+                    if (item.isCover) {
+                        item.naturalWidth = item.naturalWidth || 600;
+                        item.naturalHeight = item.naturalHeight || 400;
+                        item.aspectRatio = 1.5;
+                        item.isWide = true;
+                        finish(true);
+                    } else {
+                        finish(false);
+                    }
+                }, timeoutMs);
             });
         });
 
         return Promise.all(promises).then(res => {
             const valid = res.filter(Boolean);
-            // Если в раздаче есть горизонтальные скриншоты (видео), то любая одиночная узкая вертикальная картинка (h/w >= 1.25) — это скринлист!
-            const hasHorizontal = valid.some(s => s.aspectRatio && s.aspectRatio >= 1.15);
+            // Если в видео-раздаче есть горизонтальные кадры (>= 1.35), то любой вертикальный лист внутри спойлера (<= 1.05) — это скринлист!
+            const hasHorizontal = valid.some(s => s.aspectRatio && s.aspectRatio >= 1.35);
             valid.forEach(s => {
+                if (s.isCover) return; // Обложки никогда не помечаем скринлистами!
                 if (s.isScreenlist) return;
-                if (hasHorizontal && s.aspectRatio && s.aspectRatio <= 0.85) {
+                if (s.inSpoiler && hasHorizontal && s.aspectRatio && s.aspectRatio <= 1.05) {
                     s.isScreenlist = true;
                 }
             });
@@ -1742,6 +1768,7 @@
 
         const screenshots = [];
         const seen = new Set();
+        const spoilerFirstImgMap = new Map();
 
         // Сканируем все картинки в раздаче (включая шапку и спойлеры)
         postContent.querySelectorAll('var.postImg, img.postImg, img').forEach(node => {
@@ -1763,18 +1790,33 @@
             if (seen.has(key)) return;
             seen.add(key);
 
-            let isScreenlist = checkIfScreenlist(node, fullUrl);
             const wrap = node.closest('.sp-wrap, .sp-fold');
-            if (!isScreenlist && wrap) {
+            // Если картинка находится вне спойлера — это обложка/постер раздачи!
+            const isCover = !wrap;
+
+            let isScreenlist = false;
+            if (!isCover && wrap) {
+                isScreenlist = checkIfScreenlist(node, fullUrl);
+
                 const head = wrap.querySelector('.sp-head, .sp-title');
                 const body = wrap.querySelector('.sp-body');
                 const tText = [head ? head.textContent : '', body ? (body.getAttribute('title') || '') : '', wrap.getAttribute('title') || ''].join(' ');
-                if (/скринлист|screenlist|sheet|caps|proof/i.test(tText)) {
-                    isScreenlist = true;
+
+                if (/скринлист|screenlist|sheet|proof|caps/i.test(tText)) {
+                    if (!/скриншот|screenshot/i.test(tText)) {
+                        // Спойлер исключительно со скринлистами
+                        isScreenlist = true;
+                    } else {
+                        // Спойлер смешанный ("Скриншоты и скринлисты"): первая картинка — это обзорный лист/скринлист!
+                        if (!spoilerFirstImgMap.has(wrap)) {
+                            spoilerFirstImgMap.set(wrap, true);
+                            isScreenlist = true;
+                        }
+                    }
                 }
             }
 
-            screenshots.push({ thumbUrl, fullUrl, isScreenlist, resolvedUrl: null });
+            screenshots.push({ thumbUrl, fullUrl, isCover, isScreenlist, inSpoiler: !!wrap, resolvedUrl: null });
         });
 
         return { dlUrl, screenshots };
@@ -1815,25 +1857,30 @@
                 const previewCandidates = validScreenshots.filter(s => !s.isScreenlist);
                 if (previewCandidates.length === 0) return;
 
+                // Разделяем: обложки (постеры) СТРОГО ПЕРВЫМИ, затем кадры фильма
+                const covers = previewCandidates.filter(s => s.isCover);
+                const nonCovers = previewCandidates.filter(s => !s.isCover);
+                const orderedCandidates = [...covers, ...nonCovers];
+
                 // Автоматически определяем ориентацию скриншотов в раздаче
-                const verticalCount = previewCandidates.filter(s => s.isVertical).length;
-                const isMostlyVertical = verticalCount >= Math.ceil(previewCandidates.length / 2);
+                const verticalCount = orderedCandidates.filter(s => s.isVertical).length;
+                const isMostlyVertical = verticalCount >= Math.ceil(orderedCandidates.length / 2);
 
                 const imgContainer = document.createElement('div');
                 imgContainer.className = 'pl-inline-imgs-container' + (isMostlyVertical ? ' pl-inline-vertical' : '');
 
                 // Для вертикальных раздач лимит 8 картинок.
-                // Для горизонтальных раздач считаем слоты (широкие картинки считаем за 2 слота, максимум 5 слотов)
+                // Для горизонтальных раздач считаем слоты (широкие картинки/обложки считаем за 2 слота, максимум 5 слотов)
                 const itemsToRender = [];
                 if (isMostlyVertical) {
-                    const limit = Math.min(previewCandidates.length, 8);
+                    const limit = Math.min(orderedCandidates.length, 8);
                     for (let i = 0; i < limit; i++) {
-                        itemsToRender.push({ item: previewCandidates[i], isWide: false });
+                        itemsToRender.push({ item: orderedCandidates[i], isWide: false });
                     }
                 } else {
                     let totalSlots = 0;
                     const maxSlots = 5;
-                    for (const cand of previewCandidates) {
+                    for (const cand of orderedCandidates) {
                         const weight = cand.isWide ? 2 : 1;
                         if (totalSlots + weight > maxSlots && itemsToRender.length > 0) {
                             break;
@@ -1854,35 +1901,33 @@
                     img.loading = 'lazy';
                     img.referrerPolicy = 'no-referrer';
 
-                    // Если прямая ссылка на картинку - пробуем обновить на HD только при успешной загрузке
-                    if (item.fullUrl && item.fullUrl !== img.src && /\.(jpe?g|png|webp)($|\?)/i.test(item.fullUrl)) {
-                        const pre = new Image();
-                        pre.referrerPolicy = 'no-referrer';
-                        pre.onload = () => { img.src = item.fullUrl; };
-                        pre.src = item.fullUrl;
-                    }
-
-                    img.onerror = () => {
-                        img.style.display = 'none';
+                    // Предотвращаем мерцание и авто-корректируем ориентацию
+                    img.onload = () => {
+                        if (img.naturalHeight > img.naturalWidth && !img.classList.contains('pl-thumb-vertical')) {
+                            img.classList.add('pl-thumb-vertical');
+                        }
                     };
 
+                    img.title = item.isCover ? '🖼️ Обложка (кликните для просмотра в галерее)' : `Кадр ${i + 1} (кликните для просмотра в галерее)`;
                     img.addEventListener('click', (e) => {
-                        e.preventDefault();
                         e.stopPropagation();
-                        const galleryItems = previewCandidates.map(s => {
-                            const full = s.resolvedUrl || s.fullUrl || s.thumbUrl;
-                            return {
-                                src: full,
-                                thumb: s.thumbUrl || full
-                            };
-                        });
-                        openLightbox(i, galleryItems);
+                        e.preventDefault();
+                        const galleryItems = orderedCandidates.map(s => ({
+                            thumbUrl: s.thumbUrl,
+                            fullUrl: s.fullUrl,
+                            resolvedUrl: s.resolvedUrl,
+                            isScreenlist: s.isScreenlist,
+                            isCover: s.isCover
+                        }));
+                        openLightbox(galleryItems, i);
                     });
 
                     imgContainer.appendChild(img);
                 });
 
-                wrap.appendChild(imgContainer);
+                if (itemsToRender.length > 0) {
+                    wrap.appendChild(imgContainer);
+                }
             });
         }
 
