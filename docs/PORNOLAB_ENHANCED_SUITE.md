@@ -27,6 +27,14 @@
 
 ## 📸 Визуальная презентация возможностей
 
+### 🎬 Живая видеодемонстрация работы скрипта (Full HD, 47 сек)
+<video src="https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/assets/videos/pornolab_presentation.mp4" controls="controls" muted="muted" width="100%" style="border-radius:8px;"></video>
+
+> 💡 *Прямая ссылка для онлайн-просмотра или скачивания:*  
+> [**▶️ Нажмите здесь, чтобы открыть видеоролик Pornolab (MP4, 47 сек)**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/assets/videos/pornolab_presentation.mp4)
+
+---
+
 ### 1. 🖼️ Встроенные превью в списке раздач — вы сразу видите контент
 Больше не нужно вслепую кликать по названиям или гадать, что внутри раздачи. Каждая строчка в поиске и разделах трекера автоматически дополняется аккуратным рядом эталонных кадров:
 - **Строго ровно 5 картинок в строку для видео:** главная обложка релиза + 4 отборных скриншота (или 2 обложки + 3 скриншота).

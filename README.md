@@ -27,6 +27,14 @@ Each script is a complete standalone tool featuring deep layout optimization, ba
 
 ---
 
+## 🎬 Live Video Demonstrations
+
+| 🧲 **RuTracker: Enhanced Suite (Full Tour)** | 🔞 **Pornolab: Enhanced Suite (Full Tour)** |
+|:---:|:---:|
+| <video src="https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/assets/videos/rutracker_presentation.mp4" controls="controls" muted="muted" width="100%"></video><br>[**▶️ Watch RuTracker Video (52s, MP4)**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/assets/videos/rutracker_presentation.mp4) | <video src="https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/assets/videos/pornolab_presentation.mp4" controls="controls" muted="muted" width="100%"></video><br>[**▶️ Watch Pornolab Video (47s, MP4)**](https://raw.githubusercontent.com/Terebonkoff/TGS-UserScripts/main/assets/videos/pornolab_presentation.mp4) |
+
+---
+
 ## 🛠 Installation & Automatic Updates
 
 1. Install a userscript manager in your browser:
