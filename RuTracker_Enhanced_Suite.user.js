@@ -3,7 +3,7 @@
 // @name:ru      RuTracker: Enhanced Suite by TGS
 // @name:en      RuTracker: Enhanced Suite by TGS
 // @namespace    https://rutracker.org/
-// @version      5.27
+// @version      5.28
 // @description  Единый мощный комплекс для RuTracker: встроенные превью и кнопка скачивания в списке раздач, идеальные колонки (Форум с ресайзером, компактный Автор ~3 см), боковое окно предпросмотра при наведении, единый тулбар в раздачах, полноразмерные скриншоты FastPic/IBB без мыла и полноэкранный Lightbox.
 // @description:en All-in-one suite for RuTracker: inline previews & download button in torrent lists, perfect column layout, right-dock hover screenshot preview, single toolbar in topics, full-size FastPic/IBB screenshots & Lightbox.
 // @author       Terebonkoff (TGS)
@@ -323,23 +323,9 @@
             /* -----------------------------------------------------------------
              * КОЛОНКА ПРЕВЬЮ (ОБЛОЖКИ/ПОСТЕРЫ) В ТАБЛИЦЕ РАЗДАЧ
              * ----------------------------------------------------------------- */
-            th.rt-preview-col {
-                width: 160px !important;
-                min-width: 150px !important;
-                max-width: 175px !important;
-                text-align: center !important;
-                font-weight: 700 !important;
-                color: #c9d1d9 !important;
-                padding: 4px 6px !important;
-                user-select: none !important;
-            }
-            td.rt-preview-col {
-                width: 160px !important;
-                min-width: 150px !important;
-                max-width: 175px !important;
-                text-align: center !important;
-                vertical-align: middle !important;
-                padding: 6px 4px !important;
+            /* Колонка превью скрыта по запросу: превью интегрировано в колонку темы */
+            th.rt-preview-col, td.rt-preview-col {
+                display: none !important;
             }
             .rt-poster-box {
                 width: 145px !important;
@@ -1717,13 +1703,8 @@
             else if (/превью|preview/i.test(txt)) previewTh = th;
         });
 
-        // 2. Вставляем th.rt-preview-col СТРОГО перед topicTh
-        if (topicTh && !previewTh) {
-            previewTh = document.createElement('th');
-            previewTh.className = 'rt-preview-col';
-            previewTh.textContent = 'ПРЕВЬЮ';
-            topicTh.parentNode.insertBefore(previewTh, topicTh);
-        }
+        // 2. Колонка превью отключена (постер отображается внутри колонки темы вместе со скриншотами)
+        tbl.querySelectorAll('th.rt-preview-col').forEach(el => el.remove());
 
         // 3. Ресайзер для колонки Форум
         if (forumTh) {
@@ -1792,12 +1773,7 @@
                              Array.from(row.querySelectorAll('td')).find(td => td.querySelector('a[href*="profile.php"]'));
             if (authorTd) authorTd.classList.add('rt-author-col');
 
-            let previewTd = row.querySelector('td.rt-preview-col');
-            if (!previewTd) {
-                previewTd = document.createElement('td');
-                previewTd.className = 'rt-preview-col';
-                tTitleTd.parentNode.insertBefore(previewTd, tTitleTd);
-            }
+            row.querySelectorAll('td.rt-preview-col').forEach(el => el.remove());
         });
     }
 
@@ -1848,8 +1824,7 @@
 
             fetchQueue.push((onDone) => {
                 if (topicId && topicDataCache[topicId] && topicDataCache[topicId].screenshots && topicDataCache[topicId].screenshots.length > 0) {
-                    renderPosterCell(row, topicDataCache[topicId]);
-                    renderInlineContent(td, topicDataCache[topicId]);
+                                        renderInlineContent(td, topicDataCache[topicId]);
                     onDone();
                     return;
                 }
@@ -1863,8 +1838,7 @@
                             if (topicId && data.screenshots && data.screenshots.length > 0) {
                                 topicDataCache[topicId] = data;
                             }
-                            renderPosterCell(row, data);
-                            renderInlineContent(td, data);
+                                                        renderInlineContent(td, data);
                         }
                     } catch (err) {
                         console.error('Error parsing topic:', err);
