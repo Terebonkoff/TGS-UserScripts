@@ -3,7 +3,7 @@
 // @name:ru      RuTracker: Enhanced Suite by TGS
 // @name:en      RuTracker: Enhanced Suite by TGS
 // @namespace    https://rutracker.org/
-// @version      5.23
+// @version      5.24
 // @description  Единый мощный комплекс для RuTracker: встроенные превью и кнопка скачивания в списке раздач, идеальные колонки (Форум с ресайзером, компактный Автор ~3 см), боковое окно предпросмотра при наведении, единый тулбар в раздачах, полноразмерные скриншоты FastPic/IBB без мыла и полноэкранный Lightbox.
 // @description:en All-in-one suite for RuTracker: inline previews & download button in torrent lists, perfect column layout, right-dock hover screenshot preview, single toolbar in topics, full-size FastPic/IBB screenshots & Lightbox.
 // @author       Terebonkoff (TGS)
@@ -315,6 +315,57 @@
             /* -----------------------------------------------------------------
              * ВСТРОЕННЫЕ ПРЕВЬЮ И КНОПКА СКАЧИВАНИЯ В СПИСКЕ РАЗДАЧ
              * ----------------------------------------------------------------- */
+            
+            /* -----------------------------------------------------------------
+             * КОЛОНКА ПРЕВЬЮ (ОБЛОЖКИ/ПОСТЕРЫ) В ТАБЛИЦЕ РАЗДАЧ
+             * ----------------------------------------------------------------- */
+            th.rt-preview-col {
+                width: 86px !important;
+                min-width: 86px !important;
+                max-width: 96px !important;
+                text-align: center !important;
+                font-weight: 700 !important;
+                color: #c9d1d9 !important;
+                padding: 4px 6px !important;
+                user-select: none !important;
+            }
+            td.rt-preview-col {
+                width: 86px !important;
+                min-width: 86px !important;
+                max-width: 96px !important;
+                text-align: center !important;
+                vertical-align: middle !important;
+                padding: 6px 4px !important;
+            }
+            .rt-poster-box {
+                width: 76px !important;
+                height: 104px !important;
+                margin: 0 auto !important;
+                border-radius: 6px !important;
+                border: 1px solid #30363d !important;
+                background: #111419 !important;
+                overflow: hidden !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                cursor: zoom-in !important;
+                transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease !important;
+                box-sizing: border-box !important;
+            }
+            .rt-poster-box:hover {
+                transform: scale(1.08) !important;
+                border-color: #58a6ff !important;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7) !important;
+                z-index: 5 !important;
+            }
+            .rt-poster-img {
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: cover !important;
+                object-position: center top !important;
+                display: block !important;
+            }
+
             .rt-inline-wrap, .pl-inline-wrap {
                 margin-top: 8px !important;
                 margin-bottom: 6px !important;
@@ -1598,17 +1649,35 @@
      * 6. ТАБЛИЦА РАЗДАЧ: НАСТРОЙКА КОЛОНОК (БЕЗ СДВИГА)
      * ========================================================================= */
     function patchRuTrackerTable(tbl) {
-        const allThs = tbl.querySelectorAll('th');
+        if (!tbl) return;
+        const allThs = Array.from(tbl.querySelectorAll('th'));
         let forumTh = null;
         let topicTh = null;
         let authorTh = null;
+        let previewTh = tbl.querySelector('th.rt-preview-col');
 
         allThs.forEach(th => {
             const txt = th.textContent.trim().toLowerCase();
             if (/форум|forum/i.test(txt)) forumTh = th;
             else if (/тема|topic/i.test(txt)) topicTh = th;
             else if (/автор|author/i.test(txt)) authorTh = th;
+            else if (/превью|preview/i.test(txt)) previewTh = th;
         });
+
+        // 1. Создаем/назначаем колонку ПРЕВЬЮ в шапке между Форум и Тема
+        if (forumTh && topicTh && !previewTh) {
+            let nextEl = forumTh.nextElementSibling;
+            if (nextEl && nextEl !== topicTh) {
+                previewTh = nextEl;
+                previewTh.classList.add('rt-preview-col');
+                previewTh.textContent = 'ПРЕВЬЮ';
+            } else {
+                previewTh = document.createElement('th');
+                previewTh.className = 'rt-preview-col';
+                previewTh.textContent = 'ПРЕВЬЮ';
+                topicTh.parentNode.insertBefore(previewTh, topicTh);
+            }
+        }
 
         if (forumTh) {
             forumTh.classList.add('rt-forum-col');
@@ -1658,6 +1727,7 @@
         if (topicTh) topicTh.classList.add('rt-topic-col');
         if (authorTh) authorTh.classList.add('rt-author-col');
 
+        // 2. Обработка всех строк раздач в таблице
         const rows = tbl.querySelectorAll('tr');
         rows.forEach(row => {
             if (row.querySelector('th')) return;
@@ -1666,13 +1736,29 @@
                             Array.from(row.querySelectorAll('td')).find(td => td.querySelector('a[href*="viewforum.php"]'));
             if (fNameTd) fNameTd.classList.add('rt-forum-col');
 
-            const tTitleTd = row.querySelector('td.t-title, td.row4.tLeft, td.tt') ||
+            const tTitleTd = row.querySelector('td.t-title, td.row4.tLeft, td.tt, td.topic-title') ||
                              Array.from(row.querySelectorAll('td')).find(td => td.querySelector('a[href*="viewtopic.php?t="]'));
             if (tTitleTd) tTitleTd.classList.add('rt-topic-col');
 
             const authorTd = row.querySelector('td.u-name, td.author') ||
                              Array.from(row.querySelectorAll('td')).find(td => td.querySelector('a[href*="profile.php"]'));
             if (authorTd) authorTd.classList.add('rt-author-col');
+
+            // Ячейка ПРЕВЬЮ в каждой строке
+            if (fNameTd && tTitleTd) {
+                let previewTd = row.querySelector('td.rt-preview-col');
+                if (!previewTd) {
+                    let betweenTd = fNameTd.nextElementSibling;
+                    if (betweenTd && betweenTd !== tTitleTd) {
+                        previewTd = betweenTd;
+                        previewTd.classList.add('rt-preview-col');
+                    } else {
+                        previewTd = document.createElement('td');
+                        previewTd.className = 'rt-preview-col';
+                        tTitleTd.parentNode.insertBefore(previewTd, tTitleTd);
+                    }
+                }
+            }
         });
     }
 
@@ -1723,6 +1809,7 @@
 
             fetchQueue.push((onDone) => {
                 if (topicId && topicDataCache[topicId] && topicDataCache[topicId].screenshots && topicDataCache[topicId].screenshots.length > 0) {
+                    renderPosterCell(row, topicDataCache[topicId]);
                     renderInlineContent(td, topicDataCache[topicId]);
                     onDone();
                     return;
@@ -1737,6 +1824,7 @@
                             if (topicId && data.screenshots && data.screenshots.length > 0) {
                                 topicDataCache[topicId] = data;
                             }
+                            renderPosterCell(row, data);
                             renderInlineContent(td, data);
                         }
                     } catch (err) {
@@ -1840,7 +1928,48 @@
         return { dlUrl, screenshots, isVertical };
     }
 
-        function renderInlineContent(td, data) {
+        
+    function renderPosterCell(row, data) {
+        if (!row) return;
+        const previewTd = row.querySelector('td.rt-preview-col');
+        if (!previewTd || previewTd.querySelector('.rt-poster-box')) return;
+
+        const { screenshots } = data;
+        if (!screenshots || screenshots.length === 0) return;
+
+        const validCandidates = screenshots.filter(s => !s.isScreenlist && !isBadgeOrTrashUrl(s.thumbUrl));
+        const coverItem = validCandidates.find(s => s.isCover) || validCandidates[0];
+        if (!coverItem) return;
+
+        const box = document.createElement('div');
+        box.className = 'rt-poster-box';
+        box.title = '🖼️ Постер раздачи (кликните для просмотра в полном размере)';
+
+        const img = document.createElement('img');
+        img.className = 'rt-poster-img';
+        img.src = coverItem.thumbUrl || coverItem.fullUrl;
+        img.referrerPolicy = 'no-referrer';
+
+        img.onerror = () => {
+            box.style.opacity = '0.35';
+        };
+
+        box.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const galleryItems = validCandidates.map(s => ({
+                src: s.resolvedUrl || s.fullUrl,
+                thumb: s.thumbUrl || s.resolvedUrl || s.fullUrl
+            }));
+            openLightbox(0, galleryItems);
+        });
+
+        box.appendChild(img);
+        previewTd.innerHTML = '';
+        previewTd.appendChild(box);
+    }
+
+    function renderInlineContent(td, data) {
         if (!td || td.querySelector('.rt-inline-wrap')) return;
 
         const { dlUrl, screenshots, isVertical } = data;
@@ -2152,9 +2281,12 @@
     function initListHoverPreviews() {
         document.addEventListener('mouseover', (e) => {
             if (isPreviewLocked) return;
-            const link = e.target.closest('a.tLink, a.tt-text, a.topictitle, a[href*="viewtopic.php?t="]');
+            const target = e.target;
+            if (target.closest('#torrent-preview') || target.closest('.rt-inline-wrap') || target.closest('.pl-inline-wrap')) return;
+
+            const link = target.closest('a.tLink, a.tt-text, a.topictitle, a[href*="viewtopic.php?t="]') ||
+                         target.closest('.rt-poster-box')?.closest('tr')?.querySelector('a.tLink, a.tt-text, a.topictitle, a[href*="viewtopic.php?t="]');
             if (!link) return;
-            if (link.closest('#torrent-preview') || link.closest('.rt-inline-wrap') || link.closest('.pl-inline-wrap')) return;
 
             clearTimeout(closeTimeout);
             clearTimeout(hoverTimeout);
