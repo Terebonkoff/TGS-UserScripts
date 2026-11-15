@@ -3,7 +3,7 @@
 // @name:ru      RuTracker: Enhanced Suite by TGS
 // @name:en      RuTracker: Enhanced Suite by TGS
 // @namespace    https://rutracker.org/
-// @version      5.20
+// @version      5.21
 // @description  Единый мощный комплекс для RuTracker: встроенные превью и кнопка скачивания в списке раздач, идеальные колонки (Форум с ресайзером, компактный Автор ~3 см), боковое окно предпросмотра при наведении, единый тулбар в раздачах, полноразмерные скриншоты FastPic/IBB без мыла и полноэкранный Lightbox.
 // @description:en All-in-one suite for RuTracker: inline previews & download button in torrent lists, perfect column layout, right-dock hover screenshot preview, single toolbar in topics, full-size FastPic/IBB screenshots & Lightbox.
 // @author       Terebonkoff (TGS)
@@ -1805,21 +1805,21 @@
     }
 
         function renderInlineContent(td, data) {
-        if (!td || td.querySelector('.pl-inline-wrap')) return;
+        if (!td || td.querySelector('.rt-inline-wrap')) return;
 
         const { dlUrl, screenshots } = data;
         if (!dlUrl && (!screenshots || screenshots.length === 0)) return;
 
         const wrap = document.createElement('div');
-        wrap.className = 'pl-inline-wrap';
+        wrap.className = 'rt-inline-wrap';
 
         // 1. Кнопка скачивания
         if (dlUrl) {
             const dlRow = document.createElement('div');
-            dlRow.className = 'pl-inline-dl-row';
+            dlRow.className = 'rt-inline-dl-row';
 
             const dlBtn = document.createElement('a');
-            dlBtn.className = 'pl-inline-dl-btn';
+            dlBtn.className = 'rt-inline-dl-btn';
             dlBtn.href = dlUrl;
             dlBtn.textContent = t.downloadTorrent;
             dlBtn.target = '_blank';
@@ -1829,7 +1829,7 @@
             wrap.appendChild(dlRow);
         }
 
-        // 2. Встроенные превью: мгновенный рендер без блокировок и таймаутов
+        // 2. Встроенные превью: мгновенный прямой рендер ровно до 5 картинок в строку (или до 8 вертикальных)
         if (showInlinePreviews && screenshots && screenshots.length > 0) {
             // Исключаем скринлисты и мусорные значки
             const validCandidates = screenshots.filter(s => !s.isScreenlist && !isBadgeOrTrashUrl(s.thumbUrl));
@@ -1837,43 +1837,33 @@
                 const covers = validCandidates.filter(s => s.isCover);
                 const screenshotsOnly = validCandidates.filter(s => !s.isCover);
 
-                // Автоматически определяем ориентацию (по флагу вертикальности)
-                const verticalCount = validCandidates.filter(s => s.isVertical).length;
-                const isMostlyVertical = verticalCount >= Math.ceil(validCandidates.length / 2);
-
-                const imgContainer = document.createElement('div');
-                imgContainer.className = 'pl-inline-imgs-container' + (isMostlyVertical ? ' pl-inline-vertical' : '');
-
-                // Для вертикальных раздач лимит 8 картинок.
-                // Для горизонтальных раздач ровно 5 картинок (1 превью + 4 кадра, или 2 превью + 3 кадра, или 5 кадров).
-                const maxTotal = isMostlyVertical ? 8 : 5;
+                // Определение вертикального типа (арт, манга, комиксы)
+                const isArtOrManga = /\[art\]|\[manga\]|\[comic\]|\[hentai manga\]|хентай|манга|арт|комикс/i.test(document.title + ' ' + (td ? td.textContent : ''));
+                const maxTotal = isArtOrManga ? 8 : 5;
                 const neededScreenshots = Math.max(0, maxTotal - covers.length);
                 const itemsToRender = [...covers, ...screenshotsOnly.slice(0, neededScreenshots)].slice(0, maxTotal);
 
+                const imgContainer = document.createElement('div');
+                imgContainer.className = 'rt-inline-imgs-container' + (isArtOrManga ? ' rt-inline-vertical' : '');
+
                 itemsToRender.forEach((item, i) => {
                     const img = document.createElement('img');
-                    img.className = 'pl-inline-thumb' + (item.isVertical ? ' pl-thumb-vertical' : '');
+                    img.className = 'rt-inline-thumb';
                     img.src = item.thumbUrl || item.fullUrl;
-                    img.loading = 'lazy';
                     img.referrerPolicy = 'no-referrer';
 
-                    // Мгновенная авто-коррекция и отсечение микро-значков при загрузке
                     img.onload = () => {
-                        if (img.naturalWidth > 0 && img.naturalWidth < 60 && img.naturalHeight < 60) {
-                            img.remove();
-                            return;
-                        }
-                        if (img.naturalHeight > img.naturalWidth && !img.classList.contains('pl-thumb-vertical')) {
-                            img.classList.add('pl-thumb-vertical');
+                        if (img.naturalHeight > img.naturalWidth && !img.classList.contains('rt-thumb-vertical')) {
+                            img.classList.add('rt-thumb-vertical');
+                            if (!imgContainer.classList.contains('rt-inline-vertical')) {
+                                imgContainer.classList.add('rt-inline-vertical');
+                            }
                         }
                     };
 
                     img.onerror = () => {
-                        // Если превью хостинга заблокировано, пробуем полный URL
-                        if (item.fullUrl && item.fullUrl !== item.thumbUrl && !img.dataset.triedFull) {
-                            img.dataset.triedFull = 'true';
-                            img.src = item.fullUrl;
-                        }
+                        // При ошибке картинки тихо скрываем её без поломки соседних
+                        img.remove();
                     };
 
                     img.title = item.isCover ? '🖼️ Превью (кликните для просмотра)' : `Кадр ${i + 1} (кликните для просмотра)`;
